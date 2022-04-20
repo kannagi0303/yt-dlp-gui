@@ -10,7 +10,7 @@ Because it is the first time to publish in github, there are many parts unfamili
 Suggestions and questions are also welcome to reflect me, mainly in Chinese or simple English, while Japanese is also available
 (Sorry for using machine translation)
 
-* Front-end of [yt-dlp](https://github.com/yt-dlp/yt-dlp) (yt-dlp的前端)
+* Front-end of [yt-dlp](https://github.com/yt-dlp/yt-dlp)
 * Windows Only
 
 ### Screenshots
