@@ -15,7 +15,7 @@ Translated with www.DeepL.com/Translator (free version)
 * Windows Only
 
 ### Screenshots
-<img src=".github/screenshot01.jpg" width="460"/>
+<img src="screenshot01.jpg" width="460"/>
 
 ### Requirements
 * [yt-dlp](https://github.com/yt-dlp/yt-dlp)
@@ -42,7 +42,7 @@ Translated with www.DeepL.com/Translator (free version)
 * 作業系統 Windows 限定
 
 ### 截圖
-<img src=".github/screenshot01.jpg" width="460"/>
+<img src="screenshot01.jpg" width="460"/>
 
 ### 執行需求
 * [yt-dlp](https://github.com/yt-dlp/yt-dlp)
