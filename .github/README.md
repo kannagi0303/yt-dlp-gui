@@ -12,7 +12,7 @@ Suggestions and questions are also welcome to reflect me, mainly in Chinese or s
 * Windows Only
 
 ### Screenshots
-<img src=".github/screenshot01.jpg" width="460"/>
+<img src="screenshot01.jpg" width="460"/>
 
 ### Requirements
 * [yt-dlp](https://github.com/yt-dlp/yt-dlp)
@@ -39,7 +39,7 @@ Suggestions and questions are also welcome to reflect me, mainly in Chinese or s
 * 作業系統 Windows 限定
 
 ### 截圖
-<img src=".github/screenshot01.jpg" width="460"/>
+<img src="screenshot01.jpg" width="460"/>
 
 ### 執行需求
 * [yt-dlp](https://github.com/yt-dlp/yt-dlp)
