@@ -8,7 +8,6 @@
 Command-line program to download videos from YouTube.com and other video sites,
 [yt-dlp](https://github.com/yt-dlp/yt-dlp) project is adding new features and patches while also keeping up to date with the original project.
 
-    
 ### Screenshots
 <img src="screenshot01.jpg" width="460"/>
 
@@ -21,6 +20,6 @@ Command-line program to download videos from YouTube.com and other video sites,
 2. Create a Folder `bin` in location of executable file
 3. Copy `yt-dlp.exe` and `ffmpeg.exe` to Folder `bin`
 4. Execute `yt-dlp-gui.exe`
-
+ 
 ### Authors
 * かんなぎ (Kannagi)
