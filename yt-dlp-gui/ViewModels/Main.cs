@@ -135,6 +135,9 @@ namespace yt_dlp_gui.Views {
             public Enable Enable { get; set; } = new();
             public bool AutoSaveConfig { get; set; } = false;
             public string Html { get; set; } = string.Empty;
+            public string LastVersion { get; set; } = string.Empty;
+            public string LastCheckUpdate { get; set; } = string.Empty;
+            public bool NewVersion { get; set; } = false;
             public Config Config { get; set; } = new();
             private void CheckEnable() {
                 Enable.Url = true;
@@ -226,6 +229,10 @@ namespace yt_dlp_gui.Views {
             public CookieType CookieType { get; set; } = CookieType.Chrome;
             [Description("With Thumbnail When Downlaod")]
             public bool SaveThumbnail { get; set; } = true;
+
+            [Description("Last Checking Update Date")]
+            public string LastVersion { get; set; } = string.Empty;
+            public string LastCheckUpdate { get; set; } = string.Empty;
         }
     }
 }

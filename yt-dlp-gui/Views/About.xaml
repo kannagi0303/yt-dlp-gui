@@ -42,7 +42,7 @@
             </Grid.RowDefinitions>
 
             <TextBlock FontSize="18" FontWeight="Bold" Text="yt-dlp-gui"/>
-            <TextBlock FontSize="12" VerticalAlignment="Bottom" HorizontalAlignment="Right" Text="2022-04-27"/>
+            <TextBlock x:Name="version" FontSize="12" VerticalAlignment="Bottom" HorizontalAlignment="Right"/>
             <Separator Grid.Row="1" Margin="0,8,0,4"/>
             <TextBlock Grid.Row="2" Grid.Column="1" LineHeight="20">
                 <Run Foreground="Gray" Text="Website :"/>

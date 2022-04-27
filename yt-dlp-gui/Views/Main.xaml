@@ -15,7 +15,20 @@
     </Window.CommandBindings>
     <Window.Resources>
         <ControlTemplate TargetType="ContentControl" x:Key="WindowExtend">
-            <Grid>
+            <StackPanel Orientation="Horizontal">
+                <controls:Icons Size="18" Kind="NewBox">
+                    <controls:Icons.Style>
+                        <Style TargetType="controls:Icons">
+                            <Setter Property="Visibility" Value="Collapsed"/>
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding NewVersion}" Value="True">
+                                    <Setter Property="Visibility" Value="Visible"/>
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </controls:Icons.Style>
+                </controls:Icons>
+
                 <Menu WindowChrome.IsHitTestVisibleInChrome="True">
                     <Menu.ItemsPanel>
                         <ItemsPanelTemplate>
@@ -34,7 +47,7 @@
                         </MenuItem>
                     </MenuItem>
                 </Menu>
-            </Grid>
+            </StackPanel>
         </ControlTemplate>
     </Window.Resources>
     <Grid Margin="4" Grid.IsSharedSizeScope="True">

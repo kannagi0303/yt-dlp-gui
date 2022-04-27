@@ -2,6 +2,7 @@
 using Libs.Yaml;
 using Markdig;
 using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
@@ -19,6 +20,7 @@ namespace yt_dlp_gui.Views {
         private List<DLP> RunningDLP = new();
         public Main() {
             InitializeComponent();
+
             DataContext = Data;
             //Load Configs
             Data.Config.Load(App.Path(App.Folders.root, App.AppName + ".yaml"));
@@ -29,7 +31,26 @@ namespace yt_dlp_gui.Views {
             if (!Directory.Exists(Data.TargetPath)) {
                 Data.TargetPath = App.AppPath;
             }
+            Task.Run(Inits);
+        }
+        public async void Inits() {
+            var needcheck = false;
+            var currentDate = DateTimeOffset.UtcNow.ToString("yyyy-MM-dd");
 
+            if (!string.IsNullOrWhiteSpace(Data.LastVersion)) needcheck = true; //not yaml
+            if (currentDate != Data.LastCheckUpdate) needcheck = true; //cross date
+
+            if (needcheck) {
+                var lastTag = await Web.GetLastTag();
+                if (!string.IsNullOrWhiteSpace(lastTag)) {
+                    Data.LastVersion = lastTag.Trim();
+                    Data.LastCheckUpdate = currentDate;
+                }
+            }
+            if (App.CurrentVersion != Data.LastVersion) {
+                Data.NewVersion = true;
+            }
+            Debug.WriteLine(Data.LastVersion, "Last Version");
         }
 
         private void Button_Analyze(object sender, RoutedEventArgs e) {
