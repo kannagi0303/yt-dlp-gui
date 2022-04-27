@@ -1,0 +1,9 @@
+﻿<?xml version="1.0"?>
+<SyntaxDefinition name="desc" extensions=".desc" xmlns="http://icsharpcode.net/sharpdevelop/syntaxdefinition/2008">
+	<Color name="Hashtag" foreground="YellowGreen"/>
+	<RuleSet ignoreCase="true">
+    <Rule color="Hashtag">
+      [\#＃]\w+
+    </Rule>
+	</RuleSet>
+</SyntaxDefinition>

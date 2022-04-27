@@ -1,0 +1,81 @@
+﻿<UserControl x:Class="yt_dlp_gui.Controls.TextEditor"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:avalonedit="http://icsharpcode.net/sharpdevelop/avalonedit"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:editing="clr-namespace:ICSharpCode.AvalonEdit.Editing;assembly=ICSharpCode.AvalonEdit"
+             xmlns:rendering="clr-namespace:ICSharpCode.AvalonEdit.Rendering;assembly=ICSharpCode.AvalonEdit"
+             mc:Ignorable="d" x:Name="root"
+             d:DesignHeight="100" d:DesignWidth="200">
+    <UserControl.Resources>
+        <Style TargetType="rendering:TextView">
+            <Setter Property="LinkTextForegroundBrush" Value="#3ea6ff"/>
+        </Style>
+        <Style TargetType="editing:TextArea">
+            <Setter Property="FocusVisualStyle" Value="{x:Null}" />
+            <Setter Property="SelectionCornerRadius" Value="0"/>
+            <Setter Property="SelectionBorder">
+                <Setter.Value>
+                    <Pen Thickness="0" />
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </UserControl.Resources>
+    <Border BorderThickness="1" 
+            BorderBrush="{StaticResource ControlDefaultBorderBrush}" 
+            Background="{StaticResource ContainerBackground}"
+            CornerRadius="2">
+        <Border.Style>
+            <Style TargetType="Border">
+                <Setter Property="Padding" Value="2"/>
+                <Style.Triggers>
+                    <DataTrigger Binding="{Binding ElementName=root, Path=Multiline}" Value="True">
+                        <Setter Property="Padding" Value="0"/>
+                    </DataTrigger>
+                </Style.Triggers>
+            </Style>
+        </Border.Style>
+        <Grid>
+            <avalonedit:TextEditor x:Name="textEditor" VerticalAlignment="Center" Margin="0,2" 
+                                   Foreground="{StaticResource ControlDefaultForeground}"
+                                   Background="{StaticResource ContainerBackground}"
+                                   WordWrap="{Binding ElementName=root, Path=WordWrap}"
+                                   IsReadOnly="{Binding ElementName=root, Path=IsReadOnly}">
+                <avalonedit:TextEditor.Style>
+                    <Style TargetType="avalonedit:TextEditor">
+                        <Setter Property="ShowLineNumbers" Value="False"/>
+                        <Setter Property="WordWrap" Value="False"/>
+                        <Setter Property="VerticalScrollBarVisibility" Value="Hidden"/>
+                        <Setter Property="HorizontalScrollBarVisibility" Value="Hidden"/>
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding ElementName=root, Path=Multiline}" Value="True">
+                                <Setter Property="ShowLineNumbers" Value="True"/>
+                                <Setter Property="WordWrap" Value="False"/>
+                                <Setter Property="VerticalScrollBarVisibility" Value="Auto"/>
+                                <Setter Property="HorizontalScrollBarVisibility" Value="Auto"/>
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </avalonedit:TextEditor.Style>
+            </avalonedit:TextEditor>
+            <TextBlock Text="{Binding ElementName=root, Path=Helper}" Foreground="Gray"
+                       IsHitTestVisible="False">
+                <TextBlock.Style>
+                    <Style TargetType="TextBlock">
+                        <Setter Property="Visibility" Value="Hidden"/>
+                        <Setter Property="Margin" Value="0,2"/>
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding ElementName=root, Path=Text}" Value="">
+                                <Setter Property="Visibility" Value="Visible"/>
+                            </DataTrigger>
+                            <DataTrigger Binding="{Binding ElementName=root, Path=Multiline}" Value="True">
+                                <Setter Property="Margin" Value="19,2,0,2"/>
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </TextBlock.Style>
+            </TextBlock>
+        </Grid>
+    </Border>
+</UserControl>

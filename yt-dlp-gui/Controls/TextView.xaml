@@ -1,0 +1,16 @@
+﻿<UserControl x:Class="yt_dlp_gui.Controls.TextView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:avalonedit="http://icsharpcode.net/sharpdevelop/avalonedit"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:rendering="clr-namespace:ICSharpCode.AvalonEdit.Rendering;assembly=ICSharpCode.AvalonEdit"
+             mc:Ignorable="d" x:Name="root"
+             d:DesignHeight="100" d:DesignWidth="200">
+    <UserControl.Resources>
+        <Style TargetType="rendering:TextView">
+            <Setter Property="LinkTextForegroundBrush" Value="#3ea6ff"/>
+        </Style>
+    </UserControl.Resources>
+    <avalonedit:TextView x:Name="textView"/>
+</UserControl>

@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.2.32408.312
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "yt-dlp-gui", "yt-dlp-gui\yt-dlp-gui.csproj", "{1F5600B8-62B1-4197-B1CC-64C18AF211A7}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{1F5600B8-62B1-4197-B1CC-64C18AF211A7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1F5600B8-62B1-4197-B1CC-64C18AF211A7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1F5600B8-62B1-4197-B1CC-64C18AF211A7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1F5600B8-62B1-4197-B1CC-64C18AF211A7}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {9590D761-AD8D-44AF-AEE0-83F111766EAA}
+	EndGlobalSection
+EndGlobal

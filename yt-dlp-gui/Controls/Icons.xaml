@@ -1,0 +1,49 @@
+﻿<UserControl x:Class="yt_dlp_gui.Controls.Icons"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:yt_dlp_gui.Controls"
+             mc:Ignorable="d" x:Name="Root" Height="24" Width="24">
+    <UserControl.Resources>
+        <local:IconsKindConverter x:Key="iconsKindConverter"/>
+    </UserControl.Resources>
+    <Grid x:Name="PART_InnerGrid">
+        <Grid.Style>
+            <Style TargetType="Grid">
+                <Setter Property="RenderTransformOrigin" Value="0.5,0.5"/>
+                <Setter Property="Grid.RenderTransform">
+                    <Setter.Value>
+                        <RotateTransform x:Name="SpinTransform"/>
+                    </Setter.Value>
+                </Setter>
+                <Style.Triggers>
+                    <DataTrigger Binding="{Binding Spin}" Value="True">
+                        <DataTrigger.EnterActions>
+                            <BeginStoryboard Name="spin">
+                                <Storyboard RepeatBehavior="Forever">
+                                    <DoubleAnimation Storyboard.TargetProperty="RenderTransform.Angle" From="0" To="360"/>
+                                </Storyboard>
+                            </BeginStoryboard>
+                        </DataTrigger.EnterActions>
+                        <DataTrigger.ExitActions>
+                            <BeginStoryboard>
+                                <Storyboard>
+                                    <DoubleAnimation Storyboard.TargetProperty="RenderTransform.Angle" To="360" Duration="0:0:0"/>
+                                </Storyboard>
+                            </BeginStoryboard>
+                        </DataTrigger.ExitActions>
+                    </DataTrigger>
+                </Style.Triggers>
+            </Style>
+        </Grid.Style>
+        <Viewbox>
+            <Canvas Width="24" Height="24">
+                <Path Data="{Binding Kind, Converter={StaticResource iconsKindConverter}}"
+                      Fill="{Binding ElementName=Root, Path=Foreground}" 
+                      SnapsToDevicePixels="False" Stretch="None" 
+                      UseLayoutRounding="False"/>
+            </Canvas>
+        </Viewbox>
+    </Grid>
+</UserControl>

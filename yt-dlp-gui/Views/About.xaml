@@ -1,0 +1,64 @@
+﻿<Window x:Class="yt_dlp_gui.Views.About"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:Controls="clr-namespace:yt_dlp_gui.Controls"
+        mc:Ignorable="d" Style="{DynamicResource DialogStyle}"
+        WindowStartupLocation="CenterOwner"
+        ShowInTaskbar="False"
+        Title="About" Height="150" Width="420">
+    <Window.Resources>
+        <ControlTemplate TargetType="ContentControl" x:Key="WindowLogo">
+            <Controls:Icons Kind="Information" Size="16"/>
+        </ControlTemplate>
+    </Window.Resources>
+    <Grid Margin="6" TextElement.FontFamily="Consolas">
+        <Grid.RowDefinitions>
+            <RowDefinition/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition/>
+        </Grid.ColumnDefinitions>
+        <Image Source="pack://application:,,,/Resources/logo.ico" Height="48" VerticalAlignment="Top"/>
+        <!--
+        <mdxam:MarkdownScrollViewer xml:space="preserve" MarkdownStyleName="Sasabune" 
+
+                                    VerticalScrollBarVisibility="Auto" Margin="6,0,0,0">
+            ## yt-dlp-gui  2022-04-27
+            * [https://github.com/Kannagi0303/yt-dlp-gui](https://github.com/Kannagi0303/yt-dlp-gui)
+            * Authors : Kanzaki            
+            ![](pack://application:,,,/Resources/logo.ico)
+            
+        </mdxam:MarkdownScrollViewer>
+        -->
+        <Grid Grid.Column="1" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="6">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+
+            <TextBlock FontSize="18" FontWeight="Bold" Text="yt-dlp-gui"/>
+            <TextBlock FontSize="12" VerticalAlignment="Bottom" HorizontalAlignment="Right" Text="2022-04-27"/>
+            <Separator Grid.Row="1" Margin="0,8,0,4"/>
+            <TextBlock Grid.Row="2" Grid.Column="1" LineHeight="20">
+                <Run Foreground="Gray" Text="Website :"/>
+                <Hyperlink NavigateUri="https://github.com/Kannagi0303/yt-dlp-gui" Click="Hyperlink_Click">https://github.com/Kannagi0303/yt-dlp-gui</Hyperlink>
+                <LineBreak/>
+                <Run Foreground="Gray" Text="Authors :"/>
+                カンナギ Kannagi
+            </TextBlock>
+        </Grid>
+        <Grid Grid.Row="1" Grid.ColumnSpan="2" HorizontalAlignment="Right" VerticalAlignment="Bottom" Height="24" Margin="0,6,0,0">
+            <Button Click="Button_Click">
+                <StackPanel Orientation="Horizontal" Margin="14,0">
+                    <Controls:Icons Size="14" Kind="CheckCircle"/>
+                    <TextBlock Margin="2,0,2,0" Text="OK"/>
+                </StackPanel>
+            </Button>
+        </Grid>
+    </Grid>
+</Window>

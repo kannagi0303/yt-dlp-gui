@@ -1,0 +1,26 @@
+﻿<?xml version="1.0"?>
+<SyntaxDefinition name="url" extensions=".url" xmlns="http://icsharpcode.net/sharpdevelop/syntaxdefinition/2008">
+	<Color name="Range" foreground="#2da4fa"/>
+	<Color name="Slash" foreground="#2eabfe"/>
+	<Color name="Group" foreground="#05c3ba"/>
+	<Color name="GroupName" foreground="#05c3ba"/>
+	<Color name="FileName" foreground="Gray"/>
+	<Color name="Domain" foreground="YellowGreen"/>
+	<RuleSet ignoreCase="true">
+		<Span>
+			<Begin color="Slash">(\w+)(?=:\/\/[\w-]+(\.[\w-]+)+([\w.,@?^=%&amp;:\/~+#-]*[\w@?^=%&amp;\/~+#-])?)</Begin>
+			<End>(?=[^\w.,@?^=%&amp;:\/~+#-])</End>
+			<RuleSet>
+				<Rule color="Slash">\/|\?|=|&amp;</Rule>
+				<Span color="Domain">
+					<Begin color="Slash">\/\/</Begin>
+					<End color="Slash">(?=\/)</End>
+				</Span>
+				<Span color="FileName">
+					<Begin color="Slash">\/(?=\w+([\?\#]|$))</Begin>
+					<End>(?=[\?\#]|$)</End>
+				</Span>
+			</RuleSet>
+		</Span>
+	</RuleSet>
+</SyntaxDefinition>
