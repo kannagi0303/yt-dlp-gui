@@ -1,6 +1,7 @@
 ﻿using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Net.Http;
 using System.Text;
@@ -40,18 +41,23 @@ namespace Libs {
             var res = client.Send(new HttpRequestMessage(HttpMethod.Head, uri));
             return res.StatusCode == System.Net.HttpStatusCode.OK;
         }
-        public static async Task<string> GetLastTag() {
+        public static async Task<List<GitRelease>> GetLastTag() {
             var res = await Load(@"https://api.github.com/repos/Kannagi0303/yt-dlp-gui/releases");
             if (!string.IsNullOrWhiteSpace(res.content)) {
                 try {
-                    var j = JToken.Parse(res.content);
-                    var q = (string)j.SelectToken("$[0].tag_name");
-                    if (!string.IsNullOrWhiteSpace(q)) {
-                        return q;
-                    }
+                    return JsonConvert.DeserializeObject<List<GitRelease>>(res.content);
                 } catch { };
             }
-            return string.Empty;
+            return null;
         }
+    }
+    public class GitRelease {
+        public string tag_name { get; set; } = string.Empty;
+        public string body { get; set; } = string.Empty;
+        public List<GitReleaseAssets> assets { get; set; } = new();
+    }
+    public class GitReleaseAssets {
+        public string name { get; set; } = string.Empty;
+        public string browser_download_url { get; set; } = string.Empty;
     }
 }

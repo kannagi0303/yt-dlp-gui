@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Configuration;
-using System.Data;
-using System.Diagnostics;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Linq;
 using System.Windows;
 
 namespace yt_dlp_gui {
@@ -12,7 +6,7 @@ namespace yt_dlp_gui {
     /// Interaction logic for App.xaml
     /// </summary>
     public partial class App : Application {
-        public static string CurrentVersion = "2022.04.24";
+        public static string CurrentVersion = "2022.04.28";
         private void Application_Startup(object sender, StartupEventArgs e) {
             var args = e.Args.ToList();
             LoadPath();

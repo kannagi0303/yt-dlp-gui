@@ -1,0 +1,39 @@
+﻿<Window x:Class="yt_dlp_gui.Views.Release"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:yt_dlp_gui.Views" xmlns:mdxam="clr-namespace:Markdown.Xaml;assembly=Markdown.Xaml" xmlns:Controls="clr-namespace:yt_dlp_gui.Controls"
+        mc:Ignorable="d"
+        WindowStartupLocation="CenterOwner"
+        ShowInTaskbar="False"
+        Title="Releases" Height="300" Width="400">
+    <Window.Style>
+        <Style TargetType="Window" BasedOn="{StaticResource DialogStyle}">
+            <Setter Property="ResizeMode" Value="CanResizeWithGrip"/>
+        </Style>
+    </Window.Style>
+    <Grid Margin="6">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+        <mdxam:MarkdownScrollViewer BorderThickness="1" 
+                                    BorderBrush="{StaticResource ControlDefaultBorderBrush}"
+                                    VerticalScrollBarVisibility="Auto"
+                                    ClickAction="OpenBrowser"
+                                    Markdown="{Binding Markdown}">
+                <mdxam:MarkdownScrollViewer.MarkdownStyle>
+                    <Style TargetType="FlowDocument" BasedOn="{x:Static mdxam:MarkdownStyle.SasabuneCompact}">
+                        <Setter Property="PagePadding" Value="12"/>
+                    </Style>
+                </mdxam:MarkdownScrollViewer.MarkdownStyle>
+        </mdxam:MarkdownScrollViewer>
+        <Button Grid.Row="1" HorizontalAlignment="Right" Click="Button_Click" Margin="0,6,0,0">
+            <StackPanel Orientation="Horizontal" Margin="14,0">
+                <Controls:Icons Size="14" Kind="CheckCircle"/>
+                <TextBlock Margin="2,0,2,0" Text="OK"/>
+            </StackPanel>
+        </Button>
+    </Grid>
+</Window>

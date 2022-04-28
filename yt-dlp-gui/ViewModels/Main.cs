@@ -138,6 +138,7 @@ namespace yt_dlp_gui.Views {
             public string LastVersion { get; set; } = string.Empty;
             public string LastCheckUpdate { get; set; } = string.Empty;
             public bool NewVersion { get; set; } = false;
+            public List<GitRelease> ReleaseData { get; set; } = new();
             public Config Config { get; set; } = new();
             private void CheckEnable() {
                 Enable.Url = true;

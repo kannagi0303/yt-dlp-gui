@@ -16,9 +16,11 @@
     <Window.Resources>
         <ControlTemplate TargetType="ContentControl" x:Key="WindowExtend">
             <StackPanel Orientation="Horizontal">
-                <controls:Icons Size="18" Kind="NewBox">
-                    <controls:Icons.Style>
-                        <Style TargetType="controls:Icons">
+                <Button BorderBrush="Transparent" Background="Transparent"
+                        Width="40" WindowChrome.IsHitTestVisibleInChrome="True"
+                        Click="Button_Release">
+                    <Button.Style>
+                        <Style TargetType="Button" BasedOn="{StaticResource {x:Type Button}}">
                             <Setter Property="Visibility" Value="Collapsed"/>
                             <Style.Triggers>
                                 <DataTrigger Binding="{Binding NewVersion}" Value="True">
@@ -26,8 +28,9 @@
                                 </DataTrigger>
                             </Style.Triggers>
                         </Style>
-                    </controls:Icons.Style>
-                </controls:Icons>
+                    </Button.Style>
+                    <controls:Icons Size="18" Kind="NewBox"/>
+                </Button>
 
                 <Menu WindowChrome.IsHitTestVisibleInChrome="True">
                     <Menu.ItemsPanel>

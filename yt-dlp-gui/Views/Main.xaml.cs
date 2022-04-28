@@ -1,10 +1,7 @@
 ﻿using Libs;
 using Libs.Yaml;
-using Markdig;
 using Newtonsoft.Json;
-using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
@@ -35,22 +32,25 @@ namespace yt_dlp_gui.Views {
         }
         public async void Inits() {
             var needcheck = false;
-            var currentDate = DateTimeOffset.UtcNow.ToString("yyyy-MM-dd");
+            var currentDate = "";// DateTimeOffset.UtcNow.ToString("yyyy-MM-dd");
 
             if (!string.IsNullOrWhiteSpace(Data.LastVersion)) needcheck = true; //not yaml
             if (currentDate != Data.LastCheckUpdate) needcheck = true; //cross date
 
             if (needcheck) {
-                var lastTag = await Web.GetLastTag();
-                if (!string.IsNullOrWhiteSpace(lastTag)) {
-                    Data.LastVersion = lastTag.Trim();
+                var releaseData = await Web.GetLastTag();
+                //Debug.WriteLine(JsonConvert.SerializeObject(releaseData, Formatting.Indented));
+                var last = releaseData.LastOrDefault();
+                if (last != null) {
+                    Data.ReleaseData = releaseData;
+                    Data.LastVersion = last.tag_name;
                     Data.LastCheckUpdate = currentDate;
                 }
             }
-            if (App.CurrentVersion != Data.LastVersion) {
+            if (string.Compare(App.CurrentVersion, Data.LastVersion) < 0) { 
                 Data.NewVersion = true;
             }
-            Debug.WriteLine(Data.LastVersion, "Last Version");
+            //Debug.WriteLine(Data.LastVersion, "Last Version");
         }
 
         private void Button_Analyze(object sender, RoutedEventArgs e) {
@@ -265,6 +265,12 @@ namespace yt_dlp_gui.Views {
 
         private void MenuItem_About_Click(object sender, RoutedEventArgs e) {
             var win = new About();
+            win.Owner = GetWindow(this);
+            win.ShowDialog();
+        }
+
+        private void Button_Release(object sender, RoutedEventArgs e) {
+            var win = new Release();
             win.Owner = GetWindow(this);
             win.ShowDialog();
         }
