@@ -11,6 +11,14 @@
     <EnableCompressionInSingleFile>true</EnableCompressionInSingleFile>
   </PropertyGroup>
 
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <DebugType>none</DebugType>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <DebugType>none</DebugType>
+  </PropertyGroup>
+
   <ItemGroup>
     <None Remove="Resources\logo.ico" />
     <None Remove="Resources\xshd\desc.xshd" />
@@ -28,11 +36,11 @@
   <ItemGroup>
     <PackageReference Include="AvalonEdit" Version="6.1.3.50" />
     <PackageReference Include="Markdig" Version="0.30.2" />
-    <PackageReference Include="MdXaml_migfree" Version="1.13.0" />
+    <PackageReference Include="MdXaml_migfree" Version="1.15.0" />
     <PackageReference Include="Microsoft.Xaml.Behaviors.Wpf" Version="1.1.39" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
-    <PackageReference Include="PropertyChanged.Fody" Version="3.4.0" />
-    <PackageReference Include="Swordfish.NET.CollectionsV3" Version="3.3.8" />
+    <PackageReference Include="PropertyChanged.Fody" Version="3.4.1" />
+    <PackageReference Include="Swordfish.NET.CollectionsV3" Version="3.3.9" />
     <PackageReference Include="System.Resources.ResourceManager" Version="4.3.0" />
     <PackageReference Include="YamlDotNet" Version="11.2.1" />
   </ItemGroup>

@@ -1,6 +1,7 @@
 ﻿using Libs;
 using Libs.Yaml;
 using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -32,7 +33,7 @@ namespace yt_dlp_gui.Views {
         }
         public async void Inits() {
             var needcheck = false;
-            var currentDate = "";// DateTimeOffset.UtcNow.ToString("yyyy-MM-dd");
+            var currentDate = DateTimeOffset.UtcNow.ToString("yyyy-MM-dd"); //"";
 
             if (!string.IsNullOrWhiteSpace(Data.LastVersion)) needcheck = true; //not yaml
             if (currentDate != Data.LastCheckUpdate) needcheck = true; //cross date
