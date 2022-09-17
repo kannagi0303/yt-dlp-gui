@@ -3,6 +3,7 @@ using Libs.Yaml;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
@@ -105,7 +106,9 @@ namespace yt_dlp_gui.Views {
                 }
 
                 Data.SelectFormatBest(); //选择
-                Data.TargetName = GetValidFileName(Data.Video.title); //预设挡案名称
+                Debug.WriteLine(Data.Video.title, "TITLE");
+                Data.TargetName = GetValidFileName(Data.Video.title) + ".tmp"; //预设挡案名称
+                Debug.WriteLine(Data.TargetName, "TARGET");
             });
             dlp.Err(DLP.DLPError.Sign, () => {
                 if (Data.UseCookie == UseCookie.WhenNeeded) {
@@ -233,8 +236,16 @@ namespace yt_dlp_gui.Views {
 
         private static Regex RegexValues = new Regex(@"\${(.+?)}", RegexOptions.Compiled);
         private string GetValidFileName(string filename) {
+            
             var regexSearch = new string(Path.GetInvalidFileNameChars());
+            Debug.WriteLine(JsonConvert.SerializeObject(regexSearch));
             return Regex.Replace(filename, string.Format("[{0}]", Regex.Escape(regexSearch)), "_");
+            /*
+            foreach (char c in Path.GetInvalidFileNameChars()) {
+                filename = filename.Replace(c, '_');
+            }
+            return filename;
+            */
         }
         private void CommandBinding_SaveAs_Executed(object sender, System.Windows.Input.ExecutedRoutedEventArgs e) {
             var dialog = new SaveFileDialog();
