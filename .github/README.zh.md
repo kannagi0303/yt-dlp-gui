@@ -8,17 +8,31 @@
 [yt-dlp](https://github.com/yt-dlp/yt-dlp) 專案增加許多功能與修補，同時也保持與原始項目的更新。
 
 ### 截圖
-<img src="screenshot01.png" width="460"/>
+<img src="screenshot02.png" width="460"/>
 
 ### 執行需求
 * [yt-dlp](https://github.com/yt-dlp/yt-dlp)
 * [FFMPEG](https://ffmpeg.org/download.html#build-windows)
 
+### 可選
+* [aria2](https://aria2.github.io/)
+
 ### 如何使用
-1. 下載以及解壓縮
+1. 下載 `yt-dlp-gui.exe`
 2. 於執行檔位置建立`bin`資料夾
 3. 將`yt-dlp.exe`以及`ffmpeg.exe`複製進`bin`資料夾中
-4. 執行`yt-dlp-gui.exe`
+4. 執行
+
+#### 使用Configuration設定 (參考 [configuration](https://github.com/yt-dlp/yt-dlp#configuration))
+1. 於執行檔位置建立`configs`資料夾
+2. 將 configuration 檔案放至`configs`資料夾中 (純文字)
+
+* 需要重啟掃描configuration設定檔案
+* 目前只支援 `-f`, `--format`, `-o`, `--output`
+* 將會在分析網址時套用 (依照configuration選擇影片品質與輸出樣板)
+
+#### 使用 Aria2
+複製 `aria2c.exe` 到`bin`資料夾
 
 ### 作者
 * かんなぎ (Kannagi)

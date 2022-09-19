@@ -9,17 +9,31 @@ Command-line program to download videos from YouTube.com and other video sites,
 [yt-dlp](https://github.com/yt-dlp/yt-dlp) project is adding new features and patches while also keeping up to date with the original project.
 
 ### Screenshots
-<img src="screenshot01.png" width="460"/>
+<img src="screenshot02.png" width="460"/>
 
 ### Requirements
 * [yt-dlp](https://github.com/yt-dlp/yt-dlp)
 * [FFMPEG](https://ffmpeg.org/download.html#build-windows)
 
+### Optional
+* [aria2](https://aria2.github.io/)
+
 ### How to Use
-1. Download & extract
+1. Download `yt-dlp-gui.exe`
 2. Create a Folder `bin` in location of executable file
-3. Copy `yt-dlp.exe` and `ffmpeg.exe` to Folder `bin`
-4. Execute `yt-dlp-gui.exe`
+3. Copy `yt-dlp.exe` and `ffmpeg.exe` into Folder `bin`
+4. Execute
+
+#### Use Configuration (refer to [configuration](https://github.com/yt-dlp/yt-dlp#configuration))
+1. Create a Folder `configs` in location of executable file
+2. Put configuration file(s) into Folder `configs` (text file)
+
+* Need Restart for scan configuration file(s)
+* Currently only supports `-f`, `--format`, `-o`, `--output`
+* The Configuration will be applied when `Analyze` the URL (Choose video quality and output template according to Configuration File)
+
+#### Use Aria2
+Copy `aria2c.exe` into Folder `bin`
 
 ### Authors
 * かんなぎ (Kannagi)
