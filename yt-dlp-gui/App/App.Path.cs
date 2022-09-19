@@ -5,7 +5,7 @@ using System.Windows;
 
 namespace yt_dlp_gui {
     using IoPath = System.IO.Path;
-    public partial class App : Application {
+    public partial class App :Application {
         public static string AppExe;
         public static string AppPath;
         public static string AppName;
@@ -23,6 +23,7 @@ namespace yt_dlp_gui {
             parmas.AddRange(type switch {
                 Folders.root => Array.Empty<string>(),
                 Folders.bin => new[] { "bin" },
+                Folders.configs => new[] { "configs" },
                 _ => throw new NotImplementedException(),
             });
             //新增延伸
@@ -34,7 +35,7 @@ namespace yt_dlp_gui {
             return res;
         }
         public enum Folders {
-            root, bin
+            root, bin, configs
         }
     }
 }

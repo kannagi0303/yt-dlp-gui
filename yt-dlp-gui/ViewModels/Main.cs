@@ -1,10 +1,14 @@
 ﻿using Libs;
 using Libs.Yaml;
+using Microsoft.VisualBasic;
+using Newtonsoft.Json;
 using Swordfish.NET.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Windows;
 using yt_dlp_gui.Models;
 
@@ -38,8 +42,28 @@ namespace yt_dlp_gui.Views {
                 };
                 PropertyChanged += SelfData_PropertyChanged;
             }
+            private Regex _isComment = new Regex(@"^\s*#");
+            private Regex _hasOutput = new Regex(@"(-o|--output)\s+");
+            private Regex _hasFormat = new Regex(@"(-f|--format)\s+");
             private void SelfData_PropertyChanged(object? sender, PropertyChangedEventArgs e) {
                 switch (e.PropertyName) {
+                    case nameof(selectedConfig):
+                        var f = selectedConfig.file;
+                        Debug.WriteLine(f, "config file");
+                        GUIConfig.ConfigurationFile = f;
+
+                        UseFormat = true;
+                        UseOutput = true;
+
+                        if (File.Exists(f)) {
+                            foreach (var line in File.ReadLines(f)) {
+                                if (string.IsNullOrWhiteSpace(line) || _isComment.IsMatch(line)) continue;
+                                if (_hasFormat.IsMatch(line)) UseFormat = false;
+                                if (_hasOutput.IsMatch(line)) UseOutput = false;
+                            }
+                        }
+
+                        break;
                     case nameof(selectedVideo):
                         //更改package连接
                         if (selectedVideo != null && selectedAudio != null) {
@@ -75,12 +99,17 @@ namespace yt_dlp_gui.Views {
                 }
                 CheckEnable();
 
-                if (AutoSaveConfig) Util.PropertyCopy(this, Config);
+                if (AutoSaveConfig) Util.PropertyCopy(this, GUIConfig);
             }
 
             public void SelectFormatBest() {
-                selectedVideo = FormatsVideo.FirstOrDefault();
-                selectedAudio = FormatsAudio.FirstOrDefault();
+                if (UseFormat) {
+                    selectedVideo = FormatsVideo.FirstOrDefault();
+                    selectedAudio = FormatsAudio.FirstOrDefault();
+                } else {
+                    selectedVideo = FormatsVideo.FirstOrDefault(x => RequestedFormats.Any(r => r.format_id == x.format_id));
+                    selectedAudio = FormatsAudio.FirstOrDefault(x => RequestedFormats.Any(r => r.format_id == x.format_id));
+                }
                 selectedSub = Subtitles.FirstOrDefault();
             }
             public void CheckExtension() {
@@ -99,10 +128,16 @@ namespace yt_dlp_gui.Views {
                 }
             }
             public Video? Video { get; set; } = new();
+            public ConcurrentObservableCollection<Config> Configs { get; set; } = new();
+            public IEnumerable<Config> ConfigsView => Configs.CollectionView;
+            public Config selectedConfig { get; set; } = new();
+            public bool UseFormat { get; set; } = true;
+            public bool UseOutput { get; set; } = true;
             public ConcurrentObservableCollection<Format> Formats { get; set; } = new();
             public IEnumerable<Format> FormatsView => Formats.CollectionView.OrderBy(x => x.width * x.height);
             public IEnumerable<Format> FormatsVideo => Formats.CollectionView.Where(x => x.type == FormatType.package || x.type == FormatType.video).OrderBy(x => x, ComparerVideo.Comparer);
             public IEnumerable<Format> FormatsAudio => Formats.CollectionView.Where(x => x.type == FormatType.package || x.type == FormatType.audio).OrderBy(x => x, ComparerAudio.Comparer);
+            public ConcurrentObservableCollection<Format> RequestedFormats { get; set; } = new();
             public ConcurrentObservableCollection<Thumb> Thumbnails { get; set; } = new();
             public IEnumerable<Thumb> ThumbnailsView => Thumbnails.CollectionView;
             public ConcurrentObservableCollection<Subs> Subtitles { get; set; } = new();
@@ -130,6 +165,7 @@ namespace yt_dlp_gui.Views {
             public double ImageHeight { get; set; } = 0;
             public UseCookie UseCookie { get; set; } = UseCookie.WhenNeeded;
             public CookieType CookieType { get; set; } = CookieType.Chrome;
+            public bool UseAria2 { get; set; } = true;
             public bool NeedCookie { get; set; } = false;
             public bool SaveThumbnail { get; set; } = true;
             public Enable Enable { get; set; } = new();
@@ -139,7 +175,7 @@ namespace yt_dlp_gui.Views {
             public string LastCheckUpdate { get; set; } = string.Empty;
             public bool NewVersion { get; set; } = false;
             public List<GitRelease> ReleaseData { get; set; } = new();
-            public Config Config { get; set; } = new();
+            public GUIConfig GUIConfig { get; set; } = new();
             private void CheckEnable() {
                 Enable.Url = true;
                 Enable.Analyze = true;
@@ -152,6 +188,7 @@ namespace yt_dlp_gui.Views {
                 Enable.CookieType = true;
                 Enable.SaveThumbnail = true;
                 Enable.SaveSubtitle = true;
+                Enable.UseAria2 = true;
 
                 if (string.IsNullOrWhiteSpace(Url)) Enable.Analyze = false;
                 if (IsAnalyze) {
@@ -178,6 +215,7 @@ namespace yt_dlp_gui.Views {
                     Enable.CookieType = false;
                     Enable.SaveThumbnail = false;
                     Enable.SaveSubtitle = false;
+                    Enable.UseAria2 = false;
                 }
                 if (!FormatsVideo.Any()) Enable.FormatVideo = false;
                 if (!FormatsAudio.Any()) Enable.FormatAudio = false;
@@ -216,10 +254,11 @@ namespace yt_dlp_gui.Views {
             public bool CookieType { get; set; } = true;
             public bool SaveThumbnail { get; set; } = true;
             public bool SaveSubtitle { get; set; } = true;
+            public bool UseAria2 { get; set; } = true;
         }
-        public class Config : IYamlConfig, INotifyPropertyChanged {
+        public class GUIConfig : IYamlConfig, INotifyPropertyChanged {
             public event PropertyChangedEventHandler? PropertyChanged;
-            public Config() {
+            public GUIConfig() {
                 PropertyChanged += Config_PropertyChanged;
             }
             private void Config_PropertyChanged(object? sender, PropertyChangedEventArgs e) {
@@ -230,10 +269,14 @@ namespace yt_dlp_gui.Views {
             public CookieType CookieType { get; set; } = CookieType.Chrome;
             [Description("With Thumbnail When Downlaod")]
             public bool SaveThumbnail { get; set; } = true;
-
+            [Description("Configuration File")]
+            public string ConfigurationFile { get; set; } = string.Empty;
+            [Description("Aria2 Settings")]
+            public bool UseAria2 { get; set; } = false;
             [Description("Last Checking Update Date")]
             public string LastVersion { get; set; } = string.Empty;
             public string LastCheckUpdate { get; set; } = string.Empty;
+
         }
     }
 }

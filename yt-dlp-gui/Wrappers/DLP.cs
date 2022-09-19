@@ -12,20 +12,29 @@ namespace yt_dlp_gui.Wrappers {
     public class DLP {
         public Dictionary<string, string> Options { get; set; } = new Dictionary<string, string>();
         public string Url { get; set; } = string.Empty;
-        public HashSet<string> Flags { get; set; } = new() {
-            "--no-playlist", "-j", "-v",
-            "--force-overwrites", "--no-part",
-            "--skip-download","--write-subs" };
         public HashSet<DLPError> StdErr { get; set; } = new();
         Process process = new();
         public enum DLPError { Sign, Unsupported }
 
         public DLP(string url = "") {
             Url = url;
-            NoPlaylist().NoPart().Overwrite();
+            NoPlaylist().NoPart().Overwrite().IgnoreConfig();
         }
         public DLP NoPart() {
             Options["--no-part"] = "";
+            return this;
+        }
+        public DLP IgnoreConfig() {
+            Options["--ignore-config"] = "";
+            return this;
+        }
+        public DLP LoadConfig(string path) {
+            Options.Remove("--ignore-config");
+            Options["--config-locations"] = "\"" + path + "\"";
+            return this;
+        }
+        public DLP Output(string targetpath) {
+            Options["-o"] = targetpath;
             return this;
         }
         public DLP Subtitle(string lang, string targetpath) {
@@ -48,7 +57,11 @@ namespace yt_dlp_gui.Wrappers {
             Options["--force-overwrites"] = "";
             return this;
         }
-
+        public DLP UseAria2() {
+            Options["--external-downloader"] = "aria2c";
+            //Options["--downloader-args"] = "aria2c:\"-x 16 -k 10M --user-agent=''\"";
+            return this;
+        }
         public DLP Cookie(CookieType type) {
             switch(type) {
                 case CookieType.Chrome:
@@ -76,7 +89,15 @@ namespace yt_dlp_gui.Wrappers {
         }
         private string Args {
             get {
-                var args = Options.Select(x => Flags.Contains(x.Key) ? x.Key : $"{x.Key} \"{x.Value}\"").ToList();
+                var args = Options.Select(x => {
+                    if (x.Key == "-o") {
+                        return $"{x.Key} \"{x.Value}\"";
+                    } else if (string.IsNullOrWhiteSpace(x.Value)) {
+                        return x.Key;
+                    } else {
+                        return $"{x.Key} {x.Value}";
+                    }
+                }).ToList();
                 args.Add($"\"{Url}\"");
                 return string.Join(" ", args);
             }
@@ -100,6 +121,7 @@ namespace yt_dlp_gui.Wrappers {
                 RedirectStandardOutput = true,
                 RedirectStandardError = true,
             };
+            Debug.WriteLine(Args);
             process.StartInfo = info;
             process.EnableRaisingEvents = true;
             process.OutputDataReceived += (s, e) => {

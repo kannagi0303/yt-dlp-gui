@@ -1,6 +1,7 @@
 ﻿using Libs;
 using Libs.Yaml;
 using Newtonsoft.Json;
+using Swordfish.NET.Collections.Auxiliary;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -14,7 +15,7 @@ using yt_dlp_gui.Models;
 using yt_dlp_gui.Wrappers;
 
 namespace yt_dlp_gui.Views {
-    public partial class Main : Window {
+    public partial class Main :Window {
         private readonly ViewData Data = new();
         private List<DLP> RunningDLP = new();
         public Main() {
@@ -22,17 +23,42 @@ namespace yt_dlp_gui.Views {
 
             DataContext = Data;
             //Load Configs
-            Data.Config.Load(App.Path(App.Folders.root, App.AppName + ".yaml"));
-            Util.PropertyCopy(Data.Config, Data);
+            InitGUIConfig();
 
-            Data.AutoSaveConfig = true;
-            //Check Path
+            //檢查 Configuration
+            InitConfiguration();
+
+            //檢查儲存Path，假如設定沒有則預設為App所在Path
             if (!Directory.Exists(Data.TargetPath)) {
                 Data.TargetPath = App.AppPath;
             }
+
+            //檢查更新
             Task.Run(Inits);
         }
+        public void InitGUIConfig() {
+            Data.GUIConfig.Load(App.Path(App.Folders.root, App.AppName + ".yaml"));
+            Util.PropertyCopy(Data.GUIConfig, Data);
+            //讀取設定檔完成，開啟變更自動儲存
+            Data.AutoSaveConfig = true;
+        }
+        public void InitConfiguration() {
+            Data.Configs.Clear();
+            Data.Configs.Add(new Config() { name = "[None]" });
+            var cp = App.Path(App.Folders.configs);
+            var fs = Directory.Exists(cp)
+                ?Directory.EnumerateFiles(cp).OrderBy(x => x)
+                :Enumerable.Empty<string>();
+            fs.ForEach(x => {
+                Data.Configs.Add(new Config() { 
+                    name = Path.GetFileNameWithoutExtension(x),
+                    file = x
+                });
+            });
+            Data.selectedConfig = Data.Configs.FirstOrDefault(x => x.file == Data.GUIConfig.ConfigurationFile, Data.Configs.First());
+        }
         public async void Inits() {
+            //檢查更新
             var needcheck = false;
             var currentDate = DateTimeOffset.UtcNow.ToString("yyyy-MM-dd"); //"";
 
@@ -41,20 +67,17 @@ namespace yt_dlp_gui.Views {
 
             if (needcheck) {
                 var releaseData = await Web.GetLastTag();
-                //Debug.WriteLine(JsonConvert.SerializeObject(releaseData, Formatting.Indented));
-                var last = releaseData.LastOrDefault();
+                var last = releaseData.FirstOrDefault();
                 if (last != null) {
                     Data.ReleaseData = releaseData;
                     Data.LastVersion = last.tag_name;
                     Data.LastCheckUpdate = currentDate;
                 }
             }
-            if (string.Compare(App.CurrentVersion, Data.LastVersion) < 0) { 
+            if (string.Compare(App.CurrentVersion, Data.LastVersion) < 0) {
                 Data.NewVersion = true;
             }
-            //Debug.WriteLine(Data.LastVersion, "Last Version");
         }
-
         private void Button_Analyze(object sender, RoutedEventArgs e) {
             Data.IsAnalyze = true;
             cv.SelectedIndex = -1;
@@ -72,14 +95,19 @@ namespace yt_dlp_gui.Views {
             var dlp = new DLP(Data.Url);
             if (Data.NeedCookie) dlp.Cookie(Data.CookieType);
             dlp.GetInfo();
+            if (!string.IsNullOrWhiteSpace(Data.selectedConfig.file)) {
+                dlp.LoadConfig(Data.selectedConfig.file);
+            }
+            if (Data.UseOutput) dlp.Output("%(title)s.%(ext)s"); //if not used config, default template
             dlp.Exec(std => {
                 //取得JSON
                 Data.Video = JsonConvert.DeserializeObject<Video>(std);
 
                 //读取 Formats 与 Thumbnails
                 {
-                    Data.Formats.LoadFromVideo(Data.Video);
+                    Data.Formats.LoadFromVideo(Data.Video.formats);
                     Data.Thumbnails.Reset(Data.Video.thumbnails);
+                    Data.RequestedFormats.LoadFromVideo(Data.Video.requested_formats);
                 }
                 //读取 Subtitles
                 {
@@ -106,9 +134,14 @@ namespace yt_dlp_gui.Views {
                 }
 
                 Data.SelectFormatBest(); //选择
-                Debug.WriteLine(Data.Video.title, "TITLE");
-                Data.TargetName = GetValidFileName(Data.Video.title) + ".tmp"; //预设挡案名称
-                Debug.WriteLine(Data.TargetName, "TARGET");
+                var full = string.Empty; 
+                if (Path.IsPathRooted(Data.Video.filename)) {
+                    full = Path.GetFullPath(Data.Video.filename);
+                } else {
+                    full = Path.Combine(Data.TargetPath, Data.Video.filename);
+                }
+                //Data.TargetName = GetValidFileName(Data.Video.title) + ".tmp"; //预设挡案名称
+                Data.TargetName = full; //预设挡案名称
             });
             dlp.Err(DLP.DLPError.Sign, () => {
                 if (Data.UseCookie == UseCookie.WhenNeeded) {
@@ -127,6 +160,7 @@ namespace yt_dlp_gui.Views {
             } else {
                 var overwrite = true;
                 RunningDLP.Clear();
+                //如果檔案已存在
                 if (File.Exists(Data.TargetFile)) {
                     var mb = System.Windows.Forms.MessageBox.Show(
                         "File Already exist. Overwrite it?\nwe",
@@ -135,11 +169,15 @@ namespace yt_dlp_gui.Views {
                     overwrite = mb == System.Windows.Forms.DialogResult.Yes;
                     if (!overwrite) return; //不要复写
                 }
+                //進度更新為0
                 Data.VideoPersent = Data.AudioPersent = 0;
                 Data.VideoETA = Data.AudioETA = "0:00";
                 Data.IsDownload = true;
-                var r = new Regex(@"(?<=\[download]).*?(?<persent>[\w.]+)%(.*?(?<=ETA)(?<eta>.*))?");
+                var r = new Regex(@"(?<=\[download|#\w{6}]?).*?(?<persent>[\w.]+)%(.*?(?<=ETA)(?<eta>.*))?");
                 Task.Run(() => {
+                    //任務池
+                    List<Task> tasks = new();
+
                     var temppath = App.AppPath;
                     var vid = Data.selectedVideo.format_id;
                     var vext = Data.selectedVideo.video_ext;
@@ -151,15 +189,16 @@ namespace yt_dlp_gui.Views {
                     var apath = Path.Combine(temppath, $"{Data.Video.id}.{aid}.{aext}");
                     Data.CheckExtension();
 
-                    List<Task> tasks = new();
                     //Download Video
                     tasks.Add(Task.Run(() => {
                         var dlp = new DLP(Data.Url);
                         if (Data.NeedCookie) dlp.Cookie(Data.CookieType);
                         RunningDLP.Add(dlp);
                         dlp.DownloadFormat(vid, vpath);
+                        if (Data.UseAria2) dlp.UseAria2();
                         dlp.Exec(stdout => {
                             var data = GetGroup(r, stdout);
+                            Debug.WriteLine(stdout, "VIDEO");
                             Data.VideoPersent = decimal.Parse(data.GetValueOrDefault("persent", "0"));
                             Data.VideoETA = data.GetValueOrDefault("eta", "0:00");
                         });
@@ -171,8 +210,10 @@ namespace yt_dlp_gui.Views {
                             if (Data.NeedCookie) dlp.Cookie(Data.CookieType);
                             RunningDLP.Add(dlp);
                             dlp.DownloadFormat(aid, apath);
+                            if (Data.UseAria2) dlp.UseAria2();
                             dlp.Exec(stdout => {
                                 var data = GetGroup(r, stdout);
+                                Debug.WriteLine(stdout, "AUDIO");
                                 Data.AudioPersent = decimal.Parse(data.GetValueOrDefault("persent", "0"));
                                 Data.AudioETA = data.GetValueOrDefault("eta", "0:00");
                             });
@@ -192,7 +233,7 @@ namespace yt_dlp_gui.Views {
                             FFMPEG.DownloadUrl(Data.Thumbnail, thumbpath);
                         }
                     }
-                    //WaitAll Downloads
+                    //WaitAll Downloads, Merger Video and Audio
                     Task.WaitAll(tasks.ToArray());
                     if (!Data.IsAbouted) {
                         if (Data.selectedVideo.type == FormatType.video) {
@@ -236,16 +277,8 @@ namespace yt_dlp_gui.Views {
 
         private static Regex RegexValues = new Regex(@"\${(.+?)}", RegexOptions.Compiled);
         private string GetValidFileName(string filename) {
-            
             var regexSearch = new string(Path.GetInvalidFileNameChars());
-            Debug.WriteLine(JsonConvert.SerializeObject(regexSearch));
             return Regex.Replace(filename, string.Format("[{0}]", Regex.Escape(regexSearch)), "_");
-            /*
-            foreach (char c in Path.GetInvalidFileNameChars()) {
-                filename = filename.Replace(c, '_');
-            }
-            return filename;
-            */
         }
         private void CommandBinding_SaveAs_Executed(object sender, System.Windows.Input.ExecutedRoutedEventArgs e) {
             var dialog = new SaveFileDialog();

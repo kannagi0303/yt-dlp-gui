@@ -88,8 +88,8 @@ namespace yt_dlp_gui.Models {
         public static ComparerVideo Comparer = new ComparerVideo();
     }
     public static class ExtensionFormat {
-        public static void LoadFromVideo(this ConcurrentObservableCollection<Format> source, Video from) {
-            foreach (var row in from.formats) {
+        public static void LoadFromVideo(this ConcurrentObservableCollection<Format> source, List<Format> from) { //, Video from
+            foreach (var row in from) { //from.formats
                 //分类
                 if (row.vcodec != "none" && row.acodec != "none") {
                     row.type = FormatType.package;
@@ -115,7 +115,7 @@ namespace yt_dlp_gui.Models {
                     row.acodec = "OPUS";
                 }
             }
-            source.Reset(from.formats);
+            source.Reset(from); //from.formats
         }
     }
 }
