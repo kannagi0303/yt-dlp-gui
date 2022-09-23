@@ -19,6 +19,15 @@ namespace yt_dlp_gui.Wrappers {
         public DLP(string url = "") {
             Url = url;
             NoPlaylist().NoPart().Overwrite().IgnoreConfig();
+            Options["--progress-template"] = "\"" 
+                + "[yt-dlp]," //0
+                + "%(progress._percent_str)s," //1
+                + "%(progress._eta_str)s," //2
+                + "%(progress.downloaded_bytes)s," //3
+                + "%(progress.total_bytes)s," //4
+                + "%(progress.speed)s," //5
+                + "%(progress.eta)s" //6
+                + "\"";
         }
         public DLP NoPart() {
             Options["--no-part"] = "";
@@ -35,6 +44,10 @@ namespace yt_dlp_gui.Wrappers {
         }
         public DLP Output(string targetpath) {
             Options["-o"] = targetpath;
+            return this;
+        }
+        public DLP DownloadSections(string regex) {
+            Options["--download-sections"] = "\"" + regex + "\"";
             return this;
         }
         public DLP Subtitle(string lang, string targetpath) {
@@ -110,7 +123,7 @@ namespace yt_dlp_gui.Wrappers {
         private static Regex ErrSign = new Regex(@"^(?=.*?ERROR)(?=.*?sign)(?=.*?confirm)", RegexOptions.IgnoreCase);
         private static Regex ErrUnsupported = new Regex(@"^(?=.*?ERROR)(?=.*?Unsupported)", RegexOptions.IgnoreCase);
 
-        public Process Exec(Action<string> stdout = null) {
+        public Process Exec(Action<string> stdall = null, Action<string> stdout = null, Action<string> stderr = null) {
             var fn = App.Path(App.Folders.bin, "yt-dlp.exe");
             var info = new ProcessStartInfo() {
                 FileName = fn,
@@ -127,12 +140,15 @@ namespace yt_dlp_gui.Wrappers {
             process.OutputDataReceived += (s, e) => {
                 //Debug.WriteLine(e.Data, "STD");
                 if (!string.IsNullOrWhiteSpace(e.Data)) {
+                    stdall?.Invoke(e.Data);
                     stdout?.Invoke(e.Data);
                 }
             };
             process.ErrorDataReceived += (s, e) => {
                 //Debug.WriteLine(e.Data, "ERR");
                 if (!string.IsNullOrWhiteSpace(e.Data)) {
+                    stdall?.Invoke(e.Data);
+                    stderr?.Invoke(e.Data);
                     if (ErrSign.IsMatch(e.Data)) StdErr.Add(DLPError.Sign);
                     if (ErrUnsupported.IsMatch(e.Data)) StdErr.Add(DLPError.Unsupported);
                 }

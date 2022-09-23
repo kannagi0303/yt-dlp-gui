@@ -13,8 +13,8 @@ using System.Windows;
 using yt_dlp_gui.Models;
 
 namespace yt_dlp_gui.Views {
-    public partial class Main : Window {
-        public class ViewData : INotifyPropertyChanged {
+    public partial class Main :Window {
+        public class ViewData :INotifyPropertyChanged {
             public event PropertyChangedEventHandler? PropertyChanged;
             public ViewData() {
                 Formats.PropertyChanged += (s, e) => {
@@ -37,6 +37,13 @@ namespace yt_dlp_gui.Views {
                     switch (e.PropertyName) {
                         case nameof(ConcurrentObservableCollection<Format>.CollectionView):
                             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(SubtitlesView)));
+                            break;
+                    }
+                };
+                DNStatus_Infos.PropertyChanged += (s, e) => {
+                    switch (e.PropertyName) {
+                        case nameof(ConcurrentObservableDictionary<string, string>.CollectionView):
+                            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(DNStatus_InfosView)));
                             break;
                     }
                 };
@@ -101,7 +108,15 @@ namespace yt_dlp_gui.Views {
 
                 if (AutoSaveConfig) Util.PropertyCopy(this, GUIConfig);
             }
-
+            public void UpdateDownloadStatus() {
+                /*
+                DST_Downloaded = Util.GetAutoUnit((long)DSV_Downloaded + (long)DSA_Downloaded, SizeUnit.Auto);
+                DST_Total = Util.GetAutoUnit((long)DSV_Total + (long)DSA_Total, SizeUnit.Auto);
+                DST_Speed = Util.GetAutoUnit((long)DSV_Speed + (long)DSA_Speed, SizeUnit.Auto, "iB/s");
+                DST_Elapsed = Util.SecToStr(DSV_Elapsed + DSA_Elapsed);
+                */
+                //PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(DNStatus_InfosView)));
+            }
             public void SelectFormatBest() {
                 if (UseFormat) {
                     selectedVideo = FormatsVideo.FirstOrDefault();
@@ -168,6 +183,7 @@ namespace yt_dlp_gui.Views {
             public bool UseAria2 { get; set; } = true;
             public bool NeedCookie { get; set; } = false;
             public bool SaveThumbnail { get; set; } = true;
+            public string TimeRange { get; set; } = string.Empty;
             public Enable Enable { get; set; } = new();
             public bool AutoSaveConfig { get; set; } = false;
             public string Html { get; set; } = string.Empty;
@@ -176,6 +192,14 @@ namespace yt_dlp_gui.Views {
             public bool NewVersion { get; set; } = false;
             public List<GitRelease> ReleaseData { get; set; } = new();
             public GUIConfig GUIConfig { get; set; } = new();
+            //status
+            public DownloadStatus DNStatus_Video { get; set; } = new();
+            public DownloadStatus DNStatus_Audio { get; set; } = new();
+            //public Dictionary<string, string> DNStatus_Infos { get; set; } = new();
+            public ConcurrentObservableDictionary<string, string> DNStatus_Infos { get; set; } = new();
+            public IEnumerable<KeyValuePair<string, string>> DNStatus_InfosView
+                => DNStatus_Infos.CollectionView;
+            //
             private void CheckEnable() {
                 Enable.Url = true;
                 Enable.Analyze = true;
@@ -187,6 +211,8 @@ namespace yt_dlp_gui.Views {
                 Enable.UseCookie = true;
                 Enable.CookieType = true;
                 Enable.SaveThumbnail = true;
+                Enable.SaveVideo = true;
+                Enable.SaveAudio = true;
                 Enable.SaveSubtitle = true;
                 Enable.UseAria2 = true;
 
@@ -202,6 +228,8 @@ namespace yt_dlp_gui.Views {
                     Enable.UseCookie = false;
                     Enable.CookieType = false;
                     Enable.SaveThumbnail = false;
+                    Enable.SaveVideo = false;
+                    Enable.SaveAudio = false;
                     Enable.SaveSubtitle = false;
                 }
                 if (IsDownload) {
@@ -214,19 +242,31 @@ namespace yt_dlp_gui.Views {
                     Enable.UseCookie = false;
                     Enable.CookieType = false;
                     Enable.SaveThumbnail = false;
+                    Enable.SaveVideo = false;
+                    Enable.SaveAudio = false;
                     Enable.SaveSubtitle = false;
                     Enable.UseAria2 = false;
                 }
-                if (!FormatsVideo.Any()) Enable.FormatVideo = false;
-                if (!FormatsAudio.Any()) Enable.FormatAudio = false;
+                if (!FormatsVideo.Any()) {
+                    Enable.FormatVideo = false;
+                    Enable.SaveVideo = false;
+                }
+                if (!FormatsAudio.Any()) {
+                    Enable.FormatAudio = false;
+                    Enable.SaveAudio = false;
+                }
                 if (selectedVideo == null || selectedAudio == null) {
                     Enable.Download = false;
+                    Enable.SaveVideo = false;
+                    Enable.SaveAudio = false;
                 } else {
                     if (string.IsNullOrWhiteSpace(selectedVideo.format_id)) {
                         Enable.Download = false;
+                        Enable.SaveVideo = false;
                     }
                     if (string.IsNullOrWhiteSpace(selectedAudio.format_id)) {
                         Enable.Download = false;
+                        Enable.SaveAudio = false;
                     }
                     if (selectedVideo.type == FormatType.package) Enable.FormatAudio = false;
                 }
@@ -241,7 +281,7 @@ namespace yt_dlp_gui.Views {
             }
 
         }
-        public class Enable : INotifyPropertyChanged {
+        public class Enable :INotifyPropertyChanged {
             public event PropertyChangedEventHandler? PropertyChanged;
             public bool Url { get; set; } = true;
             public bool Analyze { get; set; } = true;
@@ -253,10 +293,12 @@ namespace yt_dlp_gui.Views {
             public bool UseCookie { get; set; } = true;
             public bool CookieType { get; set; } = true;
             public bool SaveThumbnail { get; set; } = true;
+            public bool SaveVideo { get; set; } = true;
+            public bool SaveAudio { get; set; } = true;
             public bool SaveSubtitle { get; set; } = true;
             public bool UseAria2 { get; set; } = true;
         }
-        public class GUIConfig : IYamlConfig, INotifyPropertyChanged {
+        public class GUIConfig :IYamlConfig, INotifyPropertyChanged {
             public event PropertyChangedEventHandler? PropertyChanged;
             public GUIConfig() {
                 PropertyChanged += Config_PropertyChanged;
@@ -277,6 +319,13 @@ namespace yt_dlp_gui.Views {
             public string LastVersion { get; set; } = string.Empty;
             public string LastCheckUpdate { get; set; } = string.Empty;
 
+        }
+        public class DownloadStatus {
+            public decimal Persent { get; set; } = 0;
+            public decimal Downloaded { get; set; } = 0;
+            public decimal Total { get; set; } = 0;
+            public decimal Speed { get; set; } = 0;
+            public decimal Elapsed { get; set; } = 0;
         }
     }
 }

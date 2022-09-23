@@ -8,7 +8,7 @@
 [yt-dlp](https://github.com/yt-dlp/yt-dlp) 專案增加許多功能與修補，同時也保持與原始項目的更新。
 
 ### 截圖
-<img src="screenshot02.png" width="460"/>
+<img src="screenshot03.png" width="460"/>
 
 ### 執行需求
 * [yt-dlp](https://github.com/yt-dlp/yt-dlp)

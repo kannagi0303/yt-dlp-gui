@@ -9,7 +9,7 @@ Command-line program to download videos from YouTube.com and other video sites,
 [yt-dlp](https://github.com/yt-dlp/yt-dlp) project is adding new features and patches while also keeping up to date with the original project.
 
 ### Screenshots
-<img src="screenshot02.png" width="460"/>
+<img src="screenshot03.png" width="460"/>
 
 ### Requirements
 * [yt-dlp](https://github.com/yt-dlp/yt-dlp)
