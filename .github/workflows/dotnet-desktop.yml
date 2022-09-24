@@ -42,5 +42,5 @@ jobs:
     - name: Upload a Build Artifact
       uses: actions/upload-artifact@v3.1.0
       with:
-        name: Debug build for ${{ github.head_ref }}.${{ github.sha }}
+        name: ${{ github.sha }}_Debug
         path: "D:\\a\\yt-dlp-gui\\yt-dlp-gui\\yt-dlp-gui\\bin\\Debug\\net6.0-windows\\win-x64\\publish"
