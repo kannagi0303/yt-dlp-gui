@@ -37,4 +37,4 @@ jobs:
       run: dotnet restore $env:Solution_Name
     
     - name: Build
-      run: dotnet publish -c ${{ matrix.configuration }} -r win-x64 -p:PublishReadyToRun=true -p:PublishSingleFile=true
+      run: dotnet publish -c ${{ matrix.configuration }} -r win-x64 --self-contained true -p:PublishReadyToRun=true -p:PublishSingleFile=true 
