@@ -3,8 +3,6 @@ name: yt-dlp GUI CI Builder
 on:
   push:
     branches: [ "master" ]
-  pull_request:
-    branches: [ "master" ]
 
 jobs:
 
@@ -12,7 +10,7 @@ jobs:
 
     strategy:
       matrix:
-        configuration: [Debug]
+        configuration: [Debug, Release]
 
     runs-on: windows-latest
     
@@ -42,5 +40,5 @@ jobs:
     - name: Upload a Build Artifact
       uses: actions/upload-artifact@v3.1.0
       with:
-        name: ${{ github.sha }}_Debug
+        name: yt-dlp-gui-${{ github.sha }}-${{ matrix.configuration }}
         path: "D:\\a\\yt-dlp-gui\\yt-dlp-gui\\yt-dlp-gui\\bin\\Debug\\net6.0-windows\\win-x64\\publish"
