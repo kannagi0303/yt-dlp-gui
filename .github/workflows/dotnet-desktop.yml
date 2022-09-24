@@ -37,7 +37,7 @@ jobs:
       run: dotnet restore $env:Solution_Name
     
     - name: Build
-      run: dotnet publish -c ${{ matrix.configuration }} -r win-x64 --self-contained true -p:PublishReadyToRun=true -p:PublishSingleFile=true -p:PublishTrimmed=true 
+      run: dotnet publish -c ${{ matrix.configuration }} -r win-x64 --self-contained true -p:PublishReadyToRun=true -p:PublishSingleFile=true 
     
     - name: Upload a Build Artifact
       uses: actions/upload-artifact@v3.1.0
