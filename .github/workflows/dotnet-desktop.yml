@@ -1,0 +1,44 @@
+name: yt-dlp GUI CI Builder
+
+on:
+  push:
+    branches: [ "master" ]
+
+jobs:
+
+  build:
+
+    strategy:
+      matrix:
+        configuration: [Debug]
+
+    runs-on: windows-latest
+    
+    env:
+      Solution_Name: yt-dlp-gui.sln
+      
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v3
+      with:
+        fetch-depth: 0
+
+    - name: Install .NET Core
+      uses: actions/setup-dotnet@v2
+      with:
+        dotnet-version: 6.0.400
+
+    - name: Setup MSBuild.exe
+      uses: microsoft/setup-msbuild@v1.0.2
+
+    - name: Restore the application
+      run: dotnet restore $env:Solution_Name
+    
+    - name: Build
+      run: dotnet publish -c ${{ matrix.configuration }} -r win-x64 --self-contained true -p:PublishReadyToRun=true -p:PublishSingleFile=true 
+    
+    - name: Upload a Build Artifact
+      uses: actions/upload-artifact@v3.1.0
+      with:
+        name: yt-dlp-gui-${{ github.sha }}-${{ matrix.configuration }}
+        path: "D:\\a\\yt-dlp-gui\\yt-dlp-gui\\yt-dlp-gui\\bin\\Debug\\net6.0-windows\\win-x64\\publish"
