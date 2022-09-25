@@ -452,15 +452,20 @@
                         <ColumnDefinition/>
                     </Grid.ColumnDefinitions>
                     <Grid.RowDefinitions>
+                        <!-- 0 -->
                         <RowDefinition/>
+                        <!-- 1 -->
                         <RowDefinition/>
+                        <!-- 2 -->
                         <RowDefinition/>
-                        <RowDefinition/>
+                        <!-- 3 -->
                         <RowDefinition/>
                     </Grid.RowDefinitions>
-                    <TextBlock Grid.Row="0" Text="Cookie" Margin="0,5,5,5" HorizontalAlignment="Right"/>
+                    <TextBlock Grid.Row="0" Text="Notifications" Margin="0,5,5,5" HorizontalAlignment="Right"/>
+                    <CheckBox Grid.Row="0" Grid.Column="1" Content="Enabled" IsEnabled="{Binding Enable.UseNotifications}" IsChecked="{Binding UseNotifications}" Margin="0,2"/>
                     <!--UseCookie-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_ -->
-                    <StackPanel Grid.Row="0" Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Top" Margin="0,2">
+                    <TextBlock Grid.Row="1" Text="Cookie" Margin="0,5,5,5" HorizontalAlignment="Right"/>
+                    <StackPanel Grid.Row="1" Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Top" Margin="0,2">
                         <!--TextBlock Text="Cookie" Margin="0,0,4,0" VerticalAlignment="Center"/-->
                         <ComboBox SelectedValue="{Binding UseCookie}" SelectedValuePath="Tag" IsEnabled="{Binding Enable.UseCookie}">
                             <ComboBoxItem Content="When Needed" Tag="{x:Static m:UseCookie.WhenNeeded}"/>
@@ -480,16 +485,14 @@
                         </ComboBox>
                     </StackPanel>
                     <!-- Configuration-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_ -->
-                    <TextBlock Grid.Row="1" Text="Configuration" Margin="0,5,5,5" HorizontalAlignment="Right"/>
-                    <ComboBox Grid.Row="1" Grid.Column="1" x:Name="cc" HorizontalAlignment="Left"
+                    <TextBlock Grid.Row="2" Text="Configuration" Margin="0,5,5,5" HorizontalAlignment="Right"/>
+                    <ComboBox Grid.Row="2" Grid.Column="1" x:Name="cc" HorizontalAlignment="Left"
                               SelectedValue="{Binding selectedConfig}" 
                               DisplayMemberPath="name"
                               ItemsSource="{Binding ConfigsView}"/>
                     <!--UseAria2-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_ -->
-                    <TextBlock Grid.Row="2" Text="Aria2" Margin="0,5,5,5" HorizontalAlignment="Right"/>
-                    <StackPanel Grid.Row="2" Grid.Column="1" IsEnabled="{Binding Enable.UseAria2}">
-                        <CheckBox Content="Enabled" IsChecked="{Binding UseAria2}" Margin="0,2"/>
-                    </StackPanel>
+                    <TextBlock Grid.Row="3" Text="Aria2" Margin="0,5,5,5" HorizontalAlignment="Right"/>
+                    <CheckBox Grid.Row="3" Grid.Column="1" Content="Enabled" IsEnabled="{Binding Enable.UseAria2}" IsChecked="{Binding UseAria2}" Margin="0,2"/>
                 </Grid>
             </TabItem>
         </TabControl>

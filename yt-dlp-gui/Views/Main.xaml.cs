@@ -352,19 +352,23 @@ namespace yt_dlp_gui.Views {
                     //WaitAll Downloads, Merger Video and Audio
                     Task.WaitAll(tasks.ToArray());
                     if (!Data.IsAbouted) {
+                        //Download Complete
                         if (!isSingle) {
                             FFMPEG.Merger(overwrite, Data.TargetFile, tmp_video_path, tmp_audio_path);
                             if (File.Exists(tmp_video_path)) File.Delete(tmp_video_path);
                             if (File.Exists(tmp_audio_path)) File.Delete(tmp_audio_path);
                         }
                         Data.DNStatus_Infos["Status"] = "Done";
+
+                        //Send notification when download completed
+                        if (Data.UseNotifications) {
+                            new ToastContentBuilder()
+                                .AddArgument("conversationId", 2333)
+                                .AddText(Data.Video.title)
+                                .AddText("Video Download Completed!")
+                                .Show();
+                        }
                     }
-                    //Send notification when download completed
-                    new ToastContentBuilder()
-                        .AddArgument("conversationId", 2333)
-                        .AddText(Data.Video.title)
-                        .AddText("Video Download Completed!")
-                        .Show();
                     //Clear downloading status
                     Data.IsDownload = false;
                 });

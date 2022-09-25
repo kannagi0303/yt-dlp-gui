@@ -180,6 +180,7 @@ namespace yt_dlp_gui.Views {
             public double ImageHeight { get; set; } = 0;
             public UseCookie UseCookie { get; set; } = UseCookie.WhenNeeded;
             public CookieType CookieType { get; set; } = CookieType.Chrome;
+            public bool UseNotifications { get; set; } = true;
             public bool UseAria2 { get; set; } = true;
             public bool NeedCookie { get; set; } = false;
             public bool SaveThumbnail { get; set; } = true;
@@ -214,6 +215,7 @@ namespace yt_dlp_gui.Views {
                 Enable.SaveVideo = true;
                 Enable.SaveAudio = true;
                 Enable.SaveSubtitle = true;
+                Enable.UseNotifications = true;
                 Enable.UseAria2 = true;
 
                 if (string.IsNullOrWhiteSpace(Url)) Enable.Analyze = false;
@@ -245,6 +247,7 @@ namespace yt_dlp_gui.Views {
                     Enable.SaveVideo = false;
                     Enable.SaveAudio = false;
                     Enable.SaveSubtitle = false;
+                    Enable.UseNotifications = false;
                     Enable.UseAria2 = false;
                 }
                 if (!FormatsVideo.Any()) {
@@ -296,6 +299,7 @@ namespace yt_dlp_gui.Views {
             public bool SaveVideo { get; set; } = true;
             public bool SaveAudio { get; set; } = true;
             public bool SaveSubtitle { get; set; } = true;
+            public bool UseNotifications { get; set; } = true;
             public bool UseAria2 { get; set; } = true;
         }
         public class GUIConfig :IYamlConfig, INotifyPropertyChanged {
@@ -311,6 +315,8 @@ namespace yt_dlp_gui.Views {
             public CookieType CookieType { get; set; } = CookieType.Chrome;
             [Description("With Thumbnail When Downlaod")]
             public bool SaveThumbnail { get; set; } = true;
+            [Description("UseNotifications")]
+            public bool UseNotifications { get; set; } = true;
             [Description("Configuration File")]
             public string ConfigurationFile { get; set; } = string.Empty;
             [Description("Aria2 Settings")]
