@@ -15,6 +15,7 @@ using System.Windows.Forms;
 using System.Windows.Markup;
 using yt_dlp_gui.Models;
 using yt_dlp_gui.Wrappers;
+using Microsoft.Toolkit.Uwp.Notifications;
 
 namespace yt_dlp_gui.Views {
     public partial class Main :Window {
@@ -358,6 +359,13 @@ namespace yt_dlp_gui.Views {
                         }
                         Data.DNStatus_Infos["Status"] = "Done";
                     }
+                    //Send notification when download completed
+                    new ToastContentBuilder()
+                        .AddArgument("conversationId", 2333)
+                        .AddText(Data.Video.title)
+                        .AddText("Video Download Completed!")
+                        .Show();
+                    //Clear downloading status
                     Data.IsDownload = false;
                 });
             }
