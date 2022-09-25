@@ -10,7 +10,7 @@ jobs:
 
     strategy:
       matrix:
-        configuration: [Debug, Release]
+        configuration: [Debug]
 
     runs-on: windows-latest
     
@@ -41,4 +41,4 @@ jobs:
       uses: actions/upload-artifact@v3.1.0
       with:
         name: yt-dlp-gui-${{ github.sha }}-${{ matrix.configuration }}
-        path: "D:\\a\\yt-dlp-gui\\yt-dlp-gui\\yt-dlp-gui\\bin\\Debug\\net6.0-windows\\win-x64\\publish"
+        path: "D:\\a\\yt-dlp-gui\\yt-dlp-gui\\yt-dlp-gui\\bin\\Debug\\net6.0-windows10.0.17763.0\\win-x64\\publish"
