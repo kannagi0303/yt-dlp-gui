@@ -28,20 +28,20 @@ namespace yt_dlp_gui.Views {
             //Load Configs
             InitGUIConfig();
 
-            //檢查 Configuration
+            //Configuration Checking
             InitConfiguration();
 
-            //檢查儲存Path，假如設定沒有則預設為App所在Path
+            //if `Target` Not exist, default app location
             if (!Directory.Exists(Data.TargetPath)) {
                 Data.TargetPath = App.AppPath;
             }
-            //檢查更新
+            //run update
             Task.Run(Inits);
         }
         public void InitGUIConfig() {
             Data.GUIConfig.Load(App.Path(App.Folders.root, App.AppName + ".yaml"));
             Util.PropertyCopy(Data.GUIConfig, Data);
-            //讀取設定檔完成，開啟變更自動儲存
+            //Loaded and enabled auto save config
             Data.AutoSaveConfig = true;
         }
         public void InitConfiguration() {
@@ -60,7 +60,7 @@ namespace yt_dlp_gui.Views {
             Data.selectedConfig = Data.Configs.FirstOrDefault(x => x.file == Data.GUIConfig.ConfigurationFile, Data.Configs.First());
         }
         public async void Inits() {
-            //檢查更新
+            //check update
             var needcheck = false;
             var currentDate = DateTimeOffset.UtcNow.ToString("yyyy-MM-dd"); //"";
 
@@ -86,6 +86,7 @@ namespace yt_dlp_gui.Views {
             ca.SelectedIndex = -1;
             cs.SelectedIndex = -1;
             Data.Thumbnail = null;
+            Data.Video = new();
             Data.NeedCookie = Data.UseCookie == UseCookie.Always;
 
             Task.Run(() => {
@@ -131,11 +132,22 @@ namespace yt_dlp_gui.Views {
                 }
                 //读取 图片
                 var BestUrl = Data.Thumbnails.LastOrDefault()?.url;
+                //var ThumbUrl = string.Empty;
                 if (Web.Head(BestUrl)) {
                     Data.Thumbnail = BestUrl;
+                    //ThumbUrl = BestUrl;
                 } else {
                     Data.Thumbnail = Data.Video.thumbnail;
+                    //ThumbUrl = Data.Video.thumbnail;
                 }
+                //Download Thumb to Temp Folder
+                /*
+                Directory.CreateDirectory(App.Path(App.Folders.temp));
+                var ThumbPath = App.Path(App.Folders.temp, Path.ChangeExtension(Data.Video.id, ".jpg"));
+                FFMPEG.DownloadUrl(ThumbUrl, ThumbPath);
+                Data.Thumbnail = ThumbPath;
+                */
+
 
                 Data.SelectFormatBest(); //选择
                 var full = string.Empty;
@@ -242,6 +254,8 @@ namespace yt_dlp_gui.Views {
                         if (!string.IsNullOrWhiteSpace(Data.selectedConfig.file)) dlp.LoadConfig(Data.selectedConfig.file);
                         if (Data.NeedCookie) dlp.Cookie(Data.CookieType);
                         if (Data.UseAria2) dlp.UseAria2();
+                        dlp.IsLive = Data.Video.is_live;
+
                         var vid = ch == 0
                         ?Data.selectedVideo.format_id
                         :Data.selectedAudio.format_id;
@@ -299,6 +313,7 @@ namespace yt_dlp_gui.Views {
                         if (!string.IsNullOrWhiteSpace(Data.selectedConfig.file)) dlp.LoadConfig(Data.selectedConfig.file);
                         if (Data.NeedCookie) dlp.Cookie(Data.CookieType);
                         if (Data.UseAria2) dlp.UseAria2();
+                        dlp.IsLive = Data.Video.is_live;
 
                         var vid = Data.selectedVideo.format_id;
                         if (!string.IsNullOrWhiteSpace(tr)) {
@@ -309,10 +324,11 @@ namespace yt_dlp_gui.Views {
                             dlp.DownloadFormat(vid, Data.TargetFile);
                         } else {
                             tmp_video_path = Path.Combine(App.AppPath, $"{Data.Video.id}.{vid}.{Data.selectedVideo.video_ext}");
+                            //tmp_video_path = App.Path(App.Folders.temp, $"{Data.Video.id}.{vid}.{Data.selectedVideo.video_ext}");
                             dlp.DownloadFormat(vid, tmp_video_path);
                         }
                         dlp.Exec(std => {
-                            //Debug.WriteLine(std);
+                            Debug.WriteLine(std, "V");
                             GetStatus(std, 0);
                         });
                     }));
@@ -324,13 +340,15 @@ namespace yt_dlp_gui.Views {
                             if (!string.IsNullOrWhiteSpace(Data.selectedConfig.file)) dlp.LoadConfig(Data.selectedConfig.file);
                             if (Data.NeedCookie) dlp.Cookie(Data.CookieType);
                             if (Data.UseAria2) dlp.UseAria2();
+                            dlp.IsLive = Data.Video.is_live;
 
                             var aid = Data.selectedAudio.format_id;
                             tmp_audio_path = Path.Combine(App.AppPath, $"{Data.Video.id}.{aid}.{Data.selectedAudio.audio_ext}");
+                            //tmp_audio_path = App.Path(App.Folders.temp, $"{Data.Video.id}.{aid}.{Data.selectedAudio.audio_ext}");
                             dlp.DownloadFormat(aid, tmp_audio_path);
 
                             dlp.Exec(std => {
-                                //Debug.WriteLine(std);
+                                Debug.WriteLine(std, "A");
                                 GetStatus(std, 1);
                             });
                         }));
@@ -351,10 +369,12 @@ namespace yt_dlp_gui.Views {
                     }
                     //WaitAll Downloads, Merger Video and Audio
                     Task.WaitAll(tasks.ToArray());
+                    Debug.WriteLine(JsonConvert.SerializeObject(Data, Formatting.Indented));
                     if (!Data.IsAbouted) {
                         //Download Complete
                         if (!isSingle) {
                             FFMPEG.Merger(overwrite, Data.TargetFile, tmp_video_path, tmp_audio_path);
+                            //Directory.Delete(App.Path(App.Folders.temp), true);
                             if (File.Exists(tmp_video_path)) File.Delete(tmp_video_path);
                             if (File.Exists(tmp_audio_path)) File.Delete(tmp_audio_path);
                         }

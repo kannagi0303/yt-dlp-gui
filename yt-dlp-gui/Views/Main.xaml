@@ -164,6 +164,17 @@
                                 </Style>
                             </TextBlock.Style>
                         </TextBlock>
+                        <TextBlock HorizontalAlignment="Right" VerticalAlignment="Bottom" Padding="4,0" Background="Red" Text="LIVE">
+                            <TextBlock.Style>
+                                <Style TargetType="TextBlock" BasedOn="{StaticResource {x:Type TextBlock}}">
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding Video.is_live}" Value="False">
+                                            <Setter Property="Visibility" Value="Collapsed"/>
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </TextBlock.Style>
+                        </TextBlock>
                     </Grid>
                     <Border.ContextMenu>
                         <ContextMenu>
@@ -517,18 +528,7 @@
             <Button Grid.Column="1" IsEnabled="{Binding Enable.Download}" Margin="2" Click="Button_Download">
                 <StackPanel Orientation="Horizontal" Margin="4,0">
                     <controls:Icons Size="14" Kind="Download" IsLoading="{Binding IsDownload}"/>
-                    <TextBlock Margin="2,0,0,0">
-                        <TextBlock.Style>
-                            <Style TargetType="TextBlock" BasedOn="{StaticResource {x:Type TextBlock}}">
-                                <Setter Property="Text" Value="Download"/>
-                                <Style.Triggers>
-                                    <DataTrigger Binding="{Binding IsDownload}" Value="True">
-                                        <Setter Property="Text" Value="Cancel"/>
-                                    </DataTrigger>
-                                </Style.Triggers>
-                            </Style>
-                        </TextBlock.Style>
-                    </TextBlock>
+                    <TextBlock Margin="2,0,0,0" d:Text="Download" Text="{Binding ExecText}"/>
                 </StackPanel>
             </Button>
         </Grid>

@@ -12,6 +12,7 @@ namespace yt_dlp_gui.Wrappers {
     public class DLP {
         public Dictionary<string, string> Options { get; set; } = new Dictionary<string, string>();
         public string Url { get; set; } = string.Empty;
+        public bool IsLive { get; set; } = false;
         public HashSet<DLPError> StdErr { get; set; } = new();
         Process process = new();
         public enum DLPError { Sign, Unsupported }
@@ -165,7 +166,9 @@ namespace yt_dlp_gui.Wrappers {
             Util.SendCtrlC(process);
             if (Options.ContainsKey("-o")) {
                 var tempfile = Options["-o"];
-                if (File.Exists(tempfile)) File.Delete(tempfile);
+                if (!IsLive) {
+                    if (File.Exists(tempfile)) File.Delete(tempfile);
+                }
             }
             return this;
         }

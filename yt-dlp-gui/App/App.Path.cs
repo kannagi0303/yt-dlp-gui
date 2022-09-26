@@ -24,6 +24,7 @@ namespace yt_dlp_gui {
                 Folders.root => Array.Empty<string>(),
                 Folders.bin => new[] { "bin" },
                 Folders.configs => new[] { "configs" },
+                Folders.temp => new[] { "temp" },
                 _ => throw new NotImplementedException(),
             });
             //新增延伸
@@ -35,7 +36,7 @@ namespace yt_dlp_gui {
             return res;
         }
         public enum Folders {
-            root, bin, configs
+            root, bin, configs, temp
         }
     }
 }

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
@@ -55,6 +56,20 @@ namespace Libs {
             var unitText = ((SizeUnit)mag).ToString().PadLeft(2, ' ') + suffix;
             output += unitText;
             return output;
+        }
+        public static bool RemoveEmptyDirectories(string startLocation) {
+            foreach (var directory in Directory.GetDirectories(startLocation)) {
+                RemoveEmptyDirectories(directory);
+                if (Directory.GetFiles(directory).Length == 0 &&
+                    Directory.GetDirectories(directory).Length == 0) {
+                    try {
+                        Directory.Delete(directory, false);
+                    } catch (Exception e) {
+                        return false;
+                    }
+                }
+            }
+            return true;
         }
     }
 }

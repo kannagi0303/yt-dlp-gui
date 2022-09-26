@@ -108,15 +108,6 @@ namespace yt_dlp_gui.Views {
 
                 if (AutoSaveConfig) Util.PropertyCopy(this, GUIConfig);
             }
-            public void UpdateDownloadStatus() {
-                /*
-                DST_Downloaded = Util.GetAutoUnit((long)DSV_Downloaded + (long)DSA_Downloaded, SizeUnit.Auto);
-                DST_Total = Util.GetAutoUnit((long)DSV_Total + (long)DSA_Total, SizeUnit.Auto);
-                DST_Speed = Util.GetAutoUnit((long)DSV_Speed + (long)DSA_Speed, SizeUnit.Auto, "iB/s");
-                DST_Elapsed = Util.SecToStr(DSV_Elapsed + DSA_Elapsed);
-                */
-                //PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(DNStatus_InfosView)));
-            }
             public void SelectFormatBest() {
                 if (UseFormat) {
                     selectedVideo = FormatsVideo.FirstOrDefault();
@@ -178,6 +169,7 @@ namespace yt_dlp_gui.Views {
             public string? Thumbnail { get; set; } = null;
             public double ImageWidth { get; set; } = 0; //Binding 16:9
             public double ImageHeight { get; set; } = 0;
+            public string ExecText { get; set; } = string.Empty;
             public UseCookie UseCookie { get; set; } = UseCookie.WhenNeeded;
             public CookieType CookieType { get; set; } = CookieType.Chrome;
             public bool UseNotifications { get; set; } = true;
@@ -281,8 +273,12 @@ namespace yt_dlp_gui.Views {
                         Enable.SaveSubtitle = false;
                     }
                 }
+                if (Video.is_live) {
+                    ExecText = IsDownload ? "Stop" : "Record";
+                } else {
+                    ExecText = IsDownload ? "Cancel" : "Download";
+                }
             }
-
         }
         public class Enable :INotifyPropertyChanged {
             public event PropertyChangedEventHandler? PropertyChanged;
