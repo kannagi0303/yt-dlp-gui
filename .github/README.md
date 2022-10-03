@@ -51,9 +51,9 @@ Versions in `2022.10.03` and later, Attached files can now be placed in the same
 * aria2c.exe
 
 So you can put the attached files in the `bin` folder. or Like this:
-.\any1\yt-dlp.exe
-.\any2\ffmpeg.exe
-.\any3\any4\aria2c.exe
+.\any1\yt-dlp.exe<br/>
+.\any2\ffmpeg.exe<br/>
+.\any3\any4\aria2c.exe<br/>
 
 Use `youtube-dl.exe`, Need remove `yt-dlp.exe` First.
 For Now, No Options for it, Order is `yt-dlp.exe` First

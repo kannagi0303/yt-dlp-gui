@@ -50,9 +50,9 @@
 * aria2c.exe
 
 所以你可以把相關檔放在`bin`資料夾中. 或這也可像這樣:
-.\any1\yt-dlp.exe
-.\any2\ffmpeg.exe
-.\any3\any4\aria2c.exe
+.\any1\yt-dlp.exe<br/>
+.\any2\ffmpeg.exe<br/>
+.\any3\any4\aria2c.exe<br/>
 
 使用 `youtube-dl.exe`, 需要先移除 `yt-dlp.exe`
 目前沒有選項可以遷換，以`yt-dlp.exe`為優先
