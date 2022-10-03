@@ -6,7 +6,7 @@ namespace yt_dlp_gui {
     /// Interaction logic for App.xaml
     /// </summary>
     public partial class App : Application {
-        public static string CurrentVersion = "2022.09.26"; 
+        public static string CurrentVersion = "2022.10.03"; 
         private void Application_Startup(object sender, StartupEventArgs e) {
             var args = e.Args.ToList();
             LoadPath();

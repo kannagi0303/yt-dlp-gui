@@ -31,6 +31,9 @@ namespace yt_dlp_gui.Views {
             //Configuration Checking
             InitConfiguration();
 
+            //ScanDeps
+            ScanDepends();
+
             //if `Target` Not exist, default app location
             if (!Directory.Exists(Data.TargetPath)) {
                 Data.TargetPath = App.AppPath;
@@ -58,6 +61,22 @@ namespace yt_dlp_gui.Views {
                 });
             });
             Data.selectedConfig = Data.Configs.FirstOrDefault(x => x.file == Data.GUIConfig.ConfigurationFile, Data.Configs.First());
+        }
+        public void ScanDepends() {
+            var deps = Directory.EnumerateFiles(App.AppPath, "*.exe", SearchOption.AllDirectories).ToList();
+            deps = deps.Where(x => Path.GetFileName(App.AppExe) != Path.GetFileName(x)).ToList();
+            var dep_youtubedl = deps.FirstOrDefault(x => Regex.IsMatch(Path.GetFileName(x), @"^youtube-dl\.exe"), "");
+            var dep_ytdlp = deps.FirstOrDefault(x => Regex.IsMatch(Path.GetFileName(x), @"^yt-dlp(_min|_x86|_x64)?\.exe"), "");
+            var dep_ffmpeg = deps.FirstOrDefault(x => Regex.IsMatch(Path.GetFileName(x), @"^ffmpeg"), "");
+            var dep_aria2 = deps.FirstOrDefault(x => Regex.IsMatch(Path.GetFileName(x), @"^aria2"), "");
+            if (!string.IsNullOrWhiteSpace(dep_ytdlp)) {
+                DLP.Path_DLP = dep_ytdlp;
+            } else if (!string.IsNullOrWhiteSpace(dep_youtubedl)) {
+                DLP.Path_DLP = dep_youtubedl;
+                DLP.Type = DLP.DLPType.youtube_dl;
+            }
+            DLP.Path_Aria2 = dep_aria2;
+            FFMPEG.Path_FFMPEG = dep_ffmpeg;
         }
         public async void Inits() {
             //check update
@@ -104,9 +123,12 @@ namespace yt_dlp_gui.Views {
             if (Data.UseOutput) dlp.Output("%(title)s.%(ext)s"); //if not used config, default template
             ClearStatus();
             dlp.Exec(null, std => {
-                //取得JSON
-                Data.Video = JsonConvert.DeserializeObject<Video>(std);
                 //Debug.WriteLine(std);
+
+                //取得JSON
+                Data.Video = JsonConvert.DeserializeObject<Video>(std, new JsonSerializerSettings() { 
+                    NullValueHandling = NullValueHandling.Ignore
+                });
 
                 //读取 Formats 与 Thumbnails
                 {
@@ -151,10 +173,10 @@ namespace yt_dlp_gui.Views {
 
                 Data.SelectFormatBest(); //选择
                 var full = string.Empty;
-                if (Path.IsPathRooted(Data.Video.filename)) {
-                    full = Path.GetFullPath(Data.Video.filename);
+                if (Path.IsPathRooted(Data.Video._filename)) {
+                    full = Path.GetFullPath(Data.Video._filename);
                 } else {
-                    full = Path.Combine(Data.TargetPath, Data.Video.filename);
+                    full = Path.Combine(Data.TargetPath, Data.Video._filename);
                 }
                 //Data.TargetName = GetValidFileName(Data.Video.title) + ".tmp"; //预设挡案名称
                 Data.TargetName = full; //预设挡案名称
@@ -175,8 +197,10 @@ namespace yt_dlp_gui.Views {
         private Regex regDLP = new Regex(@"^\[yt-dlp]");
         private Regex regAria = new Regex(@"(?<=\[#\w{6}).*?(?<downloaded>[\w]+).*?\/(?<total>[\w]+).*?(?<persent>[\w.]+)%.*?CN:(?<cn>\d+).*DL:(?<speed>\w+)(.*?ETA:(?<eta>\w+))?");
         private Regex regFF = new Regex(@"frame=.*?(?<frame>\d+).*?fps=.*?(?<fps>[\d.]+).*?size=.*?(?<size>\w+).*?time=(?<time>\S+).*?bitrate=(?<bitrate>\S+)");
+        private Regex regYTDL = new Regex(@"^\[download\].*?(?<persent>[\d\.]+).*?(?<=of).*?(?<total>\S+).*?(?<=at).*?(?<speed>\S+).*?(?<=ETA).*?(?<eta>\S+)");
         private void GetStatus(string std, int chn = 0) {
             if (regDLP.IsMatch(std)) {
+                // yt-dlp
                 if (!Data.DNStatus_Infos.ContainsKey("Downloader")) Data.DNStatus_Infos["Downloader"] = "Native";
                 var d = std.Split(',');
                 var s = (chn == 0)?Data.DNStatus_Video : Data.DNStatus_Audio;
@@ -199,8 +223,8 @@ namespace yt_dlp_gui.Views {
                 Data.DNStatus_Infos["Elapsed"] = Util.SecToStr(Data.DNStatus_Video.Elapsed + Data.DNStatus_Audio.Elapsed);
                 Data.DNStatus_Infos["Status"] = "Downloading";
             } else if (regAria.IsMatch(std)) {
+                // aria2
                 if (!Data.DNStatus_Infos.ContainsKey("Downloader")) Data.DNStatus_Infos["Downloader"] = "aria2c";
-                //Data.DNStatus_Downloader = "aria2c";
                 var d = GetGroup(regAria, std);
                 if (chn == 0) {
                     if (decimal.TryParse(d["persent"], out decimal o_persent)) Data.VideoPersent = o_persent;
@@ -214,14 +238,27 @@ namespace yt_dlp_gui.Views {
                 }
                 Data.DNStatus_Infos["Status"] = "Downloading";
             } else if (regFF.IsMatch(std)) {
+                // ffmpeg
                 if (!Data.DNStatus_Infos.ContainsKey("Downloader")) Data.DNStatus_Infos["Downloader"] = "FFMPEG";
                 var d = GetGroup(regFF, std);
-                //Data.DNStatus_Downloader = "FFMPEG";
                 Data.DNStatus_Infos["Downloaded"] = d.GetValueOrDefault("size", "");
                 Data.DNStatus_Infos["Speed"] = d.GetValueOrDefault("bitrate", "");
                 Data.DNStatus_Infos["Frame"] = d.GetValueOrDefault("frame", "");
                 Data.DNStatus_Infos["FPS"] = d.GetValueOrDefault("fps", "");
                 Data.DNStatus_Infos["Time"] = d.GetValueOrDefault("time", "");
+                Data.DNStatus_Infos["Status"] = "Downloading";
+            } else if (regYTDL.IsMatch(std)) {
+                // youtube-dl
+                if (!Data.DNStatus_Infos.ContainsKey("Downloader")) Data.DNStatus_Infos["Downloader"] = "youtube-dl";
+                var d = GetGroup(regYTDL, std);
+                if (chn == 0) {
+                    if (decimal.TryParse(d["persent"], out decimal o_persent)) Data.VideoPersent = o_persent;
+                } else {
+                    if (decimal.TryParse(d["persent"], out decimal o_persent)) Data.AudioPersent = o_persent;
+                }
+                Data.DNStatus_Infos["Total"] = d.GetValueOrDefault("total", "");
+                Data.DNStatus_Infos["Speed"] = d.GetValueOrDefault("speed", "");
+                Data.DNStatus_Infos["Elapsed"] = d.GetValueOrDefault("eta", "");
                 Data.DNStatus_Infos["Status"] = "Downloading";
             }
         }

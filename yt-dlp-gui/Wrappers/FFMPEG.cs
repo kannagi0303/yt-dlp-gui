@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 
 namespace yt_dlp_gui.Wrappers {
     public class FFMPEG {
+        public static string Path_FFMPEG { get; set; } = string.Empty;
         public static void Merger(bool overwrite, string target, params string[] sources) {
             var options = new List<string>();
             foreach (var source in sources) {
@@ -32,7 +33,8 @@ namespace yt_dlp_gui.Wrappers {
             Exec(args);
         }
         private static void Exec(string args = "") {
-            var fn = App.Path(App.Folders.bin, "ffmpeg.exe");
+            //var fn = App.Path(App.Folders.bin, "ffmpeg.exe");
+            var fn = Path_FFMPEG;
             Process p = new Process();
             p.StartInfo.FileName = fn;
             p.StartInfo.Arguments = args;

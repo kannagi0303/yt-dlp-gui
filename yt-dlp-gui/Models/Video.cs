@@ -14,7 +14,7 @@ namespace yt_dlp_gui.Models {
         public decimal duration { get; set; } = 0;
         public string duration_string { get; set; } = string.Empty;
         public List<Format> requested_formats { get; set; } = new();
-        public string filename { get; set; } = string.Empty;
+        public string _filename { get; set; } = string.Empty;
         public bool is_live { get; set; } = false;
     }
 }

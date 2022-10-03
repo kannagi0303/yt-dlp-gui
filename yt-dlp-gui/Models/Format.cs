@@ -93,8 +93,14 @@ namespace yt_dlp_gui.Models {
                 //分类
                 if (row.vcodec != "none" && row.acodec != "none") {
                     row.type = FormatType.package;
+                    if (row.height.HasValue && row.width.HasValue) {
+                        row.resolution = $"{row.width.Value}x{row.height.Value}";
+                    }
                 } else if (row.vcodec != "none") {
                     row.type = FormatType.video;
+                    if (row.height.HasValue && row.width.HasValue) {
+                        row.resolution = $"{row.width.Value}x{row.height.Value}";
+                    }
                 } else if (row.acodec != "none") {
                     row.type = FormatType.audio;
                 } else {

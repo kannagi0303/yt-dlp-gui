@@ -10,6 +10,12 @@ using yt_dlp_gui.Models;
 namespace yt_dlp_gui.Wrappers {
 
     public class DLP {
+        public enum DLPType {
+            yd_dlp, youtube_dl
+        }
+        static public DLPType Type { get; set; } = DLPType.yd_dlp;
+        static public string Path_DLP { get; set; } = string.Empty;
+        static public string Path_Aria2 { get; set; } = string.Empty;
         public Dictionary<string, string> Options { get; set; } = new Dictionary<string, string>();
         public string Url { get; set; } = string.Empty;
         public bool IsLive { get; set; } = false;
@@ -20,15 +26,17 @@ namespace yt_dlp_gui.Wrappers {
         public DLP(string url = "") {
             Url = url;
             NoPlaylist().NoPart().Overwrite().IgnoreConfig();
-            Options["--progress-template"] = "\"" 
-                + "[yt-dlp]," //0
-                + "%(progress._percent_str)s," //1
-                + "%(progress._eta_str)s," //2
-                + "%(progress.downloaded_bytes)s," //3
-                + "%(progress.total_bytes)s," //4
-                + "%(progress.speed)s," //5
-                + "%(progress.eta)s" //6
-                + "\"";
+            if (Type == DLPType.yd_dlp) {
+                Options["--progress-template"] = "\""
+                    + "[yt-dlp]," //0
+                    + "%(progress._percent_str)s," //1
+                    + "%(progress._eta_str)s," //2
+                    + "%(progress.downloaded_bytes)s," //3
+                    + "%(progress.total_bytes)s," //4
+                    + "%(progress.speed)s," //5
+                    + "%(progress.eta)s" //6
+                    + "\"";
+            }
         }
         public DLP NoPart() {
             Options["--no-part"] = "";
@@ -40,7 +48,7 @@ namespace yt_dlp_gui.Wrappers {
         }
         public DLP LoadConfig(string path) {
             Options.Remove("--ignore-config");
-            Options["--config-locations"] = "\"" + path + "\"";
+            Options["--config-location"] = "\"" + path + "\"";
             return this;
         }
         public DLP Output(string targetpath) {
@@ -57,7 +65,7 @@ namespace yt_dlp_gui.Wrappers {
             Options["--write-subs"] = "";
             Options["--skip-download"] = "";
             Options["-o"] = targetpath;
-            return this; 
+            return this;
         }
         public DLP NoPlaylist() {
             Options["--no-playlist"] = "";
@@ -68,16 +76,21 @@ namespace yt_dlp_gui.Wrappers {
             return this;
         }
         public DLP Overwrite() {
-            Options["--force-overwrites"] = "";
+            if (Type == DLPType.yd_dlp) {
+                //Options["--force-overwrites"] = "";
+            }
             return this;
         }
         public DLP UseAria2() {
-            Options["--external-downloader"] = "aria2c";
-            //Options["--downloader-args"] = "aria2c:\"-x 16 -k 10M --user-agent=''\"";
+            if (File.Exists(Path_Aria2)) {
+                Options["--external-downloader"] = "\"" + Path_Aria2 + "\"";
+                //Options["--external-downloader"] = "aria2c";
+                //Options["--downloader-args"] = "aria2c:\"-x 16 -k 10M --user-agent=''\"";
+            }
             return this;
         }
         public DLP Cookie(CookieType type) {
-            switch(type) {
+            switch (type) {
                 case CookieType.Chrome:
                     Options["--cookies-from-browser"] = $"chrome";
                     break;
@@ -125,7 +138,8 @@ namespace yt_dlp_gui.Wrappers {
         private static Regex ErrUnsupported = new Regex(@"^(?=.*?ERROR)(?=.*?Unsupported)", RegexOptions.IgnoreCase);
 
         public Process Exec(Action<string> stdall = null, Action<string> stdout = null, Action<string> stderr = null) {
-            var fn = App.Path(App.Folders.bin, "yt-dlp.exe");
+            //var fn = App.Path(App.Folders.bin, "yt-dlp.exe");
+            var fn = Path_DLP;
             var info = new ProcessStartInfo() {
                 FileName = fn,
                 Arguments = Args,

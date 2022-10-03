@@ -273,7 +273,7 @@ namespace yt_dlp_gui.Views {
                         Enable.SaveSubtitle = false;
                     }
                 }
-                if (Video.is_live) {
+                if (Video.is_live == true) {
                     ExecText = IsDownload ? "Stop" : "Record";
                 } else {
                     ExecText = IsDownload ? "Cancel" : "Download";

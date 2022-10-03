@@ -279,6 +279,7 @@
                                             <ColumnDefinition SharedSizeGroup="S3" />
                                             <ColumnDefinition SharedSizeGroup="S4" />
                                             <ColumnDefinition SharedSizeGroup="S5" />
+                                            <ColumnDefinition SharedSizeGroup="S6" />
                                         </Grid.ColumnDefinitions>
                                         <controls:Icons Size="14">
                                             <controls:Icons.Style>
@@ -297,6 +298,7 @@
                                         <TextBlock FontSize="10" Grid.Column="3" Text="{Binding video_ext}"/>
                                         <TextBlock FontSize="10" Grid.Column="4" Text="{Binding vcodec}"/>
                                         <TextBlock FontSize="10" Grid.Column="5" HorizontalAlignment="Right" controls:Filesize.Bytes="{Binding filesize}"/>
+                                        <TextBlock FontSize="10" Grid.Column="6" Text="{Binding format_id}"/>
                                     </Grid>
                                 </DataTemplate>
                             </ComboBox.ItemTemplate>
