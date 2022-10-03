@@ -29,7 +29,6 @@ Command-line program to download videos from YouTube.com and other video sites,
 4. Execute `yt-dlp-gui.exe`
 
 * The first execution will generate the `yt-dlp-gui.yaml` file, which is used to store the settings.
-* Versions in `2022.10.03` and later, `yt-dlp.exe` & `ffmpeg.exe` can now be placed in the same location as `yt-dlp-gui.exe`, or in **any named** subfolder under `yt-dlp-gui.exe` (even nested)
 
 #### Use Configuration (refer to [configuration](https://github.com/yt-dlp/yt-dlp#configuration))
 1. Create a Folder `configs` in location of executable file
@@ -43,7 +42,21 @@ Command-line program to download videos from YouTube.com and other video sites,
 3. Copy `aria2c.exe` into Folder `bin`
 
 * Need Restart for scan `aria2c.exe` file
-* Versions in `2022.10.03` and later, `aria2c.exe` can now be placed in the same location as `yt-dlp-gui.exe`, or in **any named** subfolder under `yt-dlp-gui.exe` (even nested)
+
+### Important changes
+Versions in `2022.10.03` and later, Attached files can now be placed in the same location as `yt-dlp-gui.exe`, or in **any named** subfolder under `yt-dlp-gui.exe` (even nested)
+* yt-dlp.exe (also `yt-dlp_min.exe`, `yt-dlp_x86.exe`)
+* youtube-dl.exe
+* ffmpeg.exe
+* aria2c.exe
+
+So you can put the attached files in the `bin` folder. or Like this:
+.\any1\yt-dlp.exe
+.\any2\ffmpeg.exe
+.\any3\any4\aria2c.exe
+
+Use `youtube-dl.exe`, Need remove `yt-dlp.exe` First.
+For Now, No Options for it, Order is `yt-dlp.exe` First
 
 ### How to Remove
 Just delete `yt-dlp-gui.exe`

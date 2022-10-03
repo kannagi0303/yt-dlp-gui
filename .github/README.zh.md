@@ -28,7 +28,6 @@
 4. 執行 `yt-dlp-gui.exe`
 
 * 首次執行將會產生`yt-dlp-gui.yaml`檔案，用來存放設定。
-* `2022.10.03`或之後版本, `yt-dlp.exe` & `ffmpeg.exe` 可放置與`yt-dlp-gui.exe`相同位置, 或是`yt-dlp-gui.exe`之下**任何名稱**的資料夾 (即使巢狀)
 
 #### 使用Configuration設定 (參考 [configuration](https://github.com/yt-dlp/yt-dlp#configuration))
 1. 於執行檔位置建立`configs`資料夾
@@ -42,7 +41,21 @@
 3. 將`aria2c.exe`複製進`bin`資料夾中
 
 * 需要重啟掃描`aria2c.exe`執行檔
-* `2022.10.03`或之後版本, `aria2c.exe` 可放置與`yt-dlp-gui.exe`相同位置, 或是`yt-dlp-gui.exe`之下**任何名稱**的資料夾 (即使巢狀)
+
+### 重要變更
+`2022.10.03`或之後版本, 相關檔案可放置與`yt-dlp-gui.exe`相同位置, 或是`yt-dlp-gui.exe`之下**任何名稱**的資料夾 (即使巢狀)
+* yt-dlp.exe (包含 `yt-dlp_min.exe`, `yt-dlp_x86.exe`)
+* youtube-dl.exe
+* ffmpeg.exe
+* aria2c.exe
+
+所以你可以把相關檔放在`bin`資料夾中. 或這也可像這樣:
+.\any1\yt-dlp.exe
+.\any2\ffmpeg.exe
+.\any3\any4\aria2c.exe
+
+使用 `youtube-dl.exe`, 需要先移除 `yt-dlp.exe`
+目前沒有選項可以遷換，以`yt-dlp.exe`為優先
 
 ### 如何刪除
 直接刪除 `yt-dlp-gui.exe` 即可
