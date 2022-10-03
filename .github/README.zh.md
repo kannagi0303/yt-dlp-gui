@@ -50,6 +50,7 @@
 * aria2c.exe
 
 所以你可以把相關檔放在`bin`資料夾中. 或這也可像這樣:
+
 .\any1\yt-dlp.exe<br/>
 .\any2\ffmpeg.exe<br/>
 .\any3\any4\aria2c.exe<br/>
