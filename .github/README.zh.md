@@ -1,6 +1,6 @@
 # yt-dlp-gui
 
-* [yt-dlp](https://github.com/yt-dlp/yt-dlp) 的前端GUI
+* [yt-dlp](https://github.com/yt-dlp/yt-dlp) 與 [youtube-dl](https://github.com/ytdl-org/youtube-dl) 的前端GUI
 * 作業系統 Windows 限定
 
 ### 特色

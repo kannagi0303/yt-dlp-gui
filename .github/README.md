@@ -1,7 +1,7 @@
 # yt-dlp-gui
 (README Of [中文](README.zh.md))
 
-* Front-end of [yt-dlp](https://github.com/yt-dlp/yt-dlp)
+* Front-end of [yt-dlp](https://github.com/yt-dlp/yt-dlp) and [youtube-dl](https://github.com/ytdl-org/youtube-dl)
 * Windows Only
 
 ### Features
