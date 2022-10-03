@@ -43,7 +43,7 @@ Command-line program to download videos from YouTube.com and other video sites,
 3. Copy `aria2c.exe` into Folder `bin`
 
 * Need Restart for scan `aria2c.exe` file
-* Versions in `2022.10.03` and later, `aria2c.exe` can now be placed in the same location as `yt-dlp-gui.exe`, or or in **any named** subfolder under `yt-dlp-gui.exe` (even nested)
+* Versions in `2022.10.03` and later, `aria2c.exe` can now be placed in the same location as `yt-dlp-gui.exe`, or in **any named** subfolder under `yt-dlp-gui.exe` (even nested)
 
 ### How to Remove
 Just delete `yt-dlp-gui.exe`
