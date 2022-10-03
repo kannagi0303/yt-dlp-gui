@@ -11,7 +11,7 @@
 <img src="screenshot03.png" width="460"/>
 
 ### 執行需求
-* [yt-dlp](https://github.com/yt-dlp/yt-dlp)
+* [yt-dlp](https://github.com/yt-dlp/yt-dlp) (建議) 或 [youtube-dl](https://github.com/ytdl-org/youtube-dl)
 * [FFMPEG](https://ffmpeg.org/download.html#build-windows)
 
 [yt-dlp](https://github.com/yt-dlp/yt-dlp) 是基於 [youtube-dl](https://github.com/ytdl-org/youtube-dl) 的分支，
@@ -21,13 +21,14 @@
 ### 可選
 * [aria2](https://aria2.github.io/)
 
-### 如何使用
-1. 下載 `yt-dlp-gui.exe`
+### 如何使用 (建議步驟)
+1. 下載 [`yt-dlp-gui.exe`](https://github.com/kannagi0303/yt-dlp-gui/releases)
 2. 於執行檔位置建立`bin`資料夾
 3. 將`yt-dlp.exe`以及`ffmpeg.exe`複製進`bin`資料夾中
 4. 執行 `yt-dlp-gui.exe`
 
 * 首次執行將會產生`yt-dlp-gui.yaml`檔案，用來存放設定。
+* `2022.10.03`或之後版本, `yt-dlp.exe` & `ffmpeg.exe` 可放置與`yt-dlp-gui.exe`相同位置, 或是`yt-dlp-gui.exe`之下**任何名稱**的資料夾 (即使巢狀)
 
 #### 使用Configuration設定 (參考 [configuration](https://github.com/yt-dlp/yt-dlp#configuration))
 1. 於執行檔位置建立`configs`資料夾
@@ -35,8 +36,13 @@
 
 * 需要重啟掃描configuration設定檔案
 
-#### 使用 Aria2
-複製 `aria2c.exe` 到`bin`資料夾
+#### 使用 Aria2 (建議步驟)
+1. 如果 `yt-dlp-gui.exe` 在實行中請先關閉
+2. 於`yt-dlp-gui.exe`執行檔位置建立`bin`資料夾
+3. 將`aria2c.exe`複製進`bin`資料夾中
+
+* 需要重啟掃描`aria2c.exe`執行檔
+* `2022.10.03`或之後版本, `aria2c.exe` 可放置與`yt-dlp-gui.exe`相同位置, 或是`yt-dlp-gui.exe`之下**任何名稱**的資料夾 (即使巢狀)
 
 ### 如何刪除
 直接刪除 `yt-dlp-gui.exe` 即可

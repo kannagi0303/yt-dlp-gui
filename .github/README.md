@@ -12,7 +12,7 @@
 <img src="screenshot03.png" width="460"/>
 
 ### Requirements
-* [yt-dlp](https://github.com/yt-dlp/yt-dlp)
+* [yt-dlp](https://github.com/yt-dlp/yt-dlp) (Recommend) or [youtube-dl](https://github.com/ytdl-org/youtube-dl)
 * [FFMPEG](https://ffmpeg.org/download.html#build-windows)
 
 [yt-dlp](https://github.com/yt-dlp/yt-dlp) is a [youtube-dl](https://github.com/ytdl-org/youtube-dl) fork based,
@@ -22,14 +22,14 @@ Command-line program to download videos from YouTube.com and other video sites,
 ### Optional
 * [aria2](https://aria2.github.io/)
 
-### How to Use
-1. Download `yt-dlp-gui.exe`
-2. Create a Folder `bin` in location of executable file
+### How to Use (Suggested Steps)
+1. Download [`yt-dlp-gui.exe`](https://github.com/kannagi0303/yt-dlp-gui/releases)
+2. Create a Folder `bin` at the location of `yt-dlp-gui.exe`
 3. Copy `yt-dlp.exe` and `ffmpeg.exe` into Folder `bin`
 4. Execute `yt-dlp-gui.exe`
 
 * The first execution will generate the `yt-dlp-gui.yaml` file, which is used to store the settings.
-
+* Versions in `2022.10.03` and later, `yt-dlp.exe` & `ffmpeg.exe` can now be placed in the same location as `yt-dlp-gui.exe`, or in **any named** subfolder under `yt-dlp-gui.exe` (even nested)
 
 #### Use Configuration (refer to [configuration](https://github.com/yt-dlp/yt-dlp#configuration))
 1. Create a Folder `configs` in location of executable file
@@ -37,8 +37,13 @@ Command-line program to download videos from YouTube.com and other video sites,
 
 * Need Restart for scan configuration file(s)
 
-#### Use Aria2
-Copy `aria2c.exe` into Folder `bin`
+#### Use Aria2 (Suggested Steps)
+1. If `yt-dlp-gui.exe` Is Running, Close it first.
+2. Create a Folder `bin` at the location of `yt-dlp-gui.exe`
+3. Copy `aria2c.exe` into Folder `bin`
+
+* Need Restart for scan `aria2c.exe` file
+* Versions in `2022.10.03` and later, `aria2c.exe` can now be placed in the same location as `yt-dlp-gui.exe`, or or in **any named** subfolder under `yt-dlp-gui.exe` (even nested)
 
 ### How to Remove
 Just delete `yt-dlp-gui.exe`
