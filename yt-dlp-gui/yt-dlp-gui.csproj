@@ -41,6 +41,7 @@
     <PackageReference Include="Microsoft.Xaml.Behaviors.Wpf" Version="1.1.39" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
     <PackageReference Include="PropertyChanged.Fody" Version="4.0.3" />
+    <PackageReference Include="SharpClipboard" Version="3.5.2" />
     <PackageReference Include="Swordfish.NET.CollectionsV3" Version="3.3.10" />
     <PackageReference Include="System.Resources.ResourceManager" Version="4.3.0" />
     <PackageReference Include="YamlDotNet" Version="12.0.1" />

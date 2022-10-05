@@ -1,5 +1,6 @@
 ﻿using Libs;
 using Libs.Yaml;
+using Microsoft.Toolkit.Uwp.Notifications;
 using Newtonsoft.Json;
 using Swordfish.NET.Collections.Auxiliary;
 using System;
@@ -7,15 +8,14 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using System.Security.Cryptography;
+using System.Security.Policy;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Forms;
-using System.Windows.Markup;
+using WK.Libraries.SharpClipboardNS;
 using yt_dlp_gui.Models;
 using yt_dlp_gui.Wrappers;
-using Microsoft.Toolkit.Uwp.Notifications;
 
 namespace yt_dlp_gui.Views {
     public partial class Main :Window {
@@ -25,6 +25,10 @@ namespace yt_dlp_gui.Views {
             InitializeComponent();
 
             DataContext = Data;
+
+            var y = @"https://www.youtube.com/watch?v=rS4UNmnqJ0s";
+            Debug.WriteLine(Util.UrlVaild(y), y);
+
             //Load Configs
             InitGUIConfig();
 
@@ -38,8 +42,45 @@ namespace yt_dlp_gui.Views {
             if (!Directory.Exists(Data.TargetPath)) {
                 Data.TargetPath = App.AppPath;
             }
-            //run update
+
+            InitClipboard();
+
+            //run update check
             Task.Run(Inits);
+        }
+        private Regex _frgPat = new Regex("<!--StartFragment-->(.*)<!--EndFragment-->", RegexOptions.Multiline | RegexOptions.Compiled);
+        private Regex _matchUrls = new Regex(@"(https?|ftp|file)\://[A-Za-z0-9\.\-]+(/[A-Za-z0-9\?\&\=;\+!'\(\)\*\-\._~%]*)*", RegexOptions.Compiled);
+        public void InitClipboard() {
+            Data.PropertyChanged += (s, e) => {
+                switch (e.PropertyName) {
+                    case nameof(Data.ClipboardText):
+                        var content = System.Windows.Clipboard.GetText(System.Windows.TextDataFormat.Html);
+                        if (!string.IsNullOrWhiteSpace(content)) {
+                            content = _frgPat.Match(content).Groups?[1].Value.Trim() ?? "";
+                        } else {
+                            content = System.Windows.Clipboard.GetText(System.Windows.TextDataFormat.Text);
+                        }
+                        var m = _matchUrls.Match(content);
+                        if (m.Success) {
+                            var capUrl = m.Value;
+                            if (Util.UrlVaild(capUrl)) {
+                                Data.Url = capUrl;
+                                Analyze_Start();
+                            }
+                        }
+                        //Debug.WriteLine($"Clipboard Change To: {ClipboardText}");
+                        break;
+                }
+            };
+
+            var sc = new SharpClipboard();
+            sc.ClipboardChanged += (s, e) => {
+                if (!Data.IsMonitor || Data.IsAnalyze || Data.IsDownload) return;
+                if (e.ContentType == SharpClipboard.ContentTypes.Text) {
+                    var text = System.Windows.Clipboard.GetText(System.Windows.TextDataFormat.Text);
+                    Data.ClipboardText = text;
+                }
+            };
         }
         public void InitGUIConfig() {
             Data.GUIConfig.Load(App.Path(App.Folders.root, App.AppName + ".yaml"));
@@ -100,6 +141,9 @@ namespace yt_dlp_gui.Views {
             }
         }
         private void Button_Analyze(object sender, RoutedEventArgs e) {
+            Analyze_Start();
+        }
+        private void Analyze_Start() {
             Data.IsAnalyze = true;
             cv.SelectedIndex = -1;
             ca.SelectedIndex = -1;
@@ -114,6 +158,8 @@ namespace yt_dlp_gui.Views {
             });
         }
         private void GetInfo() {
+            //System.Windows.Threading.Dispatcher.Yield();
+
             var dlp = new DLP(Data.Url);
             if (Data.NeedCookie) dlp.Cookie(Data.CookieType);
             dlp.GetInfo();
@@ -126,7 +172,7 @@ namespace yt_dlp_gui.Views {
                 //Debug.WriteLine(std);
 
                 //取得JSON
-                Data.Video = JsonConvert.DeserializeObject<Video>(std, new JsonSerializerSettings() { 
+                Data.Video = JsonConvert.DeserializeObject<Video>(std, new JsonSerializerSettings() {
                     NullValueHandling = NullValueHandling.Ignore
                 });
 
@@ -225,7 +271,7 @@ namespace yt_dlp_gui.Views {
             } else if (regAria.IsMatch(std)) {
                 // aria2
                 if (!Data.DNStatus_Infos.ContainsKey("Downloader")) Data.DNStatus_Infos["Downloader"] = "aria2c";
-                var d = GetGroup(regAria, std);
+                var d = Util.GetGroup(regAria, std);
                 if (chn == 0) {
                     if (decimal.TryParse(d["persent"], out decimal o_persent)) Data.VideoPersent = o_persent;
                     Data.DNStatus_Infos["Downloaded"] = d["downloaded"];
@@ -240,7 +286,7 @@ namespace yt_dlp_gui.Views {
             } else if (regFF.IsMatch(std)) {
                 // ffmpeg
                 if (!Data.DNStatus_Infos.ContainsKey("Downloader")) Data.DNStatus_Infos["Downloader"] = "FFMPEG";
-                var d = GetGroup(regFF, std);
+                var d = Util.GetGroup(regFF, std);
                 Data.DNStatus_Infos["Downloaded"] = d.GetValueOrDefault("size", "");
                 Data.DNStatus_Infos["Speed"] = d.GetValueOrDefault("bitrate", "");
                 Data.DNStatus_Infos["Frame"] = d.GetValueOrDefault("frame", "");
@@ -250,7 +296,7 @@ namespace yt_dlp_gui.Views {
             } else if (regYTDL.IsMatch(std)) {
                 // youtube-dl
                 if (!Data.DNStatus_Infos.ContainsKey("Downloader")) Data.DNStatus_Infos["Downloader"] = "youtube-dl";
-                var d = GetGroup(regYTDL, std);
+                var d = Util.GetGroup(regYTDL, std);
                 if (chn == 0) {
                     if (decimal.TryParse(d["persent"], out decimal o_persent)) Data.VideoPersent = o_persent;
                 } else {
@@ -448,17 +494,6 @@ namespace yt_dlp_gui.Views {
                     Data.TargetName = Path.GetFileName(dialog.FileName);
                 }
             }
-        }
-        private Dictionary<string, string> GetGroup(Regex r, string input) {
-            var m = r.Match(input);
-            if (m.Success) {
-                var groupData = r.GetGroupNames()
-                    .Where(x => !string.IsNullOrWhiteSpace(m.Groups[x]?.Value))
-                    .ToDictionary(x => x.ToLower(), x => m.Groups[x]);
-                var group = groupData.ToDictionary(x => x.Key, x => x.Value.Value.Trim());
-                return group;
-            }
-            return new Dictionary<string, string>();
         }
 
         private static Regex RegexValues = new Regex(@"\${(.+?)}", RegexOptions.Compiled);

@@ -88,6 +88,7 @@
         <Grid Grid.Row="0" Grid.ColumnSpan="3">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition/>
+                <ColumnDefinition Width="Auto"/>
                 <ColumnDefinition Width="Auto" SharedSizeGroup="Button"/>
             </Grid.ColumnDefinitions>
             <controls:TextEditor Helper="Url" Margin="0,2" IsEnabled="{Binding Enable.Url}" 
@@ -118,6 +119,9 @@
                     </ContextMenu>
                 </controls:TextEditor.ContextMenu>
             </controls:TextEditor>
+            <ToggleButton Grid.Column="1" Margin="4,2,0,2" Padding="6,0" IsChecked="{Binding IsMonitor}">
+                <controls:Icons Kind="Monitor" Size="14"/>
+            </ToggleButton>
             <Button Grid.Column="2" IsEnabled="{Binding Enable.Analyze}" Margin="2" Click="Button_Analyze">
                 <StackPanel Orientation="Horizontal" Margin="4,0">
                     <controls:Icons Size="14" Kind="Magnify" IsLoading="{Binding IsAnalyze}"/>

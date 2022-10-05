@@ -154,6 +154,7 @@ namespace yt_dlp_gui.Views {
             public bool IsAnalyze { get; set; } = false;
             public bool IsDownload { get; set; } = false;
             public bool IsAbouted { get; set; } = false;
+            public bool IsMonitor { get; set; } = false;
             public string Url { get; set; } = string.Empty;
             public string CommandLine { get; set; } = string.Empty;
             public bool IsPackage { get; set; } = false;
@@ -192,6 +193,7 @@ namespace yt_dlp_gui.Views {
             public ConcurrentObservableDictionary<string, string> DNStatus_Infos { get; set; } = new();
             public IEnumerable<KeyValuePair<string, string>> DNStatus_InfosView
                 => DNStatus_Infos.CollectionView;
+            public string ClipboardText { get; set; } = string.Empty;
             //
             private void CheckEnable() {
                 Enable.Url = true;
@@ -313,6 +315,7 @@ namespace yt_dlp_gui.Views {
             public bool SaveThumbnail { get; set; } = true;
             [Description("UseNotifications")]
             public bool UseNotifications { get; set; } = true;
+            public bool IsMonitor { get; set; } = false;
             [Description("Configuration File")]
             public string ConfigurationFile { get; set; } = string.Empty;
             [Description("Aria2 Settings")]

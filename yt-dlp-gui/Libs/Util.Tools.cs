@@ -5,6 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace Libs {
@@ -70,6 +71,17 @@ namespace Libs {
                 }
             }
             return true;
+        }
+        public static Dictionary<string, string> GetGroup(Regex r, string input) {
+            var m = r.Match(input);
+            if (m.Success) {
+                var groupData = r.GetGroupNames()
+                    .Where(x => !string.IsNullOrWhiteSpace(m.Groups[x]?.Value))
+                    .ToDictionary(x => x.ToLower(), x => m.Groups[x]);
+                var group = groupData.ToDictionary(x => x.Key, x => x.Value.Value.Trim());
+                return group;
+            }
+            return new Dictionary<string, string>();
         }
     }
 }
