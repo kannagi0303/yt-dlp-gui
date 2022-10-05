@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -13,7 +14,9 @@ namespace yt_dlp_gui.Wrappers {
             foreach (var source in sources) {
                 options.Add($"-i \"{source}\"");
             }
-            options.Add("-c copy");
+            options.Add("-vcodec copy");
+            options.Add("-acodec copy");
+            if (Path.GetExtension(target).ToLower() == ".mp4") options.Add("-c:s mov_text");
             if (overwrite) {
                 options.Add("-y");
             } else {
@@ -21,7 +24,7 @@ namespace yt_dlp_gui.Wrappers {
             }
             options.Add($"\"{target}\"");
             var args = string.Join(" ", options);
-            //Debug.WriteLine(args);
+            Debug.WriteLine(args);
             Exec(args);
         }
         public static void DownloadUrl(string url, string target) {

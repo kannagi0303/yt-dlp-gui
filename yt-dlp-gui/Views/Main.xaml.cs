@@ -13,6 +13,7 @@ using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Forms;
+using System.Windows.Markup;
 using WK.Libraries.SharpClipboardNS;
 using yt_dlp_gui.Models;
 using yt_dlp_gui.Wrappers;
@@ -158,8 +159,6 @@ namespace yt_dlp_gui.Views {
             });
         }
         private void GetInfo() {
-            //System.Windows.Threading.Dispatcher.Yield();
-
             var dlp = new DLP(Data.Url);
             if (Data.NeedCookie) dlp.Cookie(Data.CookieType);
             dlp.GetInfo();
@@ -245,6 +244,7 @@ namespace yt_dlp_gui.Views {
         private Regex regFF = new Regex(@"frame=.*?(?<frame>\d+).*?fps=.*?(?<fps>[\d.]+).*?size=.*?(?<size>\w+).*?time=(?<time>\S+).*?bitrate=(?<bitrate>\S+)");
         private Regex regYTDL = new Regex(@"^\[download\].*?(?<persent>[\d\.]+).*?(?<=of).*?(?<total>\S+).*?(?<=at).*?(?<speed>\S+).*?(?<=ETA).*?(?<eta>\S+)");
         private void GetStatus(string std, int chn = 0) {
+            //Debug.WriteLine(std, "STATUS");
             if (regDLP.IsMatch(std)) {
                 // yt-dlp
                 if (!Data.DNStatus_Infos.ContainsKey("Downloader")) Data.DNStatus_Infos["Downloader"] = "Native";
@@ -253,6 +253,10 @@ namespace yt_dlp_gui.Views {
                 if (decimal.TryParse(d[4], out decimal d_total)) {
                     s.Total = d_total;
                     s.Persent = decimal.Parse(d[3]) / d_total * 100; ;
+                } else {
+                    if (decimal.TryParse(d[1].TrimEnd('%') , out decimal d_persent)) {
+                        s.Persent = d_persent;
+                    }
                 }
                 s.Downloaded = decimal.Parse(d[3]);
                 if (decimal.TryParse(d[5], out decimal d_speed)) s.Speed = d_speed;
@@ -403,15 +407,19 @@ namespace yt_dlp_gui.Views {
                             vid = vid += "+" + Data.selectedAudio.format_id;
                             dlp.DownloadSections(tr);
                         }
+                        /*
                         if (isSingle) {
                             dlp.DownloadFormat(vid, Data.TargetFile);
                         } else {
                             tmp_video_path = Path.Combine(App.AppPath, $"{Data.Video.id}.{vid}.{Data.selectedVideo.video_ext}");
-                            //tmp_video_path = App.Path(App.Folders.temp, $"{Data.Video.id}.{vid}.{Data.selectedVideo.video_ext}");
                             dlp.DownloadFormat(vid, tmp_video_path);
                         }
+                        */
+                        tmp_video_path = Path.Combine(App.AppPath, $"{Data.Video.id}.{vid}.{Data.selectedVideo.video_ext}");
+                        dlp.DownloadFormat(vid, tmp_video_path);
+
                         dlp.Exec(std => {
-                            Debug.WriteLine(std, "V");
+                            //Debug.WriteLine(std, "V");
                             GetStatus(std, 0);
                         });
                     }));
@@ -427,19 +435,19 @@ namespace yt_dlp_gui.Views {
 
                             var aid = Data.selectedAudio.format_id;
                             tmp_audio_path = Path.Combine(App.AppPath, $"{Data.Video.id}.{aid}.{Data.selectedAudio.audio_ext}");
-                            //tmp_audio_path = App.Path(App.Folders.temp, $"{Data.Video.id}.{aid}.{Data.selectedAudio.audio_ext}");
                             dlp.DownloadFormat(aid, tmp_audio_path);
 
                             dlp.Exec(std => {
-                                Debug.WriteLine(std, "A");
+                                //Debug.WriteLine(std, "A");
                                 GetStatus(std, 1);
                             });
                         }));
                     }
                     //Download Subtitle
+                    var subpath = string.Empty;
                     if (!string.IsNullOrWhiteSpace(Data.selectedSub?.url)) {
                         Data.SubtitlePersent = 0;
-                        var subpath = Path.ChangeExtension(Data.TargetFile, Data.selectedSub.key + ".srt");
+                        subpath = Path.ChangeExtension(Data.TargetFile, Data.selectedSub.key + ".srt");
                         FFMPEG.DownloadUrl(Data.selectedSub.url, subpath);
                         Data.SubtitlePersent = 100;
                     }
@@ -452,14 +460,25 @@ namespace yt_dlp_gui.Views {
                     }
                     //WaitAll Downloads, Merger Video and Audio
                     Task.WaitAll(tasks.ToArray());
-                    Debug.WriteLine(JsonConvert.SerializeObject(Data, Formatting.Indented));
                     if (!Data.IsAbouted) {
                         //Download Complete
                         if (!isSingle) {
-                            FFMPEG.Merger(overwrite, Data.TargetFile, tmp_video_path, tmp_audio_path);
-                            //Directory.Delete(App.Path(App.Folders.temp), true);
+                            if (Data.EmbedSub && File.Exists(subpath)) {
+                                FFMPEG.Merger(overwrite, Data.TargetFile, tmp_video_path, tmp_audio_path, subpath);
+                                File.Delete(subpath);
+                            } else {
+                                FFMPEG.Merger(overwrite, Data.TargetFile, tmp_video_path, tmp_audio_path);
+                            }
                             if (File.Exists(tmp_video_path)) File.Delete(tmp_video_path);
                             if (File.Exists(tmp_audio_path)) File.Delete(tmp_audio_path);
+                        } else {
+                            if (Data.EmbedSub && File.Exists(subpath)) {
+                                FFMPEG.Merger(overwrite, Data.TargetFile, tmp_video_path, subpath);
+                                File.Delete(subpath);
+                            } else {
+                                File.Move(tmp_video_path, Data.TargetFile, true);
+                            }
+                            if (File.Exists(tmp_video_path)) File.Delete(tmp_video_path);
                         }
                         Data.DNStatus_Infos["Status"] = "Done";
 

@@ -177,6 +177,7 @@ namespace yt_dlp_gui.Views {
             public bool UseAria2 { get; set; } = true;
             public bool NeedCookie { get; set; } = false;
             public bool SaveThumbnail { get; set; } = true;
+            public bool EmbedSub { get; set; } = false;
             public string TimeRange { get; set; } = string.Empty;
             public Enable Enable { get; set; } = new();
             public bool AutoSaveConfig { get; set; } = false;
@@ -311,17 +312,13 @@ namespace yt_dlp_gui.Views {
             [Description("Last Browsed Folder")] public string TargetPath { get; set; } = string.Empty;
             [Description("Use Cookie From Browser")] public UseCookie UseCookie { get; set; } = UseCookie.WhenNeeded;
             public CookieType CookieType { get; set; } = CookieType.Chrome;
-            [Description("With Thumbnail When Downlaod")]
-            public bool SaveThumbnail { get; set; } = true;
-            [Description("UseNotifications")]
-            public bool UseNotifications { get; set; } = true;
+            [Description("With Thumbnail When Downlaod")] public bool SaveThumbnail { get; set; } = true;
+            [Description("Embed Subtitles")] public bool EmbedSub { get; set; } = false;
+            [Description("UseNotifications")] public bool UseNotifications { get; set; } = true;
             public bool IsMonitor { get; set; } = false;
-            [Description("Configuration File")]
-            public string ConfigurationFile { get; set; } = string.Empty;
-            [Description("Aria2 Settings")]
-            public bool UseAria2 { get; set; } = false;
-            [Description("Last Checking Update Date")]
-            public string LastVersion { get; set; } = string.Empty;
+            [Description("Configuration File")] public string ConfigurationFile { get; set; } = string.Empty;
+            [Description("Aria2 Settings")] public bool UseAria2 { get; set; } = false;
+            [Description("Last Checking Update Date")] public string LastVersion { get; set; } = string.Empty;
             public string LastCheckUpdate { get; set; } = string.Empty;
 
         }

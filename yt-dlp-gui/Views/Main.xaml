@@ -283,7 +283,6 @@
                                             <ColumnDefinition SharedSizeGroup="S3" />
                                             <ColumnDefinition SharedSizeGroup="S4" />
                                             <ColumnDefinition SharedSizeGroup="S5" />
-                                            <ColumnDefinition SharedSizeGroup="S6" />
                                         </Grid.ColumnDefinitions>
                                         <controls:Icons Size="14">
                                             <controls:Icons.Style>
@@ -302,7 +301,6 @@
                                         <TextBlock FontSize="10" Grid.Column="3" Text="{Binding video_ext}"/>
                                         <TextBlock FontSize="10" Grid.Column="4" Text="{Binding vcodec}"/>
                                         <TextBlock FontSize="10" Grid.Column="5" HorizontalAlignment="Right" controls:Filesize.Bytes="{Binding filesize}"/>
-                                        <TextBlock FontSize="10" Grid.Column="6" Text="{Binding format_id}"/>
                                     </Grid>
                                 </DataTemplate>
                             </ComboBox.ItemTemplate>
@@ -453,10 +451,14 @@
                         <ColumnDefinition Width="Auto"/>
                         <ColumnDefinition Width="*"/>
                     </Grid.ColumnDefinitions>
-                    <TextBlock Grid.Column="1" FontSize="10" Text="--download-sections" Foreground="Gray"/>
-                    <TextBlock Grid.Row="1" Text="Time range" VerticalAlignment="Center" Margin="0,0,4,0"/>
-                    <controls:TextEditor Grid.Row="1" Grid.Column="1" Helper="*10:15-15:00" Text="{Binding TimeRange}" 
-                                         Margin="0,2" EnableHyperlinks="False"/>
+                    <TextBlock Grid.Row="0" Text="Embed Subtitles" VerticalAlignment="Center" Margin="0,0,4,0"/>
+                    <CheckBox Grid.Row="0" Grid.Column="1" Content="Enabled" Margin="2" IsChecked="{Binding EmbedSub}"/>
+                    <StackPanel Grid.Row="1" VerticalAlignment="Center" Margin="0,0,4,0">
+                        <TextBlock Text="Time range"/>
+                        <TextBlock FontSize="10" Text="--download-sections" Foreground="Gray"/>
+                    </StackPanel>
+                    <controls:TextEditor Grid.Row="1" Grid.Column="2" Helper="*10:15-15:00" Text="{Binding TimeRange}" 
+                                         Margin="2" EnableHyperlinks="False"/>
                 </Grid>
             </TabItem>
             <TabItem>
