@@ -510,7 +510,11 @@ namespace yt_dlp_gui.Views {
                 dialog.FileName = Path.GetFileName(Data.TargetFile);
                 if (dialog.ShowDialog() == System.Windows.Forms.DialogResult.OK) {
                     Data.TargetPath = Path.GetDirectoryName(dialog.FileName);
-                    Data.TargetName = Path.GetFileName(dialog.FileName);
+                    if ((new string[] { ".mp4", ".webm", ".3gp" }).Any(x => Path.GetExtension(dialog.FileName).ToLower() == x)) {
+                        Data.TargetName = Path.GetFileName(dialog.FileName);
+                    } else {
+                        Data.TargetName = Path.GetFileName(dialog.FileName) + ".tmp";
+                    }
                 }
             }
         }

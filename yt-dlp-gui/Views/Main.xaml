@@ -529,7 +529,7 @@
                 <controls:TextEditor Helper="Save As..." Text="{Binding TargetDisplay}" 
                                              IsReadOnly="True" WordWrap="True" Margin="0,2"/>
                 <Button Grid.Column="1" IsEnabled="{Binding Enable.Browser}" 
-                                Margin="4,2,2,2" Click="Button_Browser">
+                                Margin="4,2,2,2" Click="Button_Browser" Cursor="Hand">
                     <TextBlock Margin="2,0,0,0" Text="Browse"/>
                 </Button>
             </Grid>
