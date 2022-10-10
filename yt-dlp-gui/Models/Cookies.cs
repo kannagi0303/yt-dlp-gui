@@ -2,7 +2,8 @@
     public enum UseCookie { 
         WhenNeeded, 
         Never, 
-        Always 
+        Always,
+        Ask
     }
     public enum CookieType {
         Chrome, 

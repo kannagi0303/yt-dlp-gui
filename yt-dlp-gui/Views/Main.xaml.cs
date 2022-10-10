@@ -33,6 +33,16 @@ namespace yt_dlp_gui.Views {
             //Load Configs
             InitGUIConfig();
 
+            Topmost = Data.AlwaysOnTop;
+            if (Data.RememberWindowStatePosition) {
+                Top = Data.Top;
+                Left = Data.Left;
+            }
+            if (Data.RememberWindowStateSize) {
+                Width = Data.Width;
+                Height = Data.Height;
+            }
+
             //Configuration Checking
             InitConfiguration();
 
@@ -70,6 +80,9 @@ namespace yt_dlp_gui.Views {
                             }
                         }
                         //Debug.WriteLine($"Clipboard Change To: {ClipboardText}");
+                        break;
+                    case nameof(Data.AlwaysOnTop):
+                        Topmost = Data.AlwaysOnTop;
                         break;
                 }
             };
@@ -230,6 +243,16 @@ namespace yt_dlp_gui.Views {
                 if (Data.UseCookie == UseCookie.WhenNeeded) {
                     Data.NeedCookie = true;
                     GetInfo();
+                } else if (Data.UseCookie == UseCookie.Ask) {
+                    var mb = System.Windows.Forms.MessageBox.Show(
+                        "Cookies are required, Use it?\n",
+                        "yt-dlp-gui",
+                        MessageBoxButtons.YesNo);
+                    
+                    if (mb == System.Windows.Forms.DialogResult.Yes) {
+                        Data.NeedCookie = true;
+                        GetInfo();
+                    }
                 }
             });
         }
@@ -254,7 +277,7 @@ namespace yt_dlp_gui.Views {
                     s.Total = d_total;
                     s.Persent = decimal.Parse(d[3]) / d_total * 100; ;
                 } else {
-                    if (decimal.TryParse(d[1].TrimEnd('%') , out decimal d_persent)) {
+                    if (decimal.TryParse(d[1].TrimEnd('%'), out decimal d_persent)) {
                         s.Persent = d_persent;
                     }
                 }
@@ -358,7 +381,23 @@ namespace yt_dlp_gui.Views {
                 });
             }
         }
+        private void Button_ExplorerTarget(object sender, RoutedEventArgs e) {
+            //Debug.WriteLine(Data.TargetDisplay, "TargetDisplay");
+            //Debug.WriteLine(Data.TargetFile, "TargetFile");
+            //Debug.WriteLine(Data.TargetName, "TargetName");
+            //Debug.WriteLine(Data.TargetPath, "TargetPath");
+            Util.Explorer(Data.TargetFile);
+        }
+        private void Button_Cancel(object sender, RoutedEventArgs e) {
+            if (Data.IsDownload) {
+                Data.IsAbouted = true;
+                foreach (var dlp in RunningDLP) {
+                    dlp.Close();
+                }
+            }
+        }
         private void Button_Download(object sender, RoutedEventArgs e) {
+            Data.CanCancel = false;
             Data.IsAbouted = false;
             if (Data.IsDownload) {
                 Data.IsAbouted = true;
@@ -371,7 +410,7 @@ namespace yt_dlp_gui.Views {
                 //如果檔案已存在
                 if (File.Exists(Data.TargetFile)) {
                     var mb = System.Windows.Forms.MessageBox.Show(
-                        "File Already exist. Overwrite it?\nwe",
+                        "File Already exist. Overwrite it?\n",
                         "yt-dlp-gui",
                         MessageBoxButtons.YesNo);
                     overwrite = mb == System.Windows.Forms.DialogResult.Yes;
@@ -407,19 +446,12 @@ namespace yt_dlp_gui.Views {
                             vid = vid += "+" + Data.selectedAudio.format_id;
                             dlp.DownloadSections(tr);
                         }
-                        /*
-                        if (isSingle) {
-                            dlp.DownloadFormat(vid, Data.TargetFile);
-                        } else {
-                            tmp_video_path = Path.Combine(App.AppPath, $"{Data.Video.id}.{vid}.{Data.selectedVideo.video_ext}");
-                            dlp.DownloadFormat(vid, tmp_video_path);
-                        }
-                        */
+
                         tmp_video_path = Path.Combine(App.AppPath, $"{Data.Video.id}.{vid}.{Data.selectedVideo.video_ext}");
                         dlp.DownloadFormat(vid, tmp_video_path);
 
                         dlp.Exec(std => {
-                            //Debug.WriteLine(std, "V");
+                            Debug.WriteLine(std, "V");
                             GetStatus(std, 0);
                         });
                     }));
@@ -458,7 +490,9 @@ namespace yt_dlp_gui.Views {
                             FFMPEG.DownloadUrl(Data.Thumbnail, thumbpath);
                         }
                     }
+
                     //WaitAll Downloads, Merger Video and Audio
+                    Data.CanCancel = true;
                     Task.WaitAll(tasks.ToArray());
                     if (!Data.IsAbouted) {
                         //Download Complete
@@ -562,6 +596,13 @@ namespace yt_dlp_gui.Views {
             var win = new Release();
             win.Owner = GetWindow(this);
             win.ShowDialog();
+        }
+
+        private void Window_Closed(object sender, EventArgs e) {
+            Data.Left = Left;
+            Data.Top = Top;
+            Data.Width = Width;
+            Data.Height = Height;
         }
     }
 }

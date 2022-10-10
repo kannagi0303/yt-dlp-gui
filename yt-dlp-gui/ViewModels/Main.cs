@@ -155,6 +155,14 @@ namespace yt_dlp_gui.Views {
             public bool IsDownload { get; set; } = false;
             public bool IsAbouted { get; set; } = false;
             public bool IsMonitor { get; set; } = false;
+            public bool AlwaysOnTop { get; set; } = false;
+            public bool RememberWindowStatePosition { get; set; } = false;
+            public bool RememberWindowStateSize { get; set; } = false;
+            public double Top { get; set; } = 0;
+            public double Left { get; set; } = 0;
+            public double Width { get; set; } = 600;
+            public double Height { get; set; } = 380;
+            public bool CanCancel { get; set; } = false;
             public string Url { get; set; } = string.Empty;
             public string CommandLine { get; set; } = string.Empty;
             public bool IsPackage { get; set; } = false;
@@ -310,6 +318,15 @@ namespace yt_dlp_gui.Views {
                 this.Save();
             }
             [Description("Last Browsed Folder")] public string TargetPath { get; set; } = string.Empty;
+            [Description("Window - Always on Top")]
+            public bool AlwaysOnTop { get; set; } = false;
+            [Description("Window - Remember State")]
+            public bool RememberWindowStatePosition { get; set; } = false;
+            public bool RememberWindowStateSize { get; set; } = false;
+            public double Top { get; set; } = 0;
+            public double Left { get; set; } = 0;
+            public double Width { get; set; } = 600;
+            public double Height { get; set; } = 380;
             [Description("Use Cookie From Browser")] public UseCookie UseCookie { get; set; } = UseCookie.WhenNeeded;
             public CookieType CookieType { get; set; } = CookieType.Chrome;
             [Description("With Thumbnail When Downlaod")] public bool SaveThumbnail { get; set; } = true;

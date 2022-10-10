@@ -153,14 +153,14 @@ namespace yt_dlp_gui.Wrappers {
             process.StartInfo = info;
             process.EnableRaisingEvents = true;
             process.OutputDataReceived += (s, e) => {
-                //Debug.WriteLine(e.Data, "STD");
+                Debug.WriteLine(e.Data, "STD");
                 if (!string.IsNullOrWhiteSpace(e.Data)) {
                     stdall?.Invoke(e.Data);
                     stdout?.Invoke(e.Data);
                 }
             };
             process.ErrorDataReceived += (s, e) => {
-                //Debug.WriteLine(e.Data, "ERR");
+                Debug.WriteLine(e.Data, "ERR");
                 if (!string.IsNullOrWhiteSpace(e.Data)) {
                     stdall?.Invoke(e.Data);
                     stderr?.Invoke(e.Data);

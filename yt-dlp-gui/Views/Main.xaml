@@ -9,6 +9,7 @@
         mc:Ignorable="d" Style="{DynamicResource WindowStyle}" 
         Title="yt-dlp-gui" Width="600" Height="380"
         Background="{StaticResource BackgroundColour}"
+        Closed="Window_Closed"
         Icon="pack://application:,,,/Resources/logo.ico">
     <Window.CommandBindings>
         <CommandBinding Command="ApplicationCommands.SaveAs" CanExecute="CommandBinding_SaveAs_CanExecute" Executed="CommandBinding_SaveAs_Executed"/>
@@ -38,7 +39,7 @@
                             <VirtualizingStackPanel Orientation="Horizontal"/>
                         </ItemsPanelTemplate>
                     </Menu.ItemsPanel>
-                    <MenuItem Style="{StaticResource  TopLevelMenu}" Width="40"
+                    <MenuItem Style="{StaticResource TopLevelMenu}"
                               VerticalAlignment="Center" Padding="0">
                         <MenuItem.Icon>
                             <controls:Icons Kind="MenuDown" VerticalAlignment="Center" HorizontalAlignment="Center"/>
@@ -479,17 +480,31 @@
                         <RowDefinition/>
                         <!-- 3 -->
                         <RowDefinition/>
+                        <!-- 4 -->
+                        <RowDefinition/>
+                        <!-- 5 -->
+                        <RowDefinition/>
                     </Grid.RowDefinitions>
                     <TextBlock Grid.Row="0" Text="Notifications" Margin="0,5,5,5" HorizontalAlignment="Right"/>
                     <CheckBox Grid.Row="0" Grid.Column="1" Content="Enabled" IsEnabled="{Binding Enable.UseNotifications}" IsChecked="{Binding UseNotifications}" Margin="0,2"/>
+                    <!--Always on Top-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_ -->
+                    <TextBlock Grid.Row="1" Text="Always on Top" Margin="0,5,5,5" HorizontalAlignment="Right"/>
+                    <CheckBox Grid.Row="1" Grid.Column="1" Content="Enabled" IsChecked="{Binding AlwaysOnTop}" Margin="0,2"/>
+                    <!--Potistion & Size-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_ -->
+                    <TextBlock Grid.Row="2" Text="Remember Window State" Margin="0,2,5,5" HorizontalAlignment="Right"/>
+                    <StackPanel Grid.Row="2" Grid.Column="1" VerticalAlignment="Center">
+                        <CheckBox Content="Position" IsChecked="{Binding RememberWindowStatePosition}"/>
+                        <CheckBox Content="Size" IsChecked="{Binding RememberWindowStateSize}"/>
+                    </StackPanel>
                     <!--UseCookie-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_ -->
-                    <TextBlock Grid.Row="1" Text="Cookie" Margin="0,5,5,5" HorizontalAlignment="Right"/>
-                    <StackPanel Grid.Row="1" Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Top" Margin="0,2">
+                    <TextBlock Grid.Row="3" Text="Cookie" Margin="0,5,5,5" HorizontalAlignment="Right"/>
+                    <StackPanel Grid.Row="3" Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Top" Margin="0,2">
                         <!--TextBlock Text="Cookie" Margin="0,0,4,0" VerticalAlignment="Center"/-->
                         <ComboBox SelectedValue="{Binding UseCookie}" SelectedValuePath="Tag" IsEnabled="{Binding Enable.UseCookie}">
                             <ComboBoxItem Content="When Needed" Tag="{x:Static m:UseCookie.WhenNeeded}"/>
                             <ComboBoxItem Content="Never" Tag="{x:Static m:UseCookie.Never}"/>
                             <ComboBoxItem Content="Always" Tag="{x:Static m:UseCookie.Always}"/>
+                            <ComboBoxItem Content="Ask" Tag="{x:Static m:UseCookie.Ask}"/>
                         </ComboBox>
                         <TextBlock Text="Use" Margin="4,0" VerticalAlignment="Center"/>
                         <ComboBox SelectedValue="{Binding CookieType}" SelectedValuePath="Tag" IsEnabled="{Binding Enable.CookieType}">
@@ -504,14 +519,14 @@
                         </ComboBox>
                     </StackPanel>
                     <!-- Configuration-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_ -->
-                    <TextBlock Grid.Row="2" Text="Configuration" Margin="0,5,5,5" HorizontalAlignment="Right"/>
-                    <ComboBox Grid.Row="2" Grid.Column="1" x:Name="cc" HorizontalAlignment="Left"
+                    <TextBlock Grid.Row="4" Text="Configuration" Margin="0,5,5,5" HorizontalAlignment="Right"/>
+                    <ComboBox Grid.Row="4" Grid.Column="1" x:Name="cc" HorizontalAlignment="Left"
                               SelectedValue="{Binding selectedConfig}" 
                               DisplayMemberPath="name"
                               ItemsSource="{Binding ConfigsView}"/>
                     <!--UseAria2-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_ -->
-                    <TextBlock Grid.Row="3" Text="Aria2" Margin="0,5,5,5" HorizontalAlignment="Right"/>
-                    <CheckBox Grid.Row="3" Grid.Column="1" Content="Enabled" IsEnabled="{Binding Enable.UseAria2}" IsChecked="{Binding UseAria2}" Margin="0,2"/>
+                    <TextBlock Grid.Row="5" Text="Aria2" Margin="0,5,5,5" HorizontalAlignment="Right"/>
+                    <CheckBox Grid.Row="5" Grid.Column="1" Content="Enabled" IsEnabled="{Binding Enable.UseAria2}" IsChecked="{Binding UseAria2}" Margin="0,2"/>
                 </Grid>
             </TabItem>
         </TabControl>
@@ -519,26 +534,57 @@
         <Grid Grid.Row="4" Grid.ColumnSpan="3">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition/>
-                <ColumnDefinition Width="Auto" SharedSizeGroup="Button"/>
+                <ColumnDefinition Width="Auto"/>
             </Grid.ColumnDefinitions>
             <Grid>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition/>
+                    <ColumnDefinition Width="Auto"/>
                     <ColumnDefinition Width="Auto" SharedSizeGroup="Button"/>
                 </Grid.ColumnDefinitions>
                 <controls:TextEditor Helper="Save As..." Text="{Binding TargetDisplay}" 
                                              IsReadOnly="True" WordWrap="True" Margin="0,2"/>
-                <Button Grid.Column="1" IsEnabled="{Binding Enable.Browser}" 
+                <Button Grid.Column="1" Margin="2" Cursor="Hand" Click="Button_ExplorerTarget">
+                    <StackPanel Orientation="Horizontal" Margin="4,0">
+                        <controls:Icons Size="14" Kind="FolderMoveOutline"/>
+                    </StackPanel>
+                </Button>
+                <Button Grid.Column="2" IsEnabled="{Binding Enable.Browser}" 
                                 Margin="4,2,2,2" Click="Button_Browser" Cursor="Hand">
                     <TextBlock Margin="2,0,0,0" Text="Browse"/>
                 </Button>
             </Grid>
-            <Button Grid.Column="1" IsEnabled="{Binding Enable.Download}" Margin="2" Click="Button_Download">
+            <Button Grid.Column="1" Margin="2" Cursor="Hand" IsEnabled="{Binding CanCancel}" Click="Button_Cancel">
+                <Button.Style>
+                    <Style TargetType="Button" BasedOn="{StaticResource {x:Type Button}}">
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding IsDownload}" Value="False">
+                                <Setter Property="Visibility" Value="Collapsed"/>
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </Button.Style>
+                <StackPanel Orientation="Horizontal" Margin="4,0">
+                    <controls:Icons Size="14" Kind="Download" IsLoading="True"/>
+                    <TextBlock Margin="2,0,0,0" Text="Cancel"/>
+                </StackPanel>
+            </Button>
+            <Button Grid.Column="1" IsEnabled="{Binding Enable.Download}" Margin="2" Click="Button_Download" Cursor="Hand">
+                <Button.Style>
+                    <Style TargetType="Button" BasedOn="{StaticResource {x:Type Button}}">
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding IsDownload}" Value="True">
+                                <Setter Property="Visibility" Value="Collapsed"/>
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </Button.Style>
                 <StackPanel Orientation="Horizontal" Margin="4,0">
                     <controls:Icons Size="14" Kind="Download" IsLoading="{Binding IsDownload}"/>
                     <TextBlock Margin="2,0,0,0" d:Text="Download" Text="{Binding ExecText}"/>
                 </StackPanel>
             </Button>
+
         </Grid>
         <!-- -_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_ -->
     </Grid>

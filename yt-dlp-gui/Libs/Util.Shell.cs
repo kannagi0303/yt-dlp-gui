@@ -1,5 +1,7 @@
 ﻿using System.Diagnostics;
+using System.IO;
 using System.Runtime.InteropServices;
+using System.Threading.Tasks;
 
 namespace Libs {
     public partial class Util {
@@ -33,5 +35,14 @@ namespace Libs {
             }
         }
         /* -_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_ */
+        public static async Task Explorer(string path) {
+            await Task.Run(() => {
+                if (File.Exists(path)) {
+                    Process.Start("explorer.exe", string.Format("/select,\"{0}\"", path));
+                } else if (Directory.Exists(path)) {
+                    Process.Start("explorer.exe", string.Format("/e,\"{0}\"", path));
+                }
+            });
+        }
     }
 }
