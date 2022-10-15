@@ -60,8 +60,8 @@ namespace yt_dlp_gui.Models {
             var r = 0;
             //比较 resolution
             if (x.height.HasValue && y.height.HasValue) {
-                var xr = x.width.Value * x.height.Value;
-                var yr = y.width.Value * y.height.Value;
+                var xr = (x.width ?? 1) * x.height.Value;
+                var yr = (y.width ?? 1) * y.height.Value;
                 if (xr != yr) {
                     return xr > yr ? -1 : 1;
                 }
