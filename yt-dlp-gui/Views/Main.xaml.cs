@@ -448,6 +448,9 @@ namespace yt_dlp_gui.Views {
                         }
 
                         tmp_video_path = Path.Combine(App.AppPath, $"{Data.Video.id}.{vid}.{Data.selectedVideo.video_ext}");
+                        if (dlp.IsLive) {
+                            tmp_video_path = Data.TargetFile;
+                        }
                         dlp.DownloadFormat(vid, tmp_video_path);
 
                         dlp.Exec(std => {
@@ -517,13 +520,15 @@ namespace yt_dlp_gui.Views {
                         Data.DNStatus_Infos["Status"] = "Done";
 
                         //Send notification when download completed
-                        if (Data.UseNotifications) {
-                            new ToastContentBuilder()
-                                .AddArgument("conversationId", 2333)
-                                .AddText(Data.Video.title)
-                                .AddText("Video Download Completed!")
-                                .Show();
-                        }
+                        try {
+                            if (Data.UseNotifications) {
+                                new ToastContentBuilder()
+                                    .AddArgument("conversationId", 2333)
+                                    .AddText(Data.Video.title)
+                                    .AddText("Video Download Completed!")
+                                    .Show();
+                            }
+                        } catch (Exception ex) { }
                     }
                     //Clear downloading status
                     Data.IsDownload = false;

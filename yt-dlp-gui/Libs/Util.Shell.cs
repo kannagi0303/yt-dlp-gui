@@ -29,9 +29,15 @@ namespace Libs {
 
         public static void SendCtrlC(Process process) {
             if (AttachConsole((uint)process.Id)) {
-                GenerateConsoleCtrlEvent(CtrlTypes.CTRL_C_EVENT, (uint)process.Id);
+                SetConsoleCtrlHandler(null, true);
+
+                //GenerateConsoleCtrlEvent(CtrlTypes.CTRL_C_EVENT, (uint)process.Id);
+                GenerateConsoleCtrlEvent(CtrlTypes.CTRL_C_EVENT, (uint)0);
+
                 FreeConsole();
                 process.WaitForExit();
+
+                SetConsoleCtrlHandler(null, false);
             }
         }
         /* -_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_ */
