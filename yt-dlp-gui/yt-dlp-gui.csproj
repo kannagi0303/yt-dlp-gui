@@ -9,6 +9,7 @@
     <IncludeAllContentForSelfExtract>true</IncludeAllContentForSelfExtract>
     <ApplicationIcon>Resources\logo.ico</ApplicationIcon>
     <EnableCompressionInSingleFile>true</EnableCompressionInSingleFile>
+    <TrimMode>copyused</TrimMode>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
@@ -19,6 +20,14 @@
     <DebugType>none</DebugType>
   </PropertyGroup>
 
+  <ItemGroup>
+    <TrimmerRootAssembly Include="System.Collections" />
+    <TrimmerRootAssembly Include="System.Runtime" />
+    <TrimmerRootAssembly Include="System.Runtime.Extensions" />
+    <TrimmerRootAssembly Include="System.Runtime.InteropServices" />
+    <TrimmerRootAssembly Include="System.Runtime.CompilerServices.VisualC" />
+  </ItemGroup>
+  
   <ItemGroup>
     <None Remove="Resources\logo.ico" />
     <None Remove="Resources\xshd\desc.xshd" />
