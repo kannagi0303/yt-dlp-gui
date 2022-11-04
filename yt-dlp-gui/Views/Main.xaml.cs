@@ -121,7 +121,7 @@ namespace yt_dlp_gui.Views {
             var deps = Directory.EnumerateFiles(App.AppPath, "*.exe", SearchOption.AllDirectories).ToList();
             deps = deps.Where(x => Path.GetFileName(App.AppExe) != Path.GetFileName(x)).ToList();
             var dep_youtubedl = deps.FirstOrDefault(x => Regex.IsMatch(Path.GetFileName(x), @"^youtube-dl\.exe"), "");
-            var dep_ytdlp = deps.FirstOrDefault(x => Regex.IsMatch(Path.GetFileName(x), @"^yt-dlp(_min|_x86|_x64)?\.exe"), "");
+            var dep_ytdlp = deps.FirstOrDefault(x => Regex.IsMatch(Path.GetFileName(x), @"^(yt-dlp(_min|_x86|_x64)?|ytdl-patched.*?)\.exe"), "");
             var dep_ffmpeg = deps.FirstOrDefault(x => Regex.IsMatch(Path.GetFileName(x), @"^ffmpeg"), "");
             var dep_aria2 = deps.FirstOrDefault(x => Regex.IsMatch(Path.GetFileName(x), @"^aria2"), "");
             if (!string.IsNullOrWhiteSpace(dep_ytdlp)) {
@@ -187,7 +187,6 @@ namespace yt_dlp_gui.Views {
                 Data.Video = JsonConvert.DeserializeObject<Video>(std, new JsonSerializerSettings() {
                     NullValueHandling = NullValueHandling.Ignore
                 });
-
                 //读取 Formats 与 Thumbnails
                 {
                     Data.Formats.LoadFromVideo(Data.Video.formats);
@@ -210,10 +209,9 @@ namespace yt_dlp_gui.Views {
                     }
                     Data.Subtitles.AddRange(subs);
                 }
-                //读取 图片
                 var BestUrl = Data.Thumbnails.LastOrDefault()?.url;
                 //var ThumbUrl = string.Empty;
-                if (Web.Head(BestUrl)) {
+                if (BestUrl != null && Web.Head(BestUrl)) {
                     Data.Thumbnail = BestUrl;
                     //ThumbUrl = BestUrl;
                 } else {
@@ -227,7 +225,6 @@ namespace yt_dlp_gui.Views {
                 FFMPEG.DownloadUrl(ThumbUrl, ThumbPath);
                 Data.Thumbnail = ThumbPath;
                 */
-
 
                 Data.SelectFormatBest(); //选择
                 var full = string.Empty;
@@ -248,7 +245,7 @@ namespace yt_dlp_gui.Views {
                         "Cookies are required, Use it?\n",
                         "yt-dlp-gui",
                         MessageBoxButtons.YesNo);
-                    
+
                     if (mb == System.Windows.Forms.DialogResult.Yes) {
                         Data.NeedCookie = true;
                         GetInfo();

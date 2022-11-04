@@ -380,7 +380,7 @@
                                                 </Style>
                                             </controls:Icons.Style>
                                         </controls:Icons>
-                                        <TextBlock FontSize="10" Grid.Column="1" HorizontalAlignment="Left" Text="{Binding asr, StringFormat={}{0}Hz}"/>
+                                        <TextBlock FontSize="10" Grid.Column="1" HorizontalAlignment="Left" Text="{Binding asr, StringFormat={}{0}Hz, TargetNullValue=Unknow}"/>
                                         <TextBlock FontSize="10" Grid.Column="3" Text="{Binding audio_ext}"/>
                                         <TextBlock FontSize="10" Grid.Column="4" Text="{Binding acodec}"/>
                                         <TextBlock FontSize="10" Grid.Column="5" HorizontalAlignment="Right" controls:Filesize.Bytes="{Binding filesize}"/>
