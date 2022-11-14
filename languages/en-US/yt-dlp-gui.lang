@@ -58,10 +58,10 @@ Main:
   Cancel: Cancel
   Stop: Stop
 About:
-  About: 關於
-  Website: 網站
-  Authors: 作者
+  About: About
+  Website: Website
+  Authors: Authors
 Releases:
-  Releases: 發行版本
-  Loading: 讀取中...
-  NoUpdated: 目前沒有更新版本
+  Releases: Releases
+  Loading: Loading...
+  NoUpdated: There is currently no updated version.
