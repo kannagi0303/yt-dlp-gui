@@ -14,7 +14,7 @@ Compatible tools (the following executables will be automatically searched, no f
 * Portable
 
 ### Screenshots
-<img src="screenshot03.png" width="460"/>
+<img src="screenshot04.png"/>
 
 ### Requirements
 * [yt-dlp](https://github.com/yt-dlp/yt-dlp) (Recommend) or [youtube-dl](https://github.com/ytdl-org/youtube-dl)

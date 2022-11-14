@@ -13,7 +13,7 @@
 * 可攜式
 
 ### 截圖
-<img src="screenshot03.png" width="460"/>
+<img src="screenshot04.png"/>
 
 ### 執行需求
 * [yt-dlp](https://github.com/yt-dlp/yt-dlp) (建議) 或 [youtube-dl](https://github.com/ytdl-org/youtube-dl)
