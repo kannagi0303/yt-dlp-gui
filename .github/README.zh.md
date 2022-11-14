@@ -4,7 +4,7 @@
 * 作業系統 Windows 限定
 
 相容工具 (將會自動找尋以下執行檔，無做過完整測試)
-* [yt-dlp](https://github.com/yt-dlp/yt-dlp) (`yt-dlp.exe`, `yt-dlp_x86.exe`, `yt-dlp_x64.exe`)
+* [yt-dlp](https://github.com/yt-dlp/yt-dlp) (`yt-dlp.exe`, `yt-dlp_min.exe`, `yt-dlp_x86.exe`, `yt-dlp_x64.exe`)
 * [youtube-dl](https://github.com/ytdl-org/youtube-dl) (`youtube-dl.exe`)
 * [ytdl-patched](https://github.com/ytdl-patched/ytdl-patched) (`ytdl-patched-red.exe`, `ytdl-patched-white.exe`)
 

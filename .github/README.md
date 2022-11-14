@@ -5,7 +5,7 @@
 * Windows Only
 
 Compatible tools (the following executables will be automatically searched, no full testing has been done)
-* [yt-dlp](https://github.com/yt-dlp/yt-dlp) (`yt-dlp.exe`, `yt-dlp_x86.exe`, `yt-dlp_x64.exe`)
+* [yt-dlp](https://github.com/yt-dlp/yt-dlp) (`yt-dlp.exe`, `yt-dlp_min.exe`, `yt-dlp_x86.exe`, `yt-dlp_x64.exe`)
 * [youtube-dl](https://github.com/ytdl-org/youtube-dl) (`youtube-dl.exe`)
 * [ytdl-patched](https://github.com/ytdl-patched/ytdl-patched) (`ytdl-patched-red.exe`, `ytdl-patched-white.exe`)
 
