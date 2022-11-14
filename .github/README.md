@@ -1,8 +1,13 @@
 # yt-dlp-gui
 (README Of [中文](README.zh.md))
 
-* Front-end of [yt-dlp](https://github.com/yt-dlp/yt-dlp) and [youtube-dl](https://github.com/ytdl-org/youtube-dl)
+* Front-end of [yt-dlp](https://github.com/yt-dlp/yt-dlp)
 * Windows Only
+
+Compatible tools (the following executables will be automatically searched, no full testing has been done)
+* [yt-dlp](https://github.com/yt-dlp/yt-dlp) (`yt-dlp.exe`, `yt-dlp_x86.exe`, `yt-dlp_x64.exe`)
+* [youtube-dl](https://github.com/ytdl-org/youtube-dl) (`youtube-dl.exe`)
+* [ytdl-patched](https://github.com/ytdl-patched/ytdl-patched) (`ytdl-patched-red.exe`, `ytdl-patched-white.exe`)
 
 ### Features
 * Easy-to-use
@@ -29,6 +34,13 @@ Command-line program to download videos from YouTube.com and other video sites,
 4. Execute `yt-dlp-gui.exe`
 
 * The first execution will generate the `yt-dlp-gui.yaml` file, which is used to store the settings.
+
+#### Use localized language
+1. Select your local language from the [languages](/languages) folder
+2. Put `yt-dlp.lang` in the same folder as `yt-dlp.exe`
+
+You can use the [English version](/languages/en-US/yt-dlp-gui.lang) of the lang file as a template to modify the language you need.
+If you are willing to share your local language files, you are welcome to provide them to me, and I will be included in the [languages](/languages).
 
 #### Use Configuration (refer to [configuration](https://github.com/yt-dlp/yt-dlp#configuration))
 1. Create a Folder `configs` in location of executable file

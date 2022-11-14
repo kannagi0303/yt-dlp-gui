@@ -3,6 +3,11 @@
 * [yt-dlp](https://github.com/yt-dlp/yt-dlp) 與 [youtube-dl](https://github.com/ytdl-org/youtube-dl) 的前端GUI
 * 作業系統 Windows 限定
 
+相容工具 (將會自動找尋以下執行檔，無做過完整測試)
+* [yt-dlp](https://github.com/yt-dlp/yt-dlp) (`yt-dlp.exe`, `yt-dlp_x86.exe`, `yt-dlp_x64.exe`)
+* [youtube-dl](https://github.com/ytdl-org/youtube-dl) (`youtube-dl.exe`)
+* [ytdl-patched](https://github.com/ytdl-patched/ytdl-patched) (`ytdl-patched-red.exe`, `ytdl-patched-white.exe`)
+
 ### 特色
 * 簡單使用
 * 可攜式
@@ -28,6 +33,13 @@
 4. 執行 `yt-dlp-gui.exe`
 
 * 首次執行將會產生`yt-dlp-gui.yaml`檔案，用來存放設定。
+
+#### 使用在地化語言
+1. 於 [languages](/languages) 資料夾中挑選適合您的在地語言
+2. 將`yt-dlp.lang`放置在與`yt-dlp.exe`相同資料夾
+
+您可將 [英文版](/languages/en-US/yt-dlp-gui.lang) 當作模板進行您需要的在地化.
+如果您願意分享你的在地化語言檔案，歡迎提供給我，我將會收錄於[languages](/languages)當中.
 
 #### 使用Configuration設定 (參考 [configuration](https://github.com/yt-dlp/yt-dlp#configuration))
 1. 於執行檔位置建立`configs`資料夾
