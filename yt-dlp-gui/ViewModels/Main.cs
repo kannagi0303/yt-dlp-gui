@@ -133,6 +133,7 @@ namespace yt_dlp_gui.Views {
                     }
                 }
             }
+            public Lang Lang { get; set; } = new();
             public Video? Video { get; set; } = new();
             public ConcurrentObservableCollection<Config> Configs { get; set; } = new();
             public IEnumerable<Config> ConfigsView => Configs.CollectionView;
@@ -285,9 +286,11 @@ namespace yt_dlp_gui.Views {
                     }
                 }
                 if (Video.is_live == true) {
-                    ExecText = IsDownload ? "Stop" : "Record";
+                    //ExecText = IsDownload ? "Stop" : "Record";
+                    ExecText = IsDownload ? App.Lang.Main.Stop : App.Lang.Main.Record;
                 } else {
-                    ExecText = IsDownload ? "Cancel" : "Download";
+                    //ExecText = IsDownload ? "Cancel" : "Download";
+                    ExecText = IsDownload ? App.Lang.Main.Cancel : App.Lang.Main.Download;
                 }
             }
         }

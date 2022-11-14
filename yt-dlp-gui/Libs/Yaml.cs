@@ -1,7 +1,11 @@
-﻿using System.Diagnostics;
+﻿using ICSharpCode.AvalonEdit.Highlighting.Xshd;
+using ICSharpCode.AvalonEdit.Highlighting;
+using System;
+using System.Diagnostics;
 using System.IO;
 using System.Reflection;
 using System.Text;
+using System.Windows.Forms;
 using YamlDotNet.Core;
 using YamlDotNet.Serialization;
 
@@ -17,7 +21,19 @@ namespace Libs.Yaml {
                         return deserializer.Deserialize<T>(yaml);
                     }
                 } catch (YamlException e) {
-                    //Debug.WriteLine(e.Message);
+                    Debug.WriteLine(e.Message);
+                }
+            }
+            return new T();
+        }
+        public static T OpenFromResouce<T>(string path) where T : new() {
+            if (!Util.ResourceExists(path)) return new T();
+            using (Stream s = System.Windows.Application.GetResourceStream(new Uri(path, UriKind.Relative)).Stream) {
+                using (TextReader reader = new StreamReader(s)) {
+                    var deserializer = new DeserializerBuilder()
+                            .IgnoreUnmatchedProperties()
+                            .Build();
+                    return deserializer.Deserialize<T>(reader);
                 }
             }
             return new T();

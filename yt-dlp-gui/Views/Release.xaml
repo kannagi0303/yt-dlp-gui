@@ -1,5 +1,6 @@
 ﻿<Window x:Class="yt_dlp_gui.Views.Release"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:app="clr-namespace:yt_dlp_gui"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
@@ -7,7 +8,7 @@
         mc:Ignorable="d"
         WindowStartupLocation="CenterOwner"
         ShowInTaskbar="False"
-        Title="Releases" Height="300" Width="400">
+        Title="{Binding Source={x:Static app:App.Lang}, Path=Releases.Releases}" Height="300" Width="400">
     <Window.Style>
         <Style TargetType="Window" BasedOn="{StaticResource DialogStyle}">
             <Setter Property="ResizeMode" Value="CanResizeWithGrip"/>

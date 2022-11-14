@@ -33,13 +33,13 @@ namespace yt_dlp_gui.Views {
                     }
                 }
                 if (string.IsNullOrEmpty(Data.Markdown)) {
-                    Data.Markdown = "# There is currently no updated version.";
+                    Data.Markdown = $"# {App.Lang.Releases.NoUpdated}";
                 }
             }
         }
         public class ReleaseData : INotifyPropertyChanged {
             public event PropertyChangedEventHandler? PropertyChanged;
-            public string Markdown { get; set; } = "# Loading...";
+            public string Markdown { get; set; } = $"# {App.Lang.Releases.Loading}";
         }
 
         private void Button_Click(object sender, RoutedEventArgs e) {

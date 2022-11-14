@@ -8,12 +8,10 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using System.Security.Policy;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Forms;
-using System.Windows.Markup;
 using WK.Libraries.SharpClipboardNS;
 using yt_dlp_gui.Models;
 using yt_dlp_gui.Wrappers;
@@ -24,11 +22,7 @@ namespace yt_dlp_gui.Views {
         private List<DLP> RunningDLP = new();
         public Main() {
             InitializeComponent();
-
             DataContext = Data;
-
-            var y = @"https://www.youtube.com/watch?v=rS4UNmnqJ0s";
-            Debug.WriteLine(Util.UrlVaild(y), y);
 
             //Load Configs
             InitGUIConfig();
@@ -104,7 +98,7 @@ namespace yt_dlp_gui.Views {
         }
         public void InitConfiguration() {
             Data.Configs.Clear();
-            Data.Configs.Add(new Config() { name = "[None]" });
+            Data.Configs.Add(new Config() { name = App.Lang.Main.ConfigurationNone });
             var cp = App.Path(App.Folders.configs);
             var fs = Directory.Exists(cp)
                 ?Directory.EnumerateFiles(cp).OrderBy(x => x)
