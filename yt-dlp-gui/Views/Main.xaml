@@ -249,7 +249,7 @@
         </controls:TextEditor>
         <!-- -_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_ -->
         <TabControl Grid.Row="3" TabStripPlacement="Top">
-            <TabItem Header="{Binding Source={x:Static app:App.Lang}, Path=Main.Title}">
+            <TabItem Header="{Binding Source={x:Static app:App.Lang}, Path=Main.Formats}">
                 <Grid>
                     <Grid.RowDefinitions>
                         <RowDefinition Height="*"/>
