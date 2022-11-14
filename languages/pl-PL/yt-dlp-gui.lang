@@ -1,0 +1,67 @@
+﻿AppName: yt-dlp-gui
+Main:
+  # Basic
+  Url: Link
+  Title: Tytuł
+  Desc: Opis
+  SaveAs: Zapisz jako...
+  Thumbnail: Miniatura
+  About: O programie...
+  # Tab Formats
+  Formats: Formaty
+  Video: Wideo
+  Audio: Audio
+  Subtitle: Napisy
+  VideoRes: Rozdzielczość
+  VideoFPS: FPS
+  VideoExt: Rozsz.
+  VideoCodec: Kodek
+  VideoSize: RozmiarPliku
+  AudioSampleRate: KHz
+  AudioExt: Rozsz.
+  AudioCodec: Kodek
+  AudioSize: RozmiarPliku
+  # Tab Formats
+  Advance: Zaawansowane
+  EmbedSubs: Dołącz Napisy
+  EmbedSubsEnabled: Włącz
+  TimeRange: Zakres Czasu
+  TimeRangeHits: --download-sections
+  TimeRangeHelper: "*10:15-15:00"
+  # Tab Options
+  Options: Opcje
+  Notifications: Powiadomienia
+  NotificationsEnabled: Włącz
+  AlwaysOnTop: Zawsze Na Wirzchu
+  AlwaysOnTopEnabled: Włącz
+  RememberWindowState: Pamiętaj Pozycje Okna
+  RememberWindowPosition: Pozycja
+  RememberWindowSize: Rozmiar
+  Cookie: Ciasteczko
+  CookieWhenNeeded: Gdy Wymagane
+  CookieNever: Nigdy
+  CookieAlways: Zawsze
+  CookieAsk: Zapytaj
+  CookieUse: Użyj
+  Configuration: Konfiguracja
+  ConfigurationNone: "[Brak]"
+  Aria2: Aria2
+  Aria2Enabled: Włącz
+  # Label
+  Live: NA ŻYWO
+  DownloadThumb: Pobierz Miniaturę
+  # button
+  Analyze: Analiza
+  Browse: Przeglądaj
+  Download: Pobierz
+  Record: Nagraj
+  Cancel: Anuluj
+  Stop: Stop
+About:
+  About: O programie
+  Website: Strona
+  Authors: Autorzy
+Releases:
+  Releases: Wydanie
+  Loading: Ładowanie...
+  NoUpdated: Obecnie nie ma dostępnej aktualizacji.
