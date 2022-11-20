@@ -1,0 +1,67 @@
+﻿AppName: yt-dlp-gui (简体中文)
+Main:
+  # Basic
+  Url: 网址
+  Title: 标题
+  Desc: 描述
+  SaveAs: 保存为...
+  Thumbnail: 缩略图
+  About: 关于...
+  # Tab Formats
+  Formats: 格式
+  Video: 视频
+  Audio: 音频
+  Subtitle: 字幕
+  VideoRes: 视频分辨率
+  VideoFPS: 视频帧率
+  VideoExt: 视频格式
+  VideoCodec: 视频编码
+  VideoSize: 视频大小
+  AudioSampleRate: 音频采样率
+  AudioExt: 音频格式
+  AudioCodec: 音频编码
+  AudioSize: 音频大小
+  # Tab Formats
+  Advance: 高级
+  EmbedSubs: 嵌入字幕
+  EmbedSubsEnabled: 启用嵌入字幕
+  TimeRange: 时间范围
+  TimeRangeHits: --download-sections
+  TimeRangeHelper: "*10:15-15:00"
+  # Tab Options
+  Options: 选项
+  Notifications: 通知
+  NotificationsEnabled: 启用通知
+  AlwaysOnTop: 始终置顶
+  AlwaysOnTopEnabled: 启用始终置顶
+  RememberWindowState: 记住窗口状态
+  RememberWindowPosition: 记住窗口位置
+  RememberWindowSize: 记住窗口大小
+  Cookie: Cookie
+  CookieWhenNeeded: 仅在需要时
+  CookieNever: 从不
+  CookieAlways: 总是
+  CookieAsk: 询问时
+  CookieUse: 使用
+  Configuration: 配置文件
+  ConfigurationNone: "[不使用]"
+  Aria2: Aria2
+  Aria2Enabled: 啟用
+  # Label
+  Live: 直播
+  DownloadThumb: 下载缩略图
+  # button
+  Analyze: 分析
+  Browse: 浏览
+  Download: 下载
+  Record: 录制
+  Cancel: 取消
+  Stop: 停止
+About:
+  About: 关于
+  Website: 网站
+  Authors: 作者
+Releases:
+  Releases: 发布
+  Loading: 加载中...
+  NoUpdated: 没有更新
