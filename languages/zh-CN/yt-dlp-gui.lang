@@ -46,7 +46,7 @@ Main:
   Configuration: 配置文件
   ConfigurationNone: "[不使用]"
   Aria2: Aria2
-  Aria2Enabled: 啟用
+  Aria2Enabled: 启用
   # Label
   Live: 直播
   DownloadThumb: 下载缩略图
