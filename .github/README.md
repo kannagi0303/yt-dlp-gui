@@ -1,4 +1,7 @@
 # yt-dlp-gui
+[![GitHub release (latest by date)](https://img.shields.io/github/v/release/kannagi0303/yt-dlp-gui)](#)
+[![GitHub release (latest by date)](https://img.shields.io/github/downloads/kannagi0303/yt-dlp-gui/latest/total)](#)
+
 Please refer to the [wiki](https://github.com/kannagi0303/yt-dlp-gui/wiki) for usage and details.
 
 * Front-end of [yt-dlp](https://github.com/yt-dlp/yt-dlp) (and Compatible Applications)
