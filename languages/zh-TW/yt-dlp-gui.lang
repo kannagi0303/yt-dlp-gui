@@ -9,10 +9,17 @@ Main:
   About: 關於...
   # Tab Formats
   Formats: 格式
+  Chapters: 章節
+  ChaptersNone: "[無]"
+  ChaptersAll: "[所有]"
+  ChaptersSplite: "[按照章節分割]"
   Video: 視頻
   Audio: 音頻
   Subtitle: 字幕
+  SubtitleIgnore: "[不使用]"
+  SubtitleNone: "[無]"
   VideoRes: 解析度
+  VideoDynamicRange: 色彩
   VideoFPS: 幀率
   VideoExt: 格式
   VideoCodec: 編碼
@@ -21,7 +28,7 @@ Main:
   AudioExt: 格式
   AudioCodec: 編碼
   AudioSize: 容量
-  # Tab Formats
+  # Tab Advance
   Advance: 進階
   EmbedSubs: 內嵌字幕
   EmbedSubsEnabled: 啟用
@@ -37,6 +44,9 @@ Main:
   RememberWindowState: 記憶視窗
   RememberWindowPosition: 位置
   RememberWindowSize: 尺寸
+  Proxy: 代理
+  ProxyEnabled: 啟用
+  ProxyHelper: "socks5://user:pass@127.0.0.1:1080/"
   Cookie: Cookie
   CookieWhenNeeded: 當需要時
   CookieNever: 不使用
@@ -61,6 +71,10 @@ About:
   About: 關於
   Website: 網站
   Authors: 作者
+  # Extended information can be modified arbitrarily
+  Extends:
+    繁中作者: カンナギ Kannagi
+    繁中網址: https://github.com/Kannagi0303/yt-dlp-gui
 Releases:
   Releases: 發行版本
   Loading: 讀取中...

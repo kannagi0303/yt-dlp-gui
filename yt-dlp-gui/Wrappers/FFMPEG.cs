@@ -5,6 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using yt_dlp_gui.Models;
 
 namespace yt_dlp_gui.Wrappers {
     public class FFMPEG {
@@ -22,6 +23,20 @@ namespace yt_dlp_gui.Wrappers {
             } else {
                 options.Add("-n");
             }
+            options.Add($"\"{target}\"");
+            var args = string.Join(" ", options);
+            Debug.WriteLine(args);
+            Exec(args);
+        }
+        public static void Split(string target, string source, Chapters chapter) {
+            var options = new List<string>();
+            options.Add($"-accurate_seek -i \"{source}\"");
+            options.Add("-vcodec copy");
+            options.Add("-acodec copy");
+            options.Add("-avoid_negative_ts make_zero");
+            options.Add("-y");
+            options.Add($"-ss \"{chapter.start_time}\"");
+            options.Add($"-to \"{chapter.end_time}\"");
             options.Add($"\"{target}\"");
             var args = string.Join(" ", options);
             Debug.WriteLine(args);

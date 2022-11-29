@@ -82,9 +82,9 @@
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="3*"/>
+            <ColumnDefinition Width="5*"/>
             <ColumnDefinition Width="2"/>
-            <ColumnDefinition Width="2*"/>
+            <ColumnDefinition Width="3*"/>
         </Grid.ColumnDefinitions>
         <!-- Url-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_ -->
         <Grid Grid.Row="0" Grid.ColumnSpan="3">
@@ -255,9 +255,61 @@
                         <RowDefinition Height="*"/>
                         <RowDefinition Height="*"/>
                         <RowDefinition Height="*"/>
+                        <RowDefinition Height="*"/>
                     </Grid.RowDefinitions>
-                    <!-- Video-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_ -->
+                    <!-- Chapters -_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_ -->
                     <Grid Grid.Row="0">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto" SharedSizeGroup="Label"/>
+                            <ColumnDefinition/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Text="{Binding Source={x:Static app:App.Lang}, Path=Main.Chapters}" VerticalAlignment="Center" Margin="0,0,4,0"/>
+                        <ComboBox x:Name="cc" Grid.Column="1"
+                                  IsEnabled="{Binding Enable.SelectChapters}"
+                                  HorizontalContentAlignment="Stretch"
+                                  SelectedValue="{Binding selectedChapter}" 
+                                  ItemsSource="{Binding ChaptersView}">
+                            <ComboBox.ItemContainerStyle>
+                                <Style TargetType="ComboBoxItem">
+                                    <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+                                </Style>
+                            </ComboBox.ItemContainerStyle>
+                            <ComboBox.ItemTemplate>
+                                <DataTemplate>
+                                    <Grid>
+                                        <Grid.Resources>
+                                            <Style TargetType="TextBlock">
+                                                <Setter Property="Margin" Value="2,0"/>
+                                            </Style>
+                                        </Grid.Resources>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="*" />
+                                            <ColumnDefinition Width="Auto" SharedSizeGroup="C1" />
+                                        </Grid.ColumnDefinitions>
+                                        <TextBlock Grid.Column="0" HorizontalAlignment="Left" Text="{Binding title}"/>
+                                        <StackPanel Grid.Column="1" Orientation="Horizontal">
+                                            <StackPanel.Style>
+                                                <Style TargetType="StackPanel">
+                                                    <Setter Property="Visibility" Value="Hidden"/>
+                                                    <Style.Triggers>
+                                                        <DataTrigger Binding="{Binding type}" Value="Segment">
+                                                            <Setter Property="Visibility" Value="Visible"/>
+                                                        </DataTrigger>
+                                                    </Style.Triggers>
+                                                </Style>
+                                            </StackPanel.Style>
+                                            <TextBlock controls:Duration.Secs="{Binding start_time}"/>
+                                            <TextBlock Text="~"/>
+                                            <TextBlock controls:Duration.Secs="{Binding end_time}"/>
+                                        </StackPanel>
+                                    </Grid>
+                                </DataTemplate>
+                            </ComboBox.ItemTemplate>
+                        </ComboBox>
+                    </Grid>
+                    <!-- Video-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_ -->
+                    <Grid Grid.Row="1">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="Auto" SharedSizeGroup="Label"/>
                             <ColumnDefinition/>
@@ -269,6 +321,11 @@
                                           Template="{StaticResource ComboBoxTemplateForVideo}"
                                           SelectedValue="{Binding selectedVideo}" 
                                           ItemsSource="{Binding FormatsVideo}">
+                            <ComboBox.ItemContainerStyle>
+                                <Style TargetType="ComboBoxItem">
+                                    <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+                                </Style>
+                            </ComboBox.ItemContainerStyle>
                             <ComboBox.ItemTemplate>
                                 <DataTemplate>
                                     <Grid>
@@ -285,6 +342,7 @@
                                             <ColumnDefinition SharedSizeGroup="S3" />
                                             <ColumnDefinition SharedSizeGroup="S4" />
                                             <ColumnDefinition SharedSizeGroup="S5" />
+                                            <ColumnDefinition SharedSizeGroup="S6" />
                                         </Grid.ColumnDefinitions>
                                         <controls:Icons Size="14">
                                             <controls:Icons.Style>
@@ -299,10 +357,11 @@
                                             </controls:Icons.Style>
                                         </controls:Icons>
                                         <TextBlock FontSize="10" Grid.Column="1" HorizontalAlignment="Left" Text="{Binding resolution}"/>
-                                        <TextBlock FontSize="10" Grid.Column="2" HorizontalAlignment="Center" Text="{Binding fps}"/>
-                                        <TextBlock FontSize="10" Grid.Column="3" Text="{Binding video_ext}"/>
-                                        <TextBlock FontSize="10" Grid.Column="4" Text="{Binding vcodec}"/>
-                                        <TextBlock FontSize="10" Grid.Column="5" HorizontalAlignment="Right" controls:Filesize.Bytes="{Binding filesize}"/>
+                                        <TextBlock FontSize="10" Grid.Column="2" HorizontalAlignment="Center" Text="{Binding dynamic_range}"/>
+                                        <TextBlock FontSize="10" Grid.Column="3" HorizontalAlignment="Center" Text="{Binding fps}"/>
+                                        <TextBlock FontSize="10" Grid.Column="4" Text="{Binding video_ext}"/>
+                                        <TextBlock FontSize="10" Grid.Column="5" Text="{Binding vcodec}"/>
+                                        <TextBlock FontSize="10" Grid.Column="6" HorizontalAlignment="Right" controls:Filesize.Bytes="{Binding filesize}"/>
                                     </Grid>
                                 </DataTemplate>
                             </ComboBox.ItemTemplate>
@@ -327,7 +386,7 @@
                         </Button>
                     </Grid>
                     <!-- Audio-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_ -->
-                    <Grid Grid.Row="1">
+                    <Grid Grid.Row="2">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="Auto" SharedSizeGroup="Label"/>
                             <ColumnDefinition/>
@@ -340,6 +399,7 @@
                                           ItemsSource="{Binding FormatsAudio}">
                             <ComboBox.ItemContainerStyle>
                                 <Style TargetType="ComboBoxItem">
+                                    <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
                                     <Setter Property="IsEnabled" Value="True"/>
                                     <Style.Triggers>
                                         <MultiDataTrigger>
@@ -368,6 +428,7 @@
                                             <ColumnDefinition SharedSizeGroup="S3" />
                                             <ColumnDefinition SharedSizeGroup="S4" />
                                             <ColumnDefinition SharedSizeGroup="S5" />
+                                            <ColumnDefinition SharedSizeGroup="S6" />
                                         </Grid.ColumnDefinitions>
                                         <controls:Icons Size="14">
                                             <controls:Icons.Style>
@@ -382,9 +443,9 @@
                                             </controls:Icons.Style>
                                         </controls:Icons>
                                         <TextBlock FontSize="10" Grid.Column="1" HorizontalAlignment="Left" Text="{Binding asr, StringFormat={}{0}Hz, TargetNullValue=Unknow}"/>
-                                        <TextBlock FontSize="10" Grid.Column="3" Text="{Binding audio_ext}"/>
-                                        <TextBlock FontSize="10" Grid.Column="4" Text="{Binding acodec}"/>
-                                        <TextBlock FontSize="10" Grid.Column="5" HorizontalAlignment="Right" controls:Filesize.Bytes="{Binding filesize}"/>
+                                        <TextBlock FontSize="10" Grid.Column="4" Text="{Binding audio_ext}"/>
+                                        <TextBlock FontSize="10" Grid.Column="5" Text="{Binding acodec}"/>
+                                        <TextBlock FontSize="10" Grid.Column="6" HorizontalAlignment="Right" controls:Filesize.Bytes="{Binding filesize}"/>
                                     </Grid>
                                 </DataTemplate>
                             </ComboBox.ItemTemplate>
@@ -409,7 +470,7 @@
                         </Button>
                     </Grid>
                     <!-- Subtitle-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_ -->
-                    <Grid Grid.Row="2">
+                    <Grid Grid.Row="3">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="Auto" SharedSizeGroup="Label"/>
                             <ColumnDefinition/>
@@ -485,6 +546,8 @@
                         <RowDefinition/>
                         <!-- 5 -->
                         <RowDefinition/>
+                        <!-- 6 -->
+                        <RowDefinition/>
                     </Grid.RowDefinitions>
                     <TextBlock Grid.Row="0" Text="{Binding Source={x:Static app:App.Lang}, Path=Main.Notifications}" Margin="0,5,5,5" HorizontalAlignment="Right"/>
                     <CheckBox Grid.Row="0" Grid.Column="1" Content="{Binding Source={x:Static app:App.Lang}, Path=Main.NotificationsEnabled}" IsEnabled="{Binding Enable.UseNotifications}" IsChecked="{Binding UseNotifications}" Margin="0,2"/>
@@ -497,9 +560,16 @@
                         <CheckBox Content="{Binding Source={x:Static app:App.Lang}, Path=Main.RememberWindowPosition}" IsChecked="{Binding RememberWindowStatePosition}"/>
                         <CheckBox Content="{Binding Source={x:Static app:App.Lang}, Path=Main.RememberWindowSize}" IsChecked="{Binding RememberWindowStateSize}"/>
                     </StackPanel>
+                    <!--Proxy-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_ -->
+                    <TextBlock Grid.Row="3" Text="{Binding Source={x:Static app:App.Lang}, Path=Main.Proxy}" Margin="0,2,5,5" HorizontalAlignment="Right"/>
+                    <StackPanel Grid.Row="3" Grid.Column="1" VerticalAlignment="Center">
+                        <CheckBox Content="{Binding Source={x:Static app:App.Lang}, Path=Main.ProxyEnabled}" IsChecked="{Binding ProxyEnabled}"/>
+                        <controls:TextEditor  Helper="{Binding Source={x:Static app:App.Lang}, Path=Main.ProxyHelper}" Text="{Binding ProxyUrl}" 
+                                         Margin="2" EnableHyperlinks="False"/>
+                    </StackPanel>
                     <!--UseCookie-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_ -->
-                    <TextBlock Grid.Row="3" Text="{Binding Source={x:Static app:App.Lang}, Path=Main.Cookie}" Margin="0,5,5,5" HorizontalAlignment="Right"/>
-                    <StackPanel Grid.Row="3" Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Top" Margin="0,2">
+                    <TextBlock Grid.Row="4" Text="{Binding Source={x:Static app:App.Lang}, Path=Main.Cookie}" Margin="0,5,5,5" HorizontalAlignment="Right"/>
+                    <StackPanel Grid.Row="4" Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Top" Margin="0,2">
                         <!--TextBlock Text="Cookie" Margin="0,0,4,0" VerticalAlignment="Center"/-->
                         <ComboBox SelectedValue="{Binding UseCookie}" SelectedValuePath="Tag" IsEnabled="{Binding Enable.UseCookie}">
                             <ComboBoxItem Content="{Binding Source={x:Static app:App.Lang}, Path=Main.CookieWhenNeeded}" Tag="{x:Static m:UseCookie.WhenNeeded}"/>
@@ -520,14 +590,14 @@
                         </ComboBox>
                     </StackPanel>
                     <!-- Configuration-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_ -->
-                    <TextBlock Grid.Row="4" Text="{Binding Source={x:Static app:App.Lang}, Path=Main.Configuration}" Margin="0,5,5,5" HorizontalAlignment="Right"/>
-                    <ComboBox Grid.Row="4" Grid.Column="1" x:Name="cc" HorizontalAlignment="Left"
+                    <TextBlock Grid.Row="5" Text="{Binding Source={x:Static app:App.Lang}, Path=Main.Configuration}" Margin="0,5,5,5" HorizontalAlignment="Right"/>
+                    <ComboBox Grid.Row="5" Grid.Column="1" HorizontalAlignment="Left"
                               SelectedValue="{Binding selectedConfig}" 
                               DisplayMemberPath="name"
                               ItemsSource="{Binding ConfigsView}"/>
                     <!--UseAria2-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_ -->
-                    <TextBlock Grid.Row="5" Text="{Binding Source={x:Static app:App.Lang}, Path=Main.Aria2}" Margin="0,5,5,5" HorizontalAlignment="Right"/>
-                    <CheckBox Grid.Row="5" Grid.Column="1" Content="{Binding Source={x:Static app:App.Lang}, Path=Main.Aria2Enabled}" IsEnabled="{Binding Enable.UseAria2}" IsChecked="{Binding UseAria2}" Margin="0,2"/>
+                    <TextBlock Grid.Row="6" Text="{Binding Source={x:Static app:App.Lang}, Path=Main.Aria2}" Margin="0,5,5,5" HorizontalAlignment="Right"/>
+                    <CheckBox Grid.Row="6" Grid.Column="1" Content="{Binding Source={x:Static app:App.Lang}, Path=Main.Aria2Enabled}" IsEnabled="{Binding Enable.UseAria2}" IsChecked="{Binding UseAria2}" Margin="0,2"/>
                 </Grid>
             </TabItem>
         </TabControl>

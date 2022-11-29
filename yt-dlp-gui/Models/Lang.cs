@@ -1,4 +1,5 @@
-﻿using System.ComponentModel;
+﻿using System.Collections.Generic;
+using System.ComponentModel;
 
 namespace yt_dlp_gui.Models {
     public class Lang :INotifyPropertyChanged {
@@ -20,10 +21,17 @@ namespace yt_dlp_gui.Models {
         public string About { get; set; } = "About...";
         //Tab Format
         public string Formats { get; set; } = "Formats";
+        public string Chapters { get; set; } = "Chapters";
+        public string ChaptersNone { get; set; } = "[None]";
+        public string ChaptersAll { get; set; } = "[All]";
+        public string ChaptersSplite { get; set; } = "[Split by Chapters]";
         public string Video { get; set; } = "Video";
         public string Audio { get; set; } = "Audio";
         public string Subtitle { get; set; } = "Subtitle";
+        public string SubtitleIgnore { get; set; } = "[Ignore]";
+        public string SubtitleNone { get; set; } = "[None]";
         public string VideoRes { get; set; } = "Resolution";
+        public string VideoDynamicRange { get; set; } = "DR";
         public string VideoFPS { get; set; } = "FPS";
         public string VideoExt { get; set; } = "Ext.";
         public string VideoCodec { get; set; } = "Codec";
@@ -48,6 +56,9 @@ namespace yt_dlp_gui.Models {
         public string RememberWindowState { get; set; } = "Remember Window State";
         public string RememberWindowPosition { get; set; } = "Position";
         public string RememberWindowSize { get; set; } = "Size";
+        public string Proxy { get; set; } = "Proxy";
+        public string ProxyEnabled { get; set; } = "Enabled";
+        public string ProxyHelper { get; set; } = "socks5://user:pass@127.0.0.1:1080/";
         public string Cookie { get; set; } = "Cookie";
         public string CookieWhenNeeded { get; set; } = "When Needed";
         public string CookieNever { get; set; } = "Never";
@@ -76,6 +87,7 @@ namespace yt_dlp_gui.Models {
         public string About { get; set; } = "About";
         public string Website { get; set; } = "Website";
         public string Authors { get; set; } = "Authors";
+        public Dictionary<string, string> Extends { get; set; } = new();
     }
     public class LangReleases :INotifyPropertyChanged {
         public event PropertyChangedEventHandler? PropertyChanged;

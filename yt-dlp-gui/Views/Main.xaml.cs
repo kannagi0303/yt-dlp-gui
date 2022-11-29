@@ -153,6 +153,7 @@ namespace yt_dlp_gui.Views {
         }
         private void Analyze_Start() {
             Data.IsAnalyze = true;
+            cc.SelectedIndex = -1;
             cv.SelectedIndex = -1;
             ca.SelectedIndex = -1;
             cs.SelectedIndex = -1;
@@ -166,8 +167,10 @@ namespace yt_dlp_gui.Views {
             });
         }
         private void GetInfo() {
+            //Analyze
             var dlp = new DLP(Data.Url);
             if (Data.NeedCookie) dlp.Cookie(Data.CookieType);
+            if (Data.ProxyEnabled && !string.IsNullOrWhiteSpace(Data.ProxyUrl)) dlp.Proxy(Data.ProxyUrl);
             dlp.GetInfo();
             if (!string.IsNullOrWhiteSpace(Data.selectedConfig.file)) {
                 dlp.LoadConfig(Data.selectedConfig.file);
@@ -175,14 +178,25 @@ namespace yt_dlp_gui.Views {
             if (Data.UseOutput) dlp.Output("%(title)s.%(ext)s"); //if not used config, default template
             ClearStatus();
             dlp.Exec(null, std => {
-                //Debug.WriteLine(std);
-
                 //取得JSON
                 Data.Video = JsonConvert.DeserializeObject<Video>(std, new JsonSerializerSettings() {
                     NullValueHandling = NullValueHandling.Ignore
                 });
+                //Reading Chapters
+                {
+                    Data.Chapters.Clear();
+                    if (Data.Video.chapters != null && Data.Video.chapters.Any()) {
+                        Data.Chapters.Add(new Chapters() { title = App.Lang.Main.ChaptersAll, type = ChaptersType.None });
+                        Data.Chapters.Add(new Chapters() { title = App.Lang.Main.ChaptersSplite, type = ChaptersType.Split });
+                        Data.Chapters.AddRange(Data.Video.chapters);
+                    } else {
+                        Data.Chapters.Add(new Chapters() { title = App.Lang.Main.ChaptersNone, type = ChaptersType.None });
+                    }
+                    //Data.selectedChapter = Data.Chapters.First();
+                }
                 //读取 Formats 与 Thumbnails
                 {
+                    Debug.WriteLine(JsonConvert.SerializeObject(Data.Video.chapters, Formatting.Indented));
                     Data.Formats.LoadFromVideo(Data.Video.formats);
                     Data.Thumbnails.Reset(Data.Video.thumbnails);
                     Data.RequestedFormats.LoadFromVideo(Data.Video.requested_formats);
@@ -197,9 +211,9 @@ namespace yt_dlp_gui.Views {
                     }).Where(x => x != null).ToList();
                     Data.Subtitles.Clear();
                     if (subs.Any()) {
-                        Data.Subtitles.Add(new Subs() { name = "[Ignore]" });
+                        Data.Subtitles.Add(new Subs() { name = App.Lang.Main.SubtitleIgnore });
                     } else {
-                        Data.Subtitles.Add(new Subs() { name = "[None]" });
+                        Data.Subtitles.Add(new Subs() { name = App.Lang.Main.SubtitleNone });
                     }
                     Data.Subtitles.AddRange(subs);
                 }
@@ -220,7 +234,7 @@ namespace yt_dlp_gui.Views {
                 Data.Thumbnail = ThumbPath;
                 */
 
-                Data.SelectFormatBest(); //选择
+                Data.SelectFormatBest(); //Make ComboBox Selected Item
                 var full = string.Empty;
                 if (Path.IsPathRooted(Data.Video._filename)) {
                     full = Path.GetFullPath(Data.Video._filename);
@@ -354,6 +368,7 @@ namespace yt_dlp_gui.Views {
                         RunningDLP.Add(dlp);
                         if (!string.IsNullOrWhiteSpace(Data.selectedConfig.file)) dlp.LoadConfig(Data.selectedConfig.file);
                         if (Data.NeedCookie) dlp.Cookie(Data.CookieType);
+                        if (Data.ProxyEnabled && !string.IsNullOrWhiteSpace(Data.ProxyUrl)) dlp.Proxy(Data.ProxyUrl);
                         if (Data.UseAria2) dlp.UseAria2();
                         dlp.IsLive = Data.Video.is_live;
 
@@ -412,11 +427,12 @@ namespace yt_dlp_gui.Views {
                 ClearStatus();
                 Data.CheckExtension();
 
-                //var r = new Regex(@"(?<=\[download|#\w{6}]?).*?(?<persent>[\w.]+)%(.*?(?<=ETA)(?<eta>.*))?");
                 var tr = Data.TimeRange.Trim();
-                //var tr = "*01:00-01:10";
                 var isSingle = false;
-                if (Data.selectedVideo.type == FormatType.package || !string.IsNullOrWhiteSpace(tr)) isSingle = true;
+                if (Data.selectedVideo.type == FormatType.package) isSingle = true;
+                if (!string.IsNullOrWhiteSpace(tr)) isSingle = true;
+                if (Data.selectedChapter != null && Data.selectedChapter.type == ChaptersType.Segment) isSingle = true;
+                
 
                 Task.Run(() => {
                     //任務池
@@ -429,13 +445,18 @@ namespace yt_dlp_gui.Views {
                         RunningDLP.Add(dlp);
                         if (!string.IsNullOrWhiteSpace(Data.selectedConfig.file)) dlp.LoadConfig(Data.selectedConfig.file);
                         if (Data.NeedCookie) dlp.Cookie(Data.CookieType);
+                        if (Data.ProxyEnabled && !string.IsNullOrWhiteSpace(Data.ProxyUrl)) dlp.Proxy(Data.ProxyUrl);
                         if (Data.UseAria2) dlp.UseAria2();
                         dlp.IsLive = Data.Video.is_live;
 
                         var vid = Data.selectedVideo.format_id;
                         if (!string.IsNullOrWhiteSpace(tr)) {
-                            vid = vid += "+" + Data.selectedAudio.format_id;
+                            vid = Data.selectedVideo.format_id + "+" + Data.selectedAudio.format_id;
                             dlp.DownloadSections(tr);
+                        }
+                        if (Data.selectedChapter != null && Data.selectedChapter.type == ChaptersType.Segment) {
+                            vid = Data.selectedVideo.format_id + "+" + Data.selectedAudio.format_id;
+                            dlp.DownloadSections(Data.selectedChapter.title);
                         }
 
                         tmp_video_path = Path.Combine(App.AppPath, $"{Data.Video.id}.{vid}.{Data.selectedVideo.video_ext}");
@@ -443,7 +464,7 @@ namespace yt_dlp_gui.Views {
                             tmp_video_path = Data.TargetFile;
                         }
                         dlp.DownloadFormat(vid, tmp_video_path);
-
+                        Debug.WriteLine("Download Video");
                         dlp.Exec(std => {
                             Debug.WriteLine(std, "V");
                             GetStatus(std, 0);
@@ -456,13 +477,14 @@ namespace yt_dlp_gui.Views {
                             RunningDLP.Add(dlp);
                             if (!string.IsNullOrWhiteSpace(Data.selectedConfig.file)) dlp.LoadConfig(Data.selectedConfig.file);
                             if (Data.NeedCookie) dlp.Cookie(Data.CookieType);
+                            if (Data.ProxyEnabled && !string.IsNullOrWhiteSpace(Data.ProxyUrl)) dlp.Proxy(Data.ProxyUrl);
                             if (Data.UseAria2) dlp.UseAria2();
                             dlp.IsLive = Data.Video.is_live;
 
                             var aid = Data.selectedAudio.format_id;
                             tmp_audio_path = Path.Combine(App.AppPath, $"{Data.Video.id}.{aid}.{Data.selectedAudio.audio_ext}");
                             dlp.DownloadFormat(aid, tmp_audio_path);
-
+                            Debug.WriteLine("Download Audio");
                             dlp.Exec(std => {
                                 //Debug.WriteLine(std, "A");
                                 GetStatus(std, 1);
@@ -492,6 +514,7 @@ namespace yt_dlp_gui.Views {
                         //Download Complete
                         if (!isSingle) {
                             if (Data.EmbedSub && File.Exists(subpath)) {
+                                //Subtitle
                                 FFMPEG.Merger(overwrite, Data.TargetFile, tmp_video_path, tmp_audio_path, subpath);
                                 File.Delete(subpath);
                             } else {
@@ -501,6 +524,7 @@ namespace yt_dlp_gui.Views {
                             if (File.Exists(tmp_audio_path)) File.Delete(tmp_audio_path);
                         } else {
                             if (Data.EmbedSub && File.Exists(subpath)) {
+                                //Subtitle
                                 FFMPEG.Merger(overwrite, Data.TargetFile, tmp_video_path, subpath);
                                 File.Delete(subpath);
                             } else {
@@ -508,6 +532,22 @@ namespace yt_dlp_gui.Views {
                             }
                             if (File.Exists(tmp_video_path)) File.Delete(tmp_video_path);
                         }
+                        //Splite By Chapters
+                        if (Data.selectedChapter != null && Data.selectedChapter.type == ChaptersType.Split) {
+                            var tar_info = new FileInfo(Data.TargetFile);
+                            var tar_name = Path.GetFileNameWithoutExtension(tar_info.Name);
+                            var tar_path = tar_info.Directory.FullName;
+                            var tar_exts = tar_info.Extension;
+                            var cidx = 0;
+                            foreach (var c in Data.Video.chapters) {
+                                cidx++;
+                                var tar_seg_path = Path.Combine(tar_path, $"{tar_name} - {cidx}{tar_exts}");
+                                Debug.WriteLine( tar_seg_path );
+                                FFMPEG.Split(tar_seg_path, Data.TargetFile, c);
+                            }
+                            if (File.Exists(Data.TargetFile)) File.Delete(Data.TargetFile);
+                        }
+
                         Data.DNStatus_Infos["Status"] = "Done";
 
                         //Send notification when download completed

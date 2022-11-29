@@ -8,7 +8,8 @@
         mc:Ignorable="d" Style="{DynamicResource DialogStyle}"
         WindowStartupLocation="CenterOwner"
         ShowInTaskbar="False"
-        Title="{Binding Source={x:Static app:App.Lang}, Path=About.About}" Height="150" Width="420">
+        SizeToContent="Height"
+        Title="{Binding Source={x:Static app:App.Lang}, Path=About.About}" Width="420">
     <Window.Resources>
         <ControlTemplate TargetType="ContentControl" x:Key="WindowLogo">
             <Controls:Icons Kind="Information" Size="16"/>
@@ -35,7 +36,7 @@
             
         </mdxam:MarkdownScrollViewer>
         -->
-        <Grid Grid.Column="1" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="6">
+        <Grid Grid.Column="1" VerticalAlignment="Top" Margin="6">
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto"/>
@@ -45,6 +46,24 @@
             <TextBlock FontSize="18" FontWeight="Bold" Text="yt-dlp-gui"/>
             <TextBlock x:Name="version" FontSize="12" VerticalAlignment="Bottom" HorizontalAlignment="Right"/>
             <Separator Grid.Row="1" Margin="0,8,0,4"/>
+            <ItemsControl Grid.Row="2" Grid.Column="1" ItemsSource="{Binding ItemsView}" Grid.IsSharedSizeScope="True">
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <Grid Margin="0,4">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto" SharedSizeGroup="AboutLabel"/>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition/>
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Grid.Column="0" Foreground="Gray" Text="{Binding Label}"/>
+                            <TextBlock Grid.Column="1" Foreground="Gray" Text=":" Margin="4,0"/>
+                            <Controls:TextView Grid.Column="2" Text="{Binding Context}" EnableHyperlinks="True"/>
+                        </Grid>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+
+            <!--
             <TextBlock Grid.Row="2" Grid.Column="1" LineHeight="20">
                 <Run Foreground="Gray" Text="{Binding Source={x:Static app:App.Lang}, Path=About.Website}"/>
                 <Run Foreground="Gray" Text=" :"/>
@@ -54,6 +73,7 @@
                 <Run Foreground="Gray" Text=" :"/>
                 カンナギ Kannagi
             </TextBlock>
+            -->
         </Grid>
         <Grid Grid.Row="1" Grid.ColumnSpan="2" HorizontalAlignment="Right" VerticalAlignment="Bottom" Height="24" Margin="0,6,0,0">
             <Button Click="Button_Click">

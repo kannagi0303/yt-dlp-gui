@@ -46,6 +46,10 @@ namespace yt_dlp_gui.Wrappers {
             Options["--ignore-config"] = "";
             return this;
         }
+        public DLP Proxy(string proxy_url) {
+            Options["--proxy"] = "\"" + proxy_url + "\"";
+            return this;
+        }
         public DLP LoadConfig(string path) {
             Options.Remove("--ignore-config");
             Options["--config-location"] = "\"" + path + "\"";

@@ -26,6 +26,9 @@ namespace yt_dlp_gui.Controls {
         public static readonly DependencyProperty SyntaxProperty = DependencyProperty.RegisterAttached(
             "Syntax", typeof(string), typeof(TextView),
             new FrameworkPropertyMetadata("", FrameworkPropertyMetadataOptions.BindsTwoWayByDefault, onSyntaxChanged));
+        public static readonly DependencyProperty EnableHyperlinksProperty = DependencyProperty.RegisterAttached(
+            "EnableHyperlinks", typeof(bool), typeof(TextView),
+            new FrameworkPropertyMetadata(false, FrameworkPropertyMetadataOptions.BindsTwoWayByDefault, onLinkChanged));
         private static void onTextChanged(DependencyObject dpo, DependencyPropertyChangedEventArgs e) {
             var d = (dpo as TextView);
             if (d != null) {
@@ -40,6 +43,11 @@ namespace yt_dlp_gui.Controls {
             var n = e.NewValue?.ToString() ?? "";
             //d?.LoadDefinition(n);
         }
+        private static void onLinkChanged(DependencyObject dpo, DependencyPropertyChangedEventArgs e) {
+            var d = (dpo as TextView);
+            d.textView.Options.EnableHyperlinks = d.EnableHyperlinks;
+            d.textView.Options.RequireControlModifierForHyperlinkClick = !d.EnableHyperlinks;
+        }
         public string Text {
             get => (string)GetValue(TextProperty);
             set => SetValue(TextProperty, value);
@@ -52,6 +60,10 @@ namespace yt_dlp_gui.Controls {
             get => (bool)GetValue(MultilineProperty);
             set => SetValue(MultilineProperty, value);
         }
+        public bool EnableHyperlinks {
+            get => (bool)GetValue(EnableHyperlinksProperty);
+            set => SetValue(EnableHyperlinksProperty, value);
+        }
         public IHighlightingDefinition SyntaxDefinition {
             set {
                 textView.LineTransformers.Clear();
@@ -61,7 +73,7 @@ namespace yt_dlp_gui.Controls {
         public TextView() {
             InitializeComponent();
             textView.Document = new TextDocument();
-            textView.Options.EnableHyperlinks = false;
+            textView.Options.EnableHyperlinks = EnableHyperlinks;
         }
     }
     public interface ITextView {

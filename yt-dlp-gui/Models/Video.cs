@@ -16,5 +16,6 @@ namespace yt_dlp_gui.Models {
         public List<Format> requested_formats { get; set; } = new();
         public string _filename { get; set; } = string.Empty;
         public bool is_live { get; set; } = false;
+        public List<Chapters>? chapters { get; set; } = null;
     }
 }

@@ -17,6 +17,13 @@ namespace yt_dlp_gui.Views {
         public class ViewData :INotifyPropertyChanged {
             public event PropertyChangedEventHandler? PropertyChanged;
             public ViewData() {
+                Chapters.PropertyChanged += (s, e) => {
+                    switch (e.PropertyName) {
+                        case nameof(ConcurrentObservableCollection<Format>.CollectionView):
+                            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(ChaptersView)));
+                            break;
+                    }
+                };
                 Formats.PropertyChanged += (s, e) => {
                     switch (e.PropertyName) {
                         case nameof(ConcurrentObservableCollection<Format>.CollectionView):
@@ -109,6 +116,7 @@ namespace yt_dlp_gui.Views {
                 if (AutoSaveConfig) Util.PropertyCopy(this, GUIConfig);
             }
             public void SelectFormatBest() {
+                selectedChapter = Chapters.FirstOrDefault();
                 if (UseFormat) {
                     selectedVideo = FormatsVideo.FirstOrDefault();
                     selectedAudio = FormatsAudio.FirstOrDefault();
@@ -140,6 +148,8 @@ namespace yt_dlp_gui.Views {
             public Config selectedConfig { get; set; } = new();
             public bool UseFormat { get; set; } = true;
             public bool UseOutput { get; set; } = true;
+            public ConcurrentObservableCollection<Chapters> Chapters { get; set; } = new();
+            public IEnumerable<Chapters> ChaptersView => Chapters.CollectionView;
             public ConcurrentObservableCollection<Format> Formats { get; set; } = new();
             public IEnumerable<Format> FormatsView => Formats.CollectionView.OrderBy(x => x.width * x.height);
             public IEnumerable<Format> FormatsVideo => Formats.CollectionView.Where(x => x.type == FormatType.package || x.type == FormatType.video).OrderBy(x => x, ComparerVideo.Comparer);
@@ -149,6 +159,7 @@ namespace yt_dlp_gui.Views {
             public IEnumerable<Thumb> ThumbnailsView => Thumbnails.CollectionView;
             public ConcurrentObservableCollection<Subs> Subtitles { get; set; } = new();
             public IEnumerable<Subs> SubtitlesView => Subtitles.CollectionView;
+            public Chapters? selectedChapter { get; set; } = null;
             public Format selectedVideo { get; set; } = new();
             public Format selectedAudio { get; set; } = new();
             public Subs selectedSub { get; set; } = new();
@@ -163,6 +174,8 @@ namespace yt_dlp_gui.Views {
             public double Left { get; set; } = 0;
             public double Width { get; set; } = 600;
             public double Height { get; set; } = 380;
+            public bool ProxyEnabled { get; set; } = false;
+            public string ProxyUrl { get; set; } = string.Empty;
             public bool CanCancel { get; set; } = false;
             public string Url { get; set; } = string.Empty;
             public string CommandLine { get; set; } = string.Empty;
@@ -208,6 +221,7 @@ namespace yt_dlp_gui.Views {
             private void CheckEnable() {
                 Enable.Url = true;
                 Enable.Analyze = true;
+                Enable.SelectChapters= true;
                 Enable.FormatVideo = true;
                 Enable.FormatAudio = true;
                 Enable.Download = true;
@@ -226,6 +240,7 @@ namespace yt_dlp_gui.Views {
                 if (IsAnalyze) {
                     Enable.Url = false;
                     Enable.Analyze = false;
+                    Enable.SelectChapters= false;
                     Enable.FormatVideo = false;
                     Enable.FormatAudio = false;
                     Enable.Download = false;
@@ -241,6 +256,7 @@ namespace yt_dlp_gui.Views {
                 if (IsDownload) {
                     Enable.Url = false;
                     Enable.Analyze = false;
+                    Enable.SelectChapters = false;
                     Enable.FormatVideo = false;
                     Enable.FormatAudio = false;
                     Enable.Browser = false;
@@ -254,6 +270,7 @@ namespace yt_dlp_gui.Views {
                     Enable.UseNotifications = false;
                     Enable.UseAria2 = false;
                 }
+                if (Video.chapters == null) Enable.SelectChapters = false;
                 if (!FormatsVideo.Any()) {
                     Enable.FormatVideo = false;
                     Enable.SaveVideo = false;
@@ -298,6 +315,7 @@ namespace yt_dlp_gui.Views {
             public event PropertyChangedEventHandler? PropertyChanged;
             public bool Url { get; set; } = true;
             public bool Analyze { get; set; } = true;
+            public bool SelectChapters { get; set; } = true;
             public bool FormatVideo { get; set; } = true;
             public bool FormatAudio { get; set; } = true;
             public bool Download { get; set; } = true;
@@ -330,6 +348,9 @@ namespace yt_dlp_gui.Views {
             public double Left { get; set; } = 0;
             public double Width { get; set; } = 600;
             public double Height { get; set; } = 380;
+            [Description("Proxy")]
+            public bool ProxyEnabled { get; set; } = false;
+            public string ProxyUrl { get; set; } = string.Empty;
             [Description("Use Cookie From Browser")] public UseCookie UseCookie { get; set; } = UseCookie.WhenNeeded;
             public CookieType CookieType { get; set; } = CookieType.Chrome;
             [Description("With Thumbnail When Downlaod")] public bool SaveThumbnail { get; set; } = true;

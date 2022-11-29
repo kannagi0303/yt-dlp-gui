@@ -9,10 +9,17 @@ Main:
   About: About...
   # Tab Formats
   Formats: Formats
+  Chapters: Chapters
+  ChaptersNone: "[None]"
+  ChaptersAll: "[All]"
+  ChaptersSplite: "[Split by Chapters]"
   Video: Video
   Audio: Audio
   Subtitle: Subtitle
+  SubtitleIgnore: "[Ignore]"
+  SubtitleNone: "[None]"
   VideoRes: Resolution
+  VideoDynamicRange: DR
   VideoFPS: FPS
   VideoExt: Ext.
   VideoCodec: Codec
@@ -21,7 +28,7 @@ Main:
   AudioExt: Ext.
   AudioCodec: Codec
   AudioSize: FileSize
-  # Tab Formats
+  # Tab Advance
   Advance: Advance
   EmbedSubs: Embed Subtitles
   EmbedSubsEnabled: Enabled
@@ -37,6 +44,9 @@ Main:
   RememberWindowState: Remember Window State
   RememberWindowPosition: Position
   RememberWindowSize: Size
+  Proxy: Proxy
+  ProxyEnabled: Enabled
+  ProxyHelper: "socks5://user:pass@127.0.0.1:1080/"
   Cookie: Cookie
   CookieWhenNeeded: When Needed
   CookieNever: Never
@@ -61,6 +71,10 @@ About:
   About: About
   Website: Website
   Authors: Authors
+  # Extended information can be modified arbitrarily
+  Extends:
+    Localization Author: カンナギ Kannagi
+    Localization Website: https://github.com/Kannagi0303/yt-dlp-gui
 Releases:
   Releases: Releases
   Loading: Loading...
