@@ -14,6 +14,7 @@ Please refer to the [wiki](https://github.com/kannagi0303/yt-dlp-gui/wiki) for u
 * Easy-to-use
 * Portable
 * Selectable video quality
+* Download single chapter
 * Download single stream
 * Cookie supported
 * Configuration supported
