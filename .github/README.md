@@ -8,7 +8,7 @@ Please refer to the [wiki](https://github.com/kannagi0303/yt-dlp-gui/wiki) for u
 * Windows Only (7 or above)
 
 ### Screenshots
-<img src="screenshot04.png" width="600"/>
+<img src="screenshot01.png" width="600"/>
 
 ### Features
 * Easy-to-use
