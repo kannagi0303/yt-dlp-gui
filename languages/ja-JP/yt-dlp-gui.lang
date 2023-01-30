@@ -73,8 +73,8 @@ About:
   Authors: 作者
   # Extended information can be modified arbitrarily
   Extends:
-    Localization Author: maboroshin
-    Localization Website: https://github.com/maboroshin
+    日本語訳: maboroshin
+    サイト: https://github.com/maboroshin
 Releases:
   Releases: リリース
   Loading: 読み込み中...
