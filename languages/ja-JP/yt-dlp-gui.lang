@@ -1,0 +1,81 @@
+﻿AppName: yt-dlp-gui
+Main:
+  # Basic
+  Url: URL
+  Title: タイトル
+  Desc: 説明
+  SaveAs: 名前を付けて保存...
+  Thumbnail: サムネイル
+  About: 情報...
+  # Tab Formats
+  Formats: フォーマット
+  Chapters: チャプター
+  ChaptersNone: "[なし]"
+  ChaptersAll: "[すべて]"
+  ChaptersSplite: "[チャプターごとに分割]"
+  Video: 映像
+  Audio: 音声
+  Subtitle: 字幕
+  SubtitleIgnore: "[無視]"
+  SubtitleNone: "[なし]"　
+  VideoRes: 解像度
+  VideoDynamicRange: DR
+  VideoFPS: FPS
+  VideoExt: 拡張子
+  VideoCodec: コーデック
+  VideoSize: サイズ
+  AudioSampleRate: ASR
+  AudioExt: 拡張子
+  AudioCodec: コーデック
+  AudioSize: サイズ
+  # Tab Advance
+  Advance: 詳細
+  EmbedSubs: 字幕を埋め込む
+  EmbedSubsEnabled: 有効
+  TimeRange: 時間の範囲
+  TimeRangeHits: --download-sections
+  TimeRangeHelper: "*10:15-15:00"
+  # Tab Options
+  Options: オプション
+  Notifications: 通知
+  NotificationsEnabled: 有効
+  AlwaysOnTop: 常に手前に表示
+  AlwaysOnTopEnabled: 有効
+  RememberWindowState: ウィンドウの状態を記憶
+  RememberWindowPosition: 位置
+  RememberWindowSize: サイズ
+  Proxy: プロキシ
+  ProxyEnabled: 有効
+  ProxyHelper: "socks5://user:pass@127.0.0.1:1080/"
+  Cookie: クッキー
+  CookieWhenNeeded: 必要な時に
+  CookieNever: なし
+  CookieAlways: 常に
+  CookieAsk: 質問する
+  CookieUse: 使用
+  Configuration: 構成
+  ConfigurationNone: "[なし]"
+  Aria2: Aria2
+  Aria2Enabled: 有効
+  # Label
+  Live: ライブ
+  DownloadThumb: サムネイルをダウンロード
+  # button
+  Analyze: 分析
+  Browse: 参照
+  Download: ダウンロード
+  Record: 録画
+  Cancel: キャンセル
+  Stop: 中止
+About:
+  About: このソフトについて
+  Website: サイト
+  Authors: 作者
+  # Extended information can be modified arbitrarily
+  Extends:
+    日本語訳: maboroshin
+    サイト: https://github.com/maboroshin
+Releases:
+  Releases: リリース
+  Loading: 読み込み中...
+  NoUpdated: 最新版はありません。
