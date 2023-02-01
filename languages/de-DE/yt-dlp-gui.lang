@@ -1,0 +1,81 @@
+AppName: yt-dlp-gui
+Main:
+  # Basic
+  Url: URL
+  Title: Titel
+  Desc: Beschreibung
+  SaveAs: Speichern unter...
+  Thumbnail: Miniaturansicht
+  About: Über...
+  # Tab Formats
+  Formats: Formate
+  Chapters: Kapitel
+  ChaptersNone: "[Keine]"
+  ChaptersAll: "[Alle]"
+  ChaptersSplite: "[Nach Kapitel aufteilen]"
+  Video: Video
+  Audio: Audio
+  Subtitle: Untertitel
+  SubtitleIgnore: "[Ignorieren]"
+  SubtitleNone: "[Keine]"
+  VideoRes: Auflösung
+  VideoDynamicRange: DR
+  VideoFPS: FPS
+  VideoExt: Ext.
+  VideoCodec: Codec
+  VideoSize: Dateigröße
+  AudioSampleRate: ASR
+  AudioExt: Ext.
+  AudioCodec: Codec
+  AudioSize: Dateigröße
+  # Tab Advance
+  Advance: Erweitert
+  EmbedSubs: Eingebettete Untertitel
+  EmbedSubsEnabled: Aktiviert
+  TimeRange: Zeitspanne
+  TimeRangeHits: --download-sections
+  TimeRangeHelper: "*10:15-15:00"
+  # Tab Options
+  Options: Optionen
+  Notifications: Benachrichtigungen
+  NotificationsEnabled: Aktiviert
+  AlwaysOnTop: Immer in Vordergrund
+  AlwaysOnTopEnabled: Aktiviert
+  RememberWindowState: Speichere Fensterstatus
+  RememberWindowPosition: Position
+  RememberWindowSize: Größe
+  Proxy: Proxy
+  ProxyEnabled: Aktiviert
+  ProxyHelper: "socks5://Benutzer:Passwort@127.0.0.1:1080/"
+  Cookie: Cookie
+  CookieWhenNeeded: Falls nötig
+  CookieNever: Nie
+  CookieAlways: Immer
+  CookieAsk: Nachfragen
+  CookieUse: Benutzer
+  Configuration: Konfiguration
+  ConfigurationNone: "[Keine]"
+  Aria2: Aria2
+  Aria2Enabled: Aktiviert
+  # Label
+  Live: LIVE
+  DownloadThumb: Miniaturansicht herunterladen
+  # button
+  Analyze: Analysieren
+  Browse: Durchsuchen
+  Download: Download
+  Record: Aufnehmen
+  Cancel: Abbrechen
+  Stop: Anhalten
+About:
+  About: Über
+  Website: Webseite
+  Authors: Autoren
+  # Extended information can be modified arbitrarily
+  Extends:
+    Localization Author: holzfuss
+    Localization Website: https://github.com/Kannagi0303/yt-dlp-gui
+Releases:
+  Releases: Releases
+  Loading: Lade...
+  NoUpdated: Du benutzt die aktuelle Version.
