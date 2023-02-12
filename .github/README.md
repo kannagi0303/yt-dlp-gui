@@ -25,6 +25,9 @@ Please refer to the [wiki](https://github.com/kannagi0303/yt-dlp-gui/wiki) for u
 * [yt-dlp](https://github.com/yt-dlp/yt-dlp) (or Compatible Applications)
 * [FFMPEG](https://ffmpeg.org/download.html#build-windows)
 
+### Third Party Installer
+* [youtube-dlp-gui-installer](https://github.com/kazukikasama/youtube-dlp-gui-installer) ([kazukikasama](https://github.com/kazukikasama)) - An Automatic installer for dlp-gui project
+
 ### Authors
 * かんなぎ (Kannagi)
 
