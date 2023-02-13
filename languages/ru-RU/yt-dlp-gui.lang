@@ -1,0 +1,81 @@
+﻿AppName: yt-dlp-gui
+Main:
+  # Базовые
+  Url: Ссылка
+  Title: Заголовок
+  Desc: Описание
+  SaveAs: Сохранить как...
+  Thumbnail: Превью
+  About: О программе...
+  # Вкладка "Форматы"
+  Formats: Форматы
+  Chapters: Главы
+  ChaptersNone: "[Нет]"
+  ChaptersAll: "[Все]"
+  ChaptersSplite: "[Разделить по Главам]"
+  Video: Видео
+  Audio: Аудио
+  Subtitle: Субтитры
+  SubtitleIgnore: "[Игнорировать]"
+  SubtitleNone: "[Нет]"
+  VideoRes: Разрешение
+  VideoDynamicRange: DR
+  VideoFPS: FPS
+  VideoExt: Расш.
+  VideoCodec: Кодек
+  VideoSize: Размер файла
+  Audio Sample Rate: ASR
+  AudioExt: Расш.
+  AudioCodec: Кодек
+  AudioSize: Размер файла
+  # Вкладка "Расширенные"
+  Advance: Расширенные
+  EmbedSubs: Встроить субтитры
+  EmbedSubsEnabled: Включено
+  TimeRange: Временной диапазон
+  TimeRangeHits: --download-sections
+  TimeRangeHelper: "*10:15-15:00"
+  # Вкладка "Настройки"
+  Options: Настройки
+  Notifications: Уведомления
+  NotificationsEnabled: Включены
+  AlwaysOnTop: Поверх всех окон
+  AlwaysOnTopEnabled: Включено
+  RememberWindowState: Запоминать
+  RememberWindowPosition: Позицию окна
+  RememberWindowSize: Размер окна
+  Proxy: Прокси
+  ProxyEnabled: Включены
+  ProxyHelper: "socks5://user:pass@127.0.0.1:1080/"
+  Cookie: Cookie
+  CookieWhenNeeded: При необходимости
+  CookieNever: Никогда
+  CookieAlways: Всегда
+  CookieAsk: Спрашивать
+  CookieUse: используя
+  Configuration: Configuration
+  ConfigurationNone: "[Нет]"
+  Aria2: Aria2
+  Aria2Enabled: Включено
+  # Метка
+  Live: LIVE
+  DownloadThumb: Скачать превью
+  # button
+  Analyze: Анализировать
+  Browse: Обзор
+  Download: Скачать
+  Record: Записать
+  Cancel: Отмена
+  Stop: Стоп
+About:
+  About: О программе...
+  Website: Вебсайт
+  Authors: Автор
+  # Расширенная информация может быть изменена произвольно
+  Extends:
+    Localization Author: lzrdblzzrd
+    Localization Website: https://lzrdblzzrd.xyz
+Releases:
+  Releases: Выпуски
+  Loading: Загрузка...
+  NoUpdated: Новых обновлений не найдено.
