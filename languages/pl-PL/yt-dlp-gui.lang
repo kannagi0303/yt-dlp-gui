@@ -39,9 +39,9 @@ Main:
   Options: Opcje
   Notifications: Powiadomienia
   NotificationsEnabled: Włącz
-  AlwaysOnTop: Zawsze Na Wirzchu
+  AlwaysOnTop: Zawsze Na Wierzchu
   AlwaysOnTopEnabled: Włącz
-  RememberWindowState: Pamiętaj Pozycje Okna
+  RememberWindowState: Pamiętaj Miejsce Okna
   RememberWindowPosition: Pozycja
   RememberWindowSize: Rozmiar
   Proxy: Proxy
