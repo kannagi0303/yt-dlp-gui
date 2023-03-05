@@ -1,0 +1,83 @@
+﻿AppName: yt-dlp-gui
+Main:
+  # Basic
+  Url: Lien
+  Title: Titre
+  Desc: Description
+  SaveAs: Enregistrer sous...
+  Thumbnail: Vignette
+  About: A propos...
+  # Tab Formats
+  Formats: Formats
+  Chapters: Chapitres
+  ChaptersNone: "[Aucun]"
+  ChaptersAll: "[Tout]"
+  ChaptersSplite: "[Ventilation par chapitres]"
+  Video: Vidéo
+  Audio: Audio
+  Subtitle: Sous-titre
+  SubtitleIgnore: "[Ignorer]"
+  SubtitleNone: "[Aucun]"
+  VideoRes: Résolution
+  VideoDynamicRange: DR
+  VideoFPS: FPS
+  VideoExt: Ext.
+  VideoCodec: Codec
+  VideoSize: Taille du Fichier
+  AudioSampleRate: ASR
+  AudioExt: Ext.
+  AudioCodec: Codec
+  AudioSize: Taille fichier
+  # Tab Advance
+  Advance: Avancé
+  EmbedSubs: Embarquer Sous-titres
+  EmbedSubsEnabled: Activé
+  TimeRange: Plage de temps
+  TimeRangeHits: --download-sections
+  TimeRangeHelper: "*10:15-15:00"
+  # Tab Options
+  Options: Options
+  Notifications: Notifications
+  NotificationsEnabled: Activé
+  AlwaysOnTop: Toujours au dessus
+  AlwaysOnTopEnabled: Activé
+  RememberWindowState: Retenir État Fenêtre
+  RememberWindowPosition: Position
+  RememberWindowSize: Taille
+  Proxy: Proxy
+  ProxyEnabled: Activé
+  ProxyHelper: "socks5://user:pass@127.0.0.1:1080/"
+  Cookie: Cookie
+  CookieWhenNeeded: Si Besoin
+  CookieNever: Jamais
+  CookieAlways: Toujours
+  CookieAsk: Demander
+  CookieUse: Utiliser
+  Configuration: Configuration
+  ConfigurationNone: "[Aucun]"
+  Aria2: Aria2
+  Aria2Enabled: Activé
+  AutoDownload: Téléchargement Auto
+  AutoDownloadAnalysed: Après analyse
+  # Label
+  Live: LIVE
+  DownloadThumb: Télécharger la Vignette
+  # button
+  Analyze: Analyser
+  Browse: Parcourir
+  Download: Télécharger
+  Record: Enregistrer
+  Cancel: Annuler
+  Stop: Arrêter
+About:
+  About: A propos
+  Website: Site web
+  Authors: Auteurs
+  # Extended information can be modified arbitrarily
+  Extends:
+    Localization Author: カンナギ Kannagi
+    Localization Website: https://github.com/Kannagi0303/yt-dlp-gui
+Releases:
+  Releases: Releases
+  Loading: Telechargement en cours...
+  NoUpdated: Il n'existe actuellement aucune mise à jour.
