@@ -77,8 +77,8 @@ About:
   Authors: Autorzy
   # Extended information can be modified arbitrarily
   Extends:
-    Localization Author: Marcin Wilk
-    Localization Website: https://github.com/nicrame/yt-dlp-gui/tree/master/languages/pl-PL
+    Tłumaczenie: Marcin Wilk
+    Strona tłumaczenia: https://github.com/nicrame/yt-dlp-gui/tree/master/languages/pl-PL
 Releases:
   Releases: Wydanie
   Loading: Ładowanie...
