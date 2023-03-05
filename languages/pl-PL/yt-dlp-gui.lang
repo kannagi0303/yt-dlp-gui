@@ -9,10 +9,17 @@ Main:
   About: O programie...
   # Tab Formats
   Formats: Formaty
+  Chapters: Rzdziały
+  ChaptersNone: "[Żadne]"
+  ChaptersAll: "[Wszystkie]"
+  ChaptersSplite: "[Podziel na rozdziały]"
   Video: Wideo
   Audio: Audio
   Subtitle: Napisy
+  SubtitleIgnore: "[Ignoruj]"
+  SubtitleNone: "[Żadne]"
   VideoRes: Rozdzielczość
+  VideoDynamicRange: SzerDyn
   VideoFPS: FPS
   VideoExt: Rozsz.
   VideoCodec: Kodek
@@ -32,11 +39,14 @@ Main:
   Options: Opcje
   Notifications: Powiadomienia
   NotificationsEnabled: Włącz
-  AlwaysOnTop: Zawsze Na Wirzchu
+  AlwaysOnTop: Zawsze Na Wierzchu
   AlwaysOnTopEnabled: Włącz
-  RememberWindowState: Pamiętaj Pozycje Okna
+  RememberWindowState: Pamiętaj Miejsce Okna
   RememberWindowPosition: Pozycja
   RememberWindowSize: Rozmiar
+  Proxy: Proxy
+  ProxyEnabled: Włącz
+  ProxyHelper: "socks5://uużytkownik:hasło@127.0.0.1:1080/"
   Cookie: Ciasteczko
   CookieWhenNeeded: Gdy Wymagane
   CookieNever: Nigdy
@@ -47,6 +57,10 @@ Main:
   ConfigurationNone: "[Brak]"
   Aria2: Aria2
   Aria2Enabled: Włącz
+  AutoDownload: Automatycznie pobieraj
+  AutoDownloadAnalysed: Po analizie
+  LimitRate: Limit Prędkości Pobierania
+  LimitRateHelper: 50K lub 4.2M
   # Label
   Live: NA ŻYWO
   DownloadThumb: Pobierz Miniaturę
@@ -61,6 +75,10 @@ About:
   About: O programie
   Website: Strona
   Authors: Autorzy
+  # Extended information can be modified arbitrarily
+  Extends:
+    Tłumaczenie: Marcin Wilk
+    Strona tłumaczenia: https://github.com/nicrame/yt-dlp-gui/tree/master/languages/pl-PL
 Releases:
   Releases: Wydanie
   Loading: Ładowanie...
