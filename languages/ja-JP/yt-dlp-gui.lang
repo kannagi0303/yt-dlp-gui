@@ -17,7 +17,7 @@ Main:
   Audio: 音声
   Subtitle: 字幕
   SubtitleIgnore: "[無視]"
-  SubtitleNone: "[なし]"　
+  SubtitleNone: "[なし]"
   VideoRes: 解像度
   VideoDynamicRange: DR
   VideoFPS: FPS
