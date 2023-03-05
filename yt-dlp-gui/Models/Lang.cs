@@ -47,6 +47,8 @@ namespace yt_dlp_gui.Models {
         public string TimeRange { get; set; } = "Time Range";
         public string TimeRangeHits { get; set; } = "--download-sections";
         public string TimeRangeHelper { get; set; } = "*10:15-15:00";
+        public string LimitRate { get; set; } = "Limit Rate";
+        public string LimitRateHelper { get; set; } = "50K or 4.2M";
         //Tab Options
         public string Options { get; set; } = "Options";
         public string Notifications { get; set; } = "Notifications";
@@ -69,6 +71,9 @@ namespace yt_dlp_gui.Models {
         public string ConfigurationNone { get; set; } = "[None]";
         public string Aria2 { get; set; } = "Aria2";
         public string Aria2Enabled { get; set; } = "Enabled";
+        public string AutoDownload { get; set; } = "Automatically download";
+        public string AutoDownloadClipboard { get; set; } = "Upon clipboard detection";
+
         //Label
         public string Live { get; set; } = "LIVE";
         //checkbox

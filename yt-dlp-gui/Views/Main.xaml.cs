@@ -8,7 +8,9 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Text.RegularExpressions;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Forms;
@@ -59,6 +61,34 @@ namespace yt_dlp_gui.Views {
             Data.PropertyChanged += (s, e) => {
                 switch (e.PropertyName) {
                     case nameof(Data.ClipboardText):
+                        int maxTries = 10;
+                        int delayTime = 1000; // milliseconds
+
+                        int numTries = 0;
+                        while (numTries < maxTries) {
+                            try {
+                                var content = System.Windows.Clipboard.GetText(System.Windows.TextDataFormat.Html);
+                                if (!string.IsNullOrWhiteSpace(content)) {
+                                    content = _frgPat.Match(content).Groups?[1].Value.Trim() ?? "";
+                                } else {
+                                    content = System.Windows.Clipboard.GetText(System.Windows.TextDataFormat.Text);
+                                }
+                                var m = _matchUrls.Match(content);
+                                if (m.Success) {
+                                    var capUrl = m.Value;
+                                    if (Util.UrlVaild(capUrl)) {
+                                        Data.Url = capUrl;
+                                        Analyze_Start();
+                                    }
+                                }
+                                numTries = 0;
+                                break;
+                            } catch (Exception) {
+                                numTries++;
+                                Thread.Sleep(delayTime);
+                            }
+                        }
+                        /*
                         var content = System.Windows.Clipboard.GetText(System.Windows.TextDataFormat.Html);
                         if (!string.IsNullOrWhiteSpace(content)) {
                             content = _frgPat.Match(content).Groups?[1].Value.Trim() ?? "";
@@ -73,6 +103,7 @@ namespace yt_dlp_gui.Views {
                                 Analyze_Start();
                             }
                         }
+                        */
                         //Debug.WriteLine($"Clipboard Change To: {ClipboardText}");
                         break;
                     case nameof(Data.AlwaysOnTop):
@@ -112,20 +143,41 @@ namespace yt_dlp_gui.Views {
             Data.selectedConfig = Data.Configs.FirstOrDefault(x => x.file == Data.GUIConfig.ConfigurationFile, Data.Configs.First());
         }
         public void ScanDepends() {
-            var deps = Directory.EnumerateFiles(App.AppPath, "*.exe", SearchOption.AllDirectories).ToList();
-            deps = deps.Where(x => Path.GetFileName(App.AppExe) != Path.GetFileName(x)).ToList();
-            var dep_youtubedl = deps.FirstOrDefault(x => Regex.IsMatch(Path.GetFileName(x), @"^youtube-dl\.exe"), "");
-            var dep_ytdlp = deps.FirstOrDefault(x => Regex.IsMatch(Path.GetFileName(x), @"^(yt-dlp(_min|_x86|_x64)?|ytdl-patched.*?)\.exe"), "");
-            var dep_ffmpeg = deps.FirstOrDefault(x => Regex.IsMatch(Path.GetFileName(x), @"^ffmpeg"), "");
-            var dep_aria2 = deps.FirstOrDefault(x => Regex.IsMatch(Path.GetFileName(x), @"^aria2"), "");
-            if (!string.IsNullOrWhiteSpace(dep_ytdlp)) {
-                DLP.Path_DLP = dep_ytdlp;
-            } else if (!string.IsNullOrWhiteSpace(dep_youtubedl)) {
-                DLP.Path_DLP = dep_youtubedl;
-                DLP.Type = DLP.DLPType.youtube_dl;
+            var isYoutubeDl = @"^youtube-dl\.exe";
+            if (!string.IsNullOrWhiteSpace(Data.PathYTDLP) && File.Exists(Data.PathYTDLP)) {
+                DLP.Path_DLP = Data.PathYTDLP;
             }
-            DLP.Path_Aria2 = dep_aria2;
-            FFMPEG.Path_FFMPEG = dep_ffmpeg;
+            if (!string.IsNullOrWhiteSpace(Data.PathAria2) && File.Exists(Data.PathAria2)) {
+                DLP.Path_Aria2 = Data.PathAria2;
+            }
+            if (!string.IsNullOrWhiteSpace(Data.PathFFMPEG) && File.Exists(Data.PathFFMPEG)) {
+                FFMPEG.Path_FFMPEG = Data.PathFFMPEG;
+            }
+            if (string.IsNullOrWhiteSpace(DLP.Path_DLP) ||
+                string.IsNullOrWhiteSpace(DLP.Path_Aria2) ||
+                string.IsNullOrWhiteSpace(FFMPEG.Path_FFMPEG)) {
+                var deps = Directory.EnumerateFiles(App.AppPath, "*.exe", SearchOption.AllDirectories).ToList();
+                deps = deps.Where(x => Path.GetFileName(App.AppExe) != Path.GetFileName(x)).ToList();
+                var dep_ytdlp = deps.FirstOrDefault(x => Regex.IsMatch(Path.GetFileName(x), @"^(yt-dlp(_min|_x86|_x64)?|ytdl-patched.*?)\.exe"), "");
+                var dep_ffmpeg = deps.FirstOrDefault(x => Regex.IsMatch(Path.GetFileName(x), @"^ffmpeg"), "");
+                var dep_aria2 = deps.FirstOrDefault(x => Regex.IsMatch(Path.GetFileName(x), @"^aria2"), "");
+                var dep_youtubedl = deps.FirstOrDefault(x => Regex.IsMatch(Path.GetFileName(x), isYoutubeDl), "");
+                if (string.IsNullOrWhiteSpace(DLP.Path_DLP)) {
+                    if (!string.IsNullOrWhiteSpace(dep_ytdlp)) {
+                        Data.PathYTDLP = DLP.Path_DLP = dep_ytdlp;
+                    } else if (!string.IsNullOrWhiteSpace(dep_youtubedl)) {
+                        Data.PathYTDLP = DLP.Path_DLP = dep_youtubedl;
+                    }
+                    
+                }
+                if (Regex.IsMatch(DLP.Path_DLP, isYoutubeDl)) DLP.Type = DLP.DLPType.youtube_dl;
+                if (string.IsNullOrWhiteSpace(DLP.Path_Aria2)) {
+                    Data.PathAria2 = DLP.Path_Aria2 = dep_aria2;
+                }
+                if (string.IsNullOrWhiteSpace(FFMPEG.Path_FFMPEG)) {
+                    Data.PathFFMPEG = FFMPEG.Path_FFMPEG = dep_ffmpeg;
+                }
+            }
         }
         public async void Inits() {
             //check update
@@ -164,6 +216,10 @@ namespace yt_dlp_gui.Views {
             Task.Run(() => {
                 GetInfo();
                 Data.IsAnalyze = false;
+
+                if (Data.AutoDownloadClipboard) {
+                    Download_Start();
+                }
             });
         }
         private void GetInfo() {
@@ -370,6 +426,7 @@ namespace yt_dlp_gui.Views {
                         if (Data.NeedCookie) dlp.Cookie(Data.CookieType);
                         if (Data.ProxyEnabled && !string.IsNullOrWhiteSpace(Data.ProxyUrl)) dlp.Proxy(Data.ProxyUrl);
                         if (Data.UseAria2) dlp.UseAria2();
+                        if (!string.IsNullOrWhiteSpace(Data.LimitRate)) dlp.LimitRate(Data.LimitRate);
                         dlp.IsLive = Data.Video.is_live;
 
                         var vid = ch == 0
@@ -403,6 +460,9 @@ namespace yt_dlp_gui.Views {
             }
         }
         private void Button_Download(object sender, RoutedEventArgs e) {
+            Download_Start();
+        }
+        private void Download_Start() {
             Data.CanCancel = false;
             Data.IsAbouted = false;
             if (Data.IsDownload) {
@@ -432,7 +492,7 @@ namespace yt_dlp_gui.Views {
                 if (Data.selectedVideo.type == FormatType.package) isSingle = true;
                 if (!string.IsNullOrWhiteSpace(tr)) isSingle = true;
                 if (Data.selectedChapter != null && Data.selectedChapter.type == ChaptersType.Segment) isSingle = true;
-                
+
 
                 Task.Run(() => {
                     //任務池
@@ -447,6 +507,7 @@ namespace yt_dlp_gui.Views {
                         if (Data.NeedCookie) dlp.Cookie(Data.CookieType);
                         if (Data.ProxyEnabled && !string.IsNullOrWhiteSpace(Data.ProxyUrl)) dlp.Proxy(Data.ProxyUrl);
                         if (Data.UseAria2) dlp.UseAria2();
+                        if (!string.IsNullOrWhiteSpace(Data.LimitRate)) dlp.LimitRate(Data.LimitRate);
                         dlp.IsLive = Data.Video.is_live;
 
                         var vid = Data.selectedVideo.format_id;
@@ -479,6 +540,7 @@ namespace yt_dlp_gui.Views {
                             if (Data.NeedCookie) dlp.Cookie(Data.CookieType);
                             if (Data.ProxyEnabled && !string.IsNullOrWhiteSpace(Data.ProxyUrl)) dlp.Proxy(Data.ProxyUrl);
                             if (Data.UseAria2) dlp.UseAria2();
+                            if (!string.IsNullOrWhiteSpace(Data.LimitRate)) dlp.LimitRate(Data.LimitRate);
                             dlp.IsLive = Data.Video.is_live;
 
                             var aid = Data.selectedAudio.format_id;
@@ -542,7 +604,7 @@ namespace yt_dlp_gui.Views {
                             foreach (var c in Data.Video.chapters) {
                                 cidx++;
                                 var tar_seg_path = Path.Combine(tar_path, $"{tar_name} - {cidx}{tar_exts}");
-                                Debug.WriteLine( tar_seg_path );
+                                Debug.WriteLine(tar_seg_path);
                                 FFMPEG.Split(tar_seg_path, Data.TargetFile, c);
                             }
                             if (File.Exists(Data.TargetFile)) File.Delete(Data.TargetFile);
@@ -567,6 +629,7 @@ namespace yt_dlp_gui.Views {
             }
         }
 
+
         private void Button_Browser(object sender, RoutedEventArgs e) {
             if (string.IsNullOrWhiteSpace(Data.TargetName)) {
                 var dialog = new FolderBrowserDialog();
@@ -580,7 +643,7 @@ namespace yt_dlp_gui.Views {
                 dialog.FileName = Path.GetFileName(Data.TargetFile);
                 if (dialog.ShowDialog() == System.Windows.Forms.DialogResult.OK) {
                     Data.TargetPath = Path.GetDirectoryName(dialog.FileName);
-                    if ((new string[] { ".mp4", ".webm", ".3gp" }).Any(x => Path.GetExtension(dialog.FileName).ToLower() == x)) {
+                    if ((new string[] { ".mp4", ".webm", ".3gp", ".mkv" }).Any(x => Path.GetExtension(dialog.FileName).ToLower() == x)) {
                         Data.TargetName = Path.GetFileName(dialog.FileName);
                     } else {
                         Data.TargetName = Path.GetFileName(dialog.FileName) + ".tmp";

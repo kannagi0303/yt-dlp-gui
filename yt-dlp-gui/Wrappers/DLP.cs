@@ -90,6 +90,15 @@ namespace yt_dlp_gui.Wrappers {
                 Options["--external-downloader"] = "\"" + Path_Aria2 + "\"";
                 //Options["--external-downloader"] = "aria2c";
                 //Options["--downloader-args"] = "aria2c:\"-x 16 -k 10M --user-agent=''\"";
+                if (Options.ContainsKey("--proxy")) {
+                    Options["--external-downloader-args"] = "'--all-proxy=\""+ Options["--proxy"] + "\"'";
+                }
+            }
+            return this;
+        }
+        public DLP LimitRate(string value) {
+            if (!string.IsNullOrWhiteSpace(value)) {
+                Options["--limit-rate"] = value;
             }
             return this;
         }

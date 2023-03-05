@@ -129,14 +129,18 @@ namespace yt_dlp_gui.Views {
             public void CheckExtension() {
                 if (!string.IsNullOrWhiteSpace(TargetName)) {
                     if (selectedVideo != null && selectedAudio != null) {
-                        if (selectedVideo.type == FormatType.package) {
-                            TargetName = Path.ChangeExtension(TargetName, selectedVideo.video_ext);
-                        } else if (selectedVideo.video_ext == "webm" && selectedAudio.audio_ext == "webm") {
-                            TargetName = Path.ChangeExtension(TargetName, "webm");
-                        } else if (selectedVideo.video_ext == "mp4" && selectedAudio.audio_ext == "m4a") {
-                            TargetName = Path.ChangeExtension(TargetName, "mp4");
+                        if (Path.HasExtension(TargetName) && Path.GetExtension(TargetName).ToLower() == ".mkv") {
+                            TargetName = Path.ChangeExtension(TargetName, "mkv");
                         } else {
-                            TargetName = Path.ChangeExtension(TargetName, "mp4");
+                            if (selectedVideo.type == FormatType.package) {
+                                TargetName = Path.ChangeExtension(TargetName, selectedVideo.video_ext);
+                            } else if (selectedVideo.video_ext == "webm" && selectedAudio.audio_ext == "webm") {
+                                TargetName = Path.ChangeExtension(TargetName, "webm");
+                            } else if (selectedVideo.video_ext == "mp4" && selectedAudio.audio_ext == "m4a") {
+                                TargetName = Path.ChangeExtension(TargetName, "mp4");
+                            } else {
+                                TargetName = Path.ChangeExtension(TargetName, "mp4");
+                            }
                         }
                     }
                 }
@@ -168,6 +172,7 @@ namespace yt_dlp_gui.Views {
             public bool IsAbouted { get; set; } = false;
             public bool IsMonitor { get; set; } = false;
             public bool AlwaysOnTop { get; set; } = false;
+            public bool AutoDownloadClipboard { get; set; } = false;
             public bool RememberWindowStatePosition { get; set; } = false;
             public bool RememberWindowStateSize { get; set; } = false;
             public double Top { get; set; } = 0;
@@ -201,11 +206,15 @@ namespace yt_dlp_gui.Views {
             public bool SaveThumbnail { get; set; } = true;
             public bool EmbedSub { get; set; } = false;
             public string TimeRange { get; set; } = string.Empty;
+            public string LimitRate { get; set; } = string.Empty;
             public Enable Enable { get; set; } = new();
             public bool AutoSaveConfig { get; set; } = false;
             public string Html { get; set; } = string.Empty;
             public string LastVersion { get; set; } = string.Empty;
             public string LastCheckUpdate { get; set; } = string.Empty;
+            public string PathYTDLP { get; set; } = string.Empty;
+            public string PathAria2 { get; set; } = string.Empty;
+            public string PathFFMPEG { get; set; } = string.Empty;
             public bool NewVersion { get; set; } = false;
             public List<GitRelease> ReleaseData { get; set; } = new();
             public GUIConfig GUIConfig { get; set; } = new();
@@ -359,6 +368,12 @@ namespace yt_dlp_gui.Views {
             public bool IsMonitor { get; set; } = false;
             [Description("Configuration File")] public string ConfigurationFile { get; set; } = string.Empty;
             [Description("Aria2 Settings")] public bool UseAria2 { get; set; } = false;
+            [Description("Automatically download Upon clipboard detection")] public bool AutoDownloadClipboard { get; set; } = false;
+            [Description("Automatically download Upon clipboard detection")] public string LimitRate { get; set; } = string.Empty;
+            [Description("Paths")] 
+            public string PathYTDLP { get; set; } = string.Empty;
+            public string PathAria2 { get; set; } = string.Empty;
+            public string PathFFMPEG { get; set; } = string.Empty;
             [Description("Last Checking Update Date")] public string LastVersion { get; set; } = string.Empty;
             public string LastCheckUpdate { get; set; } = string.Empty;
 

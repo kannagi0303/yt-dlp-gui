@@ -48,15 +48,17 @@ namespace Libs.Yaml {
         }
         public static void Save(string path, object graph) {
             FileInfo info = new FileInfo(path);
-            Directory.CreateDirectory(info.DirectoryName);
-            using (var yaml = new StreamWriter(info.FullName, false, Encoding.UTF8)) {
-                var s = new SerializerBuilder()
+            try {
+                Directory.CreateDirectory(info.DirectoryName);
+                using (var yaml = new StreamWriter(info.FullName, false, Encoding.UTF8)) {
+                    var s = new SerializerBuilder()
                     .WithTypeInspector(inner => new CommentGatheringTypeInspector(inner))
                     .WithEmissionPhaseObjectGraphVisitor(args => new SkipEmptyObjectGraphVisitor(args.InnerVisitor))
                     .WithEmissionPhaseObjectGraphVisitor(args => new CommentsObjectGraphVisitor(args.InnerVisitor))
                     .Build();
-                s.Serialize(yaml, graph);
-            }
+                    s.Serialize(yaml, graph);
+                }
+            } catch { };
         }
         public static void Load(this IYamlConfig obj, string path) {
             MethodInfo mi = typeof(Yaml).GetMethod(nameof(Yaml.Open)); //方法

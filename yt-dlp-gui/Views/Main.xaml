@@ -509,67 +509,31 @@
                         <RowDefinition Height="*"/>
                         <RowDefinition Height="*"/>
                         <RowDefinition Height="*"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="*"/>
                     </Grid.RowDefinitions>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="Auto"/>
                         <ColumnDefinition Width="*"/>
                     </Grid.ColumnDefinitions>
-                    <TextBlock Grid.Row="0" Text="{Binding Source={x:Static app:App.Lang}, Path=Main.EmbedSubs}" VerticalAlignment="Center" Margin="0,0,4,0"/>
-                    <CheckBox Grid.Row="0" Grid.Column="1" Content="{Binding Source={x:Static app:App.Lang}, Path=Main.EmbedSubsEnabled}" Margin="2" IsChecked="{Binding EmbedSub}"/>
-                    <StackPanel Grid.Row="1" VerticalAlignment="Center" Margin="0,0,4,0">
-                        <TextBlock Text="{Binding Source={x:Static app:App.Lang}, Path=Main.TimeRange}"/>
-                        <TextBlock FontSize="10" Text="{Binding Source={x:Static app:App.Lang}, Path=Main.TimeRangeHits}" Foreground="Gray"/>
-                    </StackPanel>
-                    <controls:TextEditor Grid.Row="1" Grid.Column="2" Helper="{Binding Source={x:Static app:App.Lang}, Path=Main.TimeRangeHelper}" Text="{Binding TimeRange}" 
-                                         Margin="2" EnableHyperlinks="False"/>
-                </Grid>
-            </TabItem>
-            <TabItem>
-                <TabItem.Header>
-                    <Label Content="{Binding Source={x:Static app:App.Lang}, Path=Main.Options}" Padding="4,0"/>
-                </TabItem.Header>
-                <Grid Margin="4" VerticalAlignment="Top">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="Auto"/>
-                        <ColumnDefinition/>
-                    </Grid.ColumnDefinitions>
-                    <Grid.RowDefinitions>
-                        <!-- 0 -->
-                        <RowDefinition/>
-                        <!-- 1 -->
-                        <RowDefinition/>
-                        <!-- 2 -->
-                        <RowDefinition/>
-                        <!-- 3 -->
-                        <RowDefinition/>
-                        <!-- 4 -->
-                        <RowDefinition/>
-                        <!-- 5 -->
-                        <RowDefinition/>
-                        <!-- 6 -->
-                        <RowDefinition/>
-                    </Grid.RowDefinitions>
-                    <TextBlock Grid.Row="0" Text="{Binding Source={x:Static app:App.Lang}, Path=Main.Notifications}" Margin="0,5,5,5" HorizontalAlignment="Right"/>
-                    <CheckBox Grid.Row="0" Grid.Column="1" Content="{Binding Source={x:Static app:App.Lang}, Path=Main.NotificationsEnabled}" IsEnabled="{Binding Enable.UseNotifications}" IsChecked="{Binding UseNotifications}" Margin="0,2"/>
-                    <!--Always on Top-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_ -->
-                    <TextBlock Grid.Row="1" Text="{Binding Source={x:Static app:App.Lang}, Path=Main.AlwaysOnTop}" Margin="0,5,5,5" HorizontalAlignment="Right"/>
-                    <CheckBox Grid.Row="1" Grid.Column="1" Content="{Binding Source={x:Static app:App.Lang}, Path=Main.AlwaysOnTopEnabled}" IsChecked="{Binding AlwaysOnTop}" Margin="0,2"/>
-                    <!--Potistion & Size-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_ -->
-                    <TextBlock Grid.Row="2" Text="{Binding Source={x:Static app:App.Lang}, Path=Main.RememberWindowState}" Margin="0,2,5,5" HorizontalAlignment="Right"/>
-                    <StackPanel Grid.Row="2" Grid.Column="1" VerticalAlignment="Center">
-                        <CheckBox Content="{Binding Source={x:Static app:App.Lang}, Path=Main.RememberWindowPosition}" IsChecked="{Binding RememberWindowStatePosition}"/>
-                        <CheckBox Content="{Binding Source={x:Static app:App.Lang}, Path=Main.RememberWindowSize}" IsChecked="{Binding RememberWindowStateSize}"/>
-                    </StackPanel>
+                    <!-- Configuration-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_ -->
+                    <TextBlock Grid.Row="0" Text="{Binding Source={x:Static app:App.Lang}, Path=Main.Configuration}" Margin="0,5,5,5" HorizontalAlignment="Right"/>
+                    <ComboBox Grid.Row="0" Grid.Column="1" HorizontalAlignment="Left"
+                              SelectedValue="{Binding selectedConfig}" 
+                              DisplayMemberPath="name"
+                              ItemsSource="{Binding ConfigsView}"/>
                     <!--Proxy-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_ -->
-                    <TextBlock Grid.Row="3" Text="{Binding Source={x:Static app:App.Lang}, Path=Main.Proxy}" Margin="0,2,5,5" HorizontalAlignment="Right"/>
-                    <StackPanel Grid.Row="3" Grid.Column="1" VerticalAlignment="Center">
+                    <TextBlock Grid.Row="1" Text="{Binding Source={x:Static app:App.Lang}, Path=Main.Proxy}" Margin="0,2,5,5" HorizontalAlignment="Right"/>
+                    <StackPanel Grid.Row="1" Grid.Column="1" VerticalAlignment="Center">
                         <CheckBox Content="{Binding Source={x:Static app:App.Lang}, Path=Main.ProxyEnabled}" IsChecked="{Binding ProxyEnabled}"/>
                         <controls:TextEditor  Helper="{Binding Source={x:Static app:App.Lang}, Path=Main.ProxyHelper}" Text="{Binding ProxyUrl}" 
                                          Margin="2" EnableHyperlinks="False"/>
                     </StackPanel>
                     <!--UseCookie-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_ -->
-                    <TextBlock Grid.Row="4" Text="{Binding Source={x:Static app:App.Lang}, Path=Main.Cookie}" Margin="0,5,5,5" HorizontalAlignment="Right"/>
-                    <StackPanel Grid.Row="4" Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Top" Margin="0,2">
+                    <TextBlock Grid.Row="2" Text="{Binding Source={x:Static app:App.Lang}, Path=Main.Cookie}" Margin="0,5,5,5" HorizontalAlignment="Right"/>
+                    <StackPanel Grid.Row="2" Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Top" Margin="0,2">
                         <!--TextBlock Text="Cookie" Margin="0,0,4,0" VerticalAlignment="Center"/-->
                         <ComboBox SelectedValue="{Binding UseCookie}" SelectedValuePath="Tag" IsEnabled="{Binding Enable.UseCookie}">
                             <ComboBoxItem Content="{Binding Source={x:Static app:App.Lang}, Path=Main.CookieWhenNeeded}" Tag="{x:Static m:UseCookie.WhenNeeded}"/>
@@ -589,15 +553,63 @@
                             <ComboBoxItem Content="Chrome Beta" Tag="{x:Static m:CookieType.Chrome_Beta}"/>
                         </ComboBox>
                     </StackPanel>
-                    <!-- Configuration-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_ -->
-                    <TextBlock Grid.Row="5" Text="{Binding Source={x:Static app:App.Lang}, Path=Main.Configuration}" Margin="0,5,5,5" HorizontalAlignment="Right"/>
-                    <ComboBox Grid.Row="5" Grid.Column="1" HorizontalAlignment="Left"
-                              SelectedValue="{Binding selectedConfig}" 
-                              DisplayMemberPath="name"
-                              ItemsSource="{Binding ConfigsView}"/>
                     <!--UseAria2-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_ -->
-                    <TextBlock Grid.Row="6" Text="{Binding Source={x:Static app:App.Lang}, Path=Main.Aria2}" Margin="0,5,5,5" HorizontalAlignment="Right"/>
-                    <CheckBox Grid.Row="6" Grid.Column="1" Content="{Binding Source={x:Static app:App.Lang}, Path=Main.Aria2Enabled}" IsEnabled="{Binding Enable.UseAria2}" IsChecked="{Binding UseAria2}" Margin="0,2"/>
+                    <TextBlock Grid.Row="3" Text="{Binding Source={x:Static app:App.Lang}, Path=Main.Aria2}" Margin="0,5,5,5" HorizontalAlignment="Right"/>
+                    <CheckBox Grid.Row="3" Grid.Column="1" Content="{Binding Source={x:Static app:App.Lang}, Path=Main.Aria2Enabled}" IsEnabled="{Binding Enable.UseAria2}" IsChecked="{Binding UseAria2}" Margin="0,2"/>
+
+                    <TextBlock Grid.Row="4" Text="{Binding Source={x:Static app:App.Lang}, Path=Main.EmbedSubs}" VerticalAlignment="Center" Margin="0,0,4,0"/>
+                    <CheckBox Grid.Row="4" Grid.Column="1" Content="{Binding Source={x:Static app:App.Lang}, Path=Main.EmbedSubsEnabled}" Margin="0,2" IsChecked="{Binding EmbedSub}"/>
+                    <StackPanel Grid.Row="5" VerticalAlignment="Center" Margin="0,0,4,0">
+                        <TextBlock Text="{Binding Source={x:Static app:App.Lang}, Path=Main.TimeRange}"/>
+                        <TextBlock FontSize="10" Text="{Binding Source={x:Static app:App.Lang}, Path=Main.TimeRangeHits}" Foreground="Gray"/>
+                    </StackPanel>
+                    <controls:TextEditor Grid.Row="5" Grid.Column="2" Helper="{Binding Source={x:Static app:App.Lang}, Path=Main.TimeRangeHelper}" Text="{Binding TimeRange}" 
+                                         Margin="2" EnableHyperlinks="False"/>
+                    <TextBlock Grid.Row="6" Text="{Binding Source={x:Static app:App.Lang}, Path=Main.LimitRate}" VerticalAlignment="Center" Margin="0,0,4,0"/>
+                    <controls:TextEditor Grid.Row="6" Grid.Column="2" Helper="{Binding Source={x:Static app:App.Lang}, Path=Main.LimitRateHelper}" Text="{Binding LimitRate}" 
+                                         Margin="2" EnableHyperlinks="False"/>
+                </Grid>
+            </TabItem>
+            <TabItem>
+                <TabItem.Header>
+                    <Label Content="{Binding Source={x:Static app:App.Lang}, Path=Main.Options}" Padding="4,0"/>
+                </TabItem.Header>
+                <Grid Margin="4" VerticalAlignment="Top">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="76*"/>
+                        <ColumnDefinition Width="129*"/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <!-- 0 -->
+                        <RowDefinition/>
+                        <!-- 1 -->
+                        <RowDefinition/>
+                        <!-- 2 -->
+                        <RowDefinition/>
+                        <!-- 3 -->
+                        <RowDefinition/>
+                        <!-- 4 -->
+                        <RowDefinition/>
+                        <!-- 5 -->
+                        <RowDefinition/>
+                        <!-- 6 -->
+                        <RowDefinition/>
+                    </Grid.RowDefinitions>
+                    <TextBlock Grid.Row="0" Text="{Binding Source={x:Static app:App.Lang}, Path=Main.Notifications}" Margin="72,5,0,5" HorizontalAlignment="Left"/>
+                    <CheckBox Grid.Row="0" Content="{Binding Source={x:Static app:App.Lang}, Path=Main.NotificationsEnabled}" IsEnabled="{Binding Enable.UseNotifications}" IsChecked="{Binding UseNotifications}" Margin="149,3,-1,2" Grid.ColumnSpan="3"/>
+                    <!--Always on Top-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_ -->
+                    <TextBlock Grid.Row="1" Text="{Binding Source={x:Static app:App.Lang}, Path=Main.AlwaysOnTop}" Margin="60,5,0,5" HorizontalAlignment="Left"/>
+                    <CheckBox Grid.Row="1" Content="{Binding Source={x:Static app:App.Lang}, Path=Main.AlwaysOnTopEnabled}" IsChecked="{Binding AlwaysOnTop}" Margin="149,3,-1,2" Grid.ColumnSpan="3"/>
+                    <!--Potistion & Size-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_ -->
+                    <TextBlock Grid.Row="2" Text="{Binding Source={x:Static app:App.Lang}, Path=Main.RememberWindowState}" Margin="0,2,5,5" HorizontalAlignment="Right"/>
+                    <StackPanel Grid.Row="2" VerticalAlignment="Center" Grid.ColumnSpan="3" Margin="149,0,-1,0">
+                        <CheckBox Content="{Binding Source={x:Static app:App.Lang}, Path=Main.RememberWindowPosition}" IsChecked="{Binding RememberWindowStatePosition}"/>
+                        <CheckBox Content="{Binding Source={x:Static app:App.Lang}, Path=Main.RememberWindowSize}" IsChecked="{Binding RememberWindowStateSize}"/>
+                    </StackPanel>
+                    <!--Automatically download-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_ -->
+                    <TextBlock Grid.Row="3" Text="{Binding Source={x:Static app:App.Lang}, Path=Main.AutoDownload}" Margin="0,5,0,5" HorizontalAlignment="Center"/>
+                    <CheckBox Grid.Row="3" Content="{Binding Source={x:Static app:App.Lang}, Path=Main.AutoDownloadClipboard}" IsChecked="{Binding AutoDownloadClipboard}" Margin="149,3,-1,3" Grid.ColumnSpan="3"/>
                 </Grid>
             </TabItem>
         </TabControl>
