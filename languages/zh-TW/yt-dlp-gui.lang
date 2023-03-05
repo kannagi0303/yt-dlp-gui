@@ -58,7 +58,7 @@ Main:
   Aria2: Aria2
   Aria2Enabled: 啟用
   AutoDownload: 自動下載
-  AutoDownloadClipboard: 當剪貼簿檢測到影片
+  AutoDownloadAnalysed: 在分析之後
   LimitRate: 速度限制
   LimitRateHelper: 50K or 4.2M
   # Label

@@ -217,7 +217,7 @@ namespace yt_dlp_gui.Views {
                 GetInfo();
                 Data.IsAnalyze = false;
 
-                if (Data.AutoDownloadClipboard) {
+                if (Data.AutoDownloadAnalysed) {
                     Download_Start();
                 }
             });

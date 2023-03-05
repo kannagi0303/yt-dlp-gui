@@ -609,7 +609,7 @@
                     </StackPanel>
                     <!--Automatically download-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_ -->
                     <TextBlock Grid.Row="3" Text="{Binding Source={x:Static app:App.Lang}, Path=Main.AutoDownload}" Margin="0,5,0,5" HorizontalAlignment="Center"/>
-                    <CheckBox Grid.Row="3" Content="{Binding Source={x:Static app:App.Lang}, Path=Main.AutoDownloadClipboard}" IsChecked="{Binding AutoDownloadClipboard}" Margin="149,3,-1,3" Grid.ColumnSpan="3"/>
+                    <CheckBox Grid.Row="3" Content="{Binding Source={x:Static app:App.Lang}, Path=Main.AutoDownloadAnalysed}" IsChecked="{Binding AutoDownloadAnalysed}" Margin="149,3,-1,3" Grid.ColumnSpan="3"/>
                 </Grid>
             </TabItem>
         </TabControl>

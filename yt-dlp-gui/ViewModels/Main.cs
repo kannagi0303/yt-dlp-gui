@@ -172,7 +172,7 @@ namespace yt_dlp_gui.Views {
             public bool IsAbouted { get; set; } = false;
             public bool IsMonitor { get; set; } = false;
             public bool AlwaysOnTop { get; set; } = false;
-            public bool AutoDownloadClipboard { get; set; } = false;
+            public bool AutoDownloadAnalysed { get; set; } = false;
             public bool RememberWindowStatePosition { get; set; } = false;
             public bool RememberWindowStateSize { get; set; } = false;
             public double Top { get; set; } = 0;
@@ -368,7 +368,7 @@ namespace yt_dlp_gui.Views {
             public bool IsMonitor { get; set; } = false;
             [Description("Configuration File")] public string ConfigurationFile { get; set; } = string.Empty;
             [Description("Aria2 Settings")] public bool UseAria2 { get; set; } = false;
-            [Description("Automatically download Upon clipboard detection")] public bool AutoDownloadClipboard { get; set; } = false;
+            [Description("Automatically download Upon clipboard detection")] public bool AutoDownloadAnalysed { get; set; } = false;
             [Description("Automatically download Upon clipboard detection")] public string LimitRate { get; set; } = string.Empty;
             [Description("Paths")] 
             public string PathYTDLP { get; set; } = string.Empty;

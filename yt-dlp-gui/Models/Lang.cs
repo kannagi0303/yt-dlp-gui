@@ -72,7 +72,7 @@ namespace yt_dlp_gui.Models {
         public string Aria2 { get; set; } = "Aria2";
         public string Aria2Enabled { get; set; } = "Enabled";
         public string AutoDownload { get; set; } = "Automatically download";
-        public string AutoDownloadClipboard { get; set; } = "Upon clipboard detection";
+        public string AutoDownloadAnalysed { get; set; } = "After analysed";
 
         //Label
         public string Live { get; set; } = "LIVE";
