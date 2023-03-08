@@ -55,7 +55,7 @@
             </StackPanel>
         </ControlTemplate>
     </Window.Resources>
-    <Grid Margin="4" Grid.IsSharedSizeScope="True">
+    <Grid Margin="4" Grid.IsSharedSizeScope="True" Name="ContentGrid">
         <Grid.Resources>
             <Style TargetType="ComboBox" BasedOn="{StaticResource {x:Type ComboBox}}">
                 <Setter Property="Margin" Value="0,2"/>
@@ -516,25 +516,25 @@
                     </Grid.RowDefinitions>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="Auto"/>
-                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="6"/>
+                        <ColumnDefinition/>
                     </Grid.ColumnDefinitions>
                     <!-- Configuration-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_ -->
-                    <TextBlock Grid.Row="0" Text="{Binding Source={x:Static app:App.Lang}, Path=Main.Configuration}" Margin="0,5,5,5" HorizontalAlignment="Right"/>
-                    <ComboBox Grid.Row="0" Grid.Column="1" HorizontalAlignment="Left"
+                    <TextBlock Grid.Row="0" Text="{Binding Source={x:Static app:App.Lang}, Path=Main.Configuration}" VerticalAlignment="Center" HorizontalAlignment="Right"/>
+                    <ComboBox Grid.Row="0" Grid.Column="2" HorizontalAlignment="Left"
                               SelectedValue="{Binding selectedConfig}" 
                               DisplayMemberPath="name"
                               ItemsSource="{Binding ConfigsView}"/>
                     <!--Proxy-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_ -->
-                    <TextBlock Grid.Row="1" Text="{Binding Source={x:Static app:App.Lang}, Path=Main.Proxy}" Margin="0,2,5,5" HorizontalAlignment="Right"/>
-                    <StackPanel Grid.Row="1" Grid.Column="1" VerticalAlignment="Center">
+                    <TextBlock Grid.Row="1" Text="{Binding Source={x:Static app:App.Lang}, Path=Main.Proxy}" Margin="0,2" VerticalAlignment="Top" HorizontalAlignment="Right"/>
+                    <StackPanel Grid.Row="1" Grid.Column="2" VerticalAlignment="Center">
                         <CheckBox Content="{Binding Source={x:Static app:App.Lang}, Path=Main.ProxyEnabled}" IsChecked="{Binding ProxyEnabled}"/>
-                        <controls:TextEditor  Helper="{Binding Source={x:Static app:App.Lang}, Path=Main.ProxyHelper}" Text="{Binding ProxyUrl}" 
-                                         Margin="2" EnableHyperlinks="False"/>
+                        <controls:TextEditor Helper="{Binding Source={x:Static app:App.Lang}, Path=Main.ProxyHelper}" Text="{Binding ProxyUrl}" 
+                                             Margin="0,2" EnableHyperlinks="False"/>
                     </StackPanel>
                     <!--UseCookie-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_ -->
-                    <TextBlock Grid.Row="2" Text="{Binding Source={x:Static app:App.Lang}, Path=Main.Cookie}" Margin="0,5,5,5" HorizontalAlignment="Right"/>
-                    <StackPanel Grid.Row="2" Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Top" Margin="0,2">
-                        <!--TextBlock Text="Cookie" Margin="0,0,4,0" VerticalAlignment="Center"/-->
+                    <TextBlock Grid.Row="2" Text="{Binding Source={x:Static app:App.Lang}, Path=Main.Cookie}" VerticalAlignment="Center" HorizontalAlignment="Right"/>
+                    <StackPanel Grid.Row="2" Grid.Column="2" Orientation="Horizontal" VerticalAlignment="Top" Margin="0,2">
                         <ComboBox SelectedValue="{Binding UseCookie}" SelectedValuePath="Tag" IsEnabled="{Binding Enable.UseCookie}">
                             <ComboBoxItem Content="{Binding Source={x:Static app:App.Lang}, Path=Main.CookieWhenNeeded}" Tag="{x:Static m:UseCookie.WhenNeeded}"/>
                             <ComboBoxItem Content="{Binding Source={x:Static app:App.Lang}, Path=Main.CookieNever}" Tag="{x:Static m:UseCookie.Never}"/>
@@ -554,20 +554,22 @@
                         </ComboBox>
                     </StackPanel>
                     <!--UseAria2-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_ -->
-                    <TextBlock Grid.Row="3" Text="{Binding Source={x:Static app:App.Lang}, Path=Main.Aria2}" Margin="0,5,5,5" HorizontalAlignment="Right"/>
-                    <CheckBox Grid.Row="3" Grid.Column="1" Content="{Binding Source={x:Static app:App.Lang}, Path=Main.Aria2Enabled}" IsEnabled="{Binding Enable.UseAria2}" IsChecked="{Binding UseAria2}" Margin="0,2"/>
-
-                    <TextBlock Grid.Row="4" Text="{Binding Source={x:Static app:App.Lang}, Path=Main.EmbedSubs}" VerticalAlignment="Center" Margin="0,0,4,0"/>
-                    <CheckBox Grid.Row="4" Grid.Column="1" Content="{Binding Source={x:Static app:App.Lang}, Path=Main.EmbedSubsEnabled}" Margin="0,2" IsChecked="{Binding EmbedSub}"/>
-                    <StackPanel Grid.Row="5" VerticalAlignment="Center" Margin="0,0,4,0">
-                        <TextBlock Text="{Binding Source={x:Static app:App.Lang}, Path=Main.TimeRange}"/>
-                        <TextBlock FontSize="10" Text="{Binding Source={x:Static app:App.Lang}, Path=Main.TimeRangeHits}" Foreground="Gray"/>
+                    <TextBlock Grid.Row="3" Text="{Binding Source={x:Static app:App.Lang}, Path=Main.Aria2}" VerticalAlignment="Center" HorizontalAlignment="Right"/>
+                    <CheckBox Grid.Row="3" Grid.Column="2" Content="{Binding Source={x:Static app:App.Lang}, Path=Main.Aria2Enabled}" IsEnabled="{Binding Enable.UseAria2}" IsChecked="{Binding UseAria2}" Margin="0,2"/>
+                    <!--EmbedSubs-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_ -->
+                    <TextBlock Grid.Row="4" Text="{Binding Source={x:Static app:App.Lang}, Path=Main.EmbedSubs}" VerticalAlignment="Center" HorizontalAlignment="Right"/>
+                    <CheckBox Grid.Row="4" Grid.Column="2" Content="{Binding Source={x:Static app:App.Lang}, Path=Main.EmbedSubsEnabled}" Margin="0,2" IsChecked="{Binding EmbedSub}"/>
+                    <!--TimeRange-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_ -->
+                    <StackPanel Grid.Row="5" VerticalAlignment="Center" HorizontalAlignment="Right">
+                        <TextBlock Text="{Binding Source={x:Static app:App.Lang}, Path=Main.TimeRange}" HorizontalAlignment="Right"/>
+                        <TextBlock FontSize="10" Text="{Binding Source={x:Static app:App.Lang}, Path=Main.TimeRangeHits}" Foreground="Gray" HorizontalAlignment="Right"/>
                     </StackPanel>
                     <controls:TextEditor Grid.Row="5" Grid.Column="2" Helper="{Binding Source={x:Static app:App.Lang}, Path=Main.TimeRangeHelper}" Text="{Binding TimeRange}" 
-                                         Margin="2" EnableHyperlinks="False"/>
-                    <TextBlock Grid.Row="6" Text="{Binding Source={x:Static app:App.Lang}, Path=Main.LimitRate}" VerticalAlignment="Center" Margin="0,0,4,0"/>
+                                         Margin="0,2" EnableHyperlinks="False"/>
+                    <!--LimitRate-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_ -->
+                    <TextBlock Grid.Row="6" Text="{Binding Source={x:Static app:App.Lang}, Path=Main.LimitRate}" VerticalAlignment="Center" HorizontalAlignment="Right"/>
                     <controls:TextEditor Grid.Row="6" Grid.Column="2" Helper="{Binding Source={x:Static app:App.Lang}, Path=Main.LimitRateHelper}" Text="{Binding LimitRate}" 
-                                         Margin="2" EnableHyperlinks="False"/>
+                                         Margin="0,2" EnableHyperlinks="False"/>
                 </Grid>
             </TabItem>
             <TabItem>
@@ -577,8 +579,8 @@
                 <Grid Margin="4" VerticalAlignment="Top">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="Auto"/>
-                        <ColumnDefinition Width="76*"/>
-                        <ColumnDefinition Width="129*"/>
+                        <ColumnDefinition Width="6"/>
+                        <ColumnDefinition/>
                     </Grid.ColumnDefinitions>
                     <Grid.RowDefinitions>
                         <!-- 0 -->
@@ -596,20 +598,46 @@
                         <!-- 6 -->
                         <RowDefinition/>
                     </Grid.RowDefinitions>
-                    <TextBlock Grid.Row="0" Text="{Binding Source={x:Static app:App.Lang}, Path=Main.Notifications}" Margin="72,5,0,5" HorizontalAlignment="Left"/>
-                    <CheckBox Grid.Row="0" Content="{Binding Source={x:Static app:App.Lang}, Path=Main.NotificationsEnabled}" IsEnabled="{Binding Enable.UseNotifications}" IsChecked="{Binding UseNotifications}" Margin="149,3,-1,2" Grid.ColumnSpan="3"/>
+                    <TextBlock Grid.Row="0" Text="{Binding Source={x:Static app:App.Lang}, Path=Main.Notifications}" HorizontalAlignment="Right" VerticalAlignment="Center"/>
+                    <CheckBox Grid.Row="0" Grid.Column="2" Content="{Binding Source={x:Static app:App.Lang}, Path=Main.NotificationsEnabled}" IsEnabled="{Binding Enable.UseNotifications}" IsChecked="{Binding UseNotifications}"/>
                     <!--Always on Top-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_ -->
-                    <TextBlock Grid.Row="1" Text="{Binding Source={x:Static app:App.Lang}, Path=Main.AlwaysOnTop}" Margin="60,5,0,5" HorizontalAlignment="Left"/>
-                    <CheckBox Grid.Row="1" Content="{Binding Source={x:Static app:App.Lang}, Path=Main.AlwaysOnTopEnabled}" IsChecked="{Binding AlwaysOnTop}" Margin="149,3,-1,2" Grid.ColumnSpan="3"/>
+                    <TextBlock Grid.Row="1" Text="{Binding Source={x:Static app:App.Lang}, Path=Main.AlwaysOnTop}" HorizontalAlignment="Right" VerticalAlignment="Center"/>
+                    <CheckBox Grid.Row="1" Grid.Column="2" Content="{Binding Source={x:Static app:App.Lang}, Path=Main.AlwaysOnTopEnabled}" IsChecked="{Binding AlwaysOnTop}"/>
                     <!--Potistion & Size-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_ -->
-                    <TextBlock Grid.Row="2" Text="{Binding Source={x:Static app:App.Lang}, Path=Main.RememberWindowState}" Margin="0,2,5,5" HorizontalAlignment="Right"/>
-                    <StackPanel Grid.Row="2" VerticalAlignment="Center" Grid.ColumnSpan="3" Margin="149,0,-1,0">
+                    <TextBlock Grid.Row="2" Text="{Binding Source={x:Static app:App.Lang}, Path=Main.RememberWindowState}" Margin="0,2" HorizontalAlignment="Right" VerticalAlignment="Top"/>
+                    <StackPanel Grid.Row="2" Grid.Column="2">
                         <CheckBox Content="{Binding Source={x:Static app:App.Lang}, Path=Main.RememberWindowPosition}" IsChecked="{Binding RememberWindowStatePosition}"/>
                         <CheckBox Content="{Binding Source={x:Static app:App.Lang}, Path=Main.RememberWindowSize}" IsChecked="{Binding RememberWindowStateSize}"/>
                     </StackPanel>
+                    <!--Scale-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_ -->
+                    <TextBlock Grid.Row="3" Text="{Binding Source={x:Static app:App.Lang}, Path=Main.Scale}" HorizontalAlignment="Right" VerticalAlignment="Center"/>
+                    <Grid Grid.Row="3" Grid.Column="2">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition/>
+                            <ColumnDefinition Width="36"/>
+                        </Grid.ColumnDefinitions>
+                        <Slider  Minimum="80" Maximum="200" IsSnapToTickEnabled="True" Margin="0,2"
+                                 Name="slider" VerticalAlignment="Center" ValueChanged="slider_ValueChanged" Value="{Binding Scale}"/>
+                        <TextBlock Grid.Column="1" Text="{Binding ElementName=slider, Path=Value, StringFormat={}{0}%}" HorizontalAlignment="Right" VerticalAlignment="Center"/>
+                    </Grid>
                     <!--Automatically download-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_ -->
-                    <TextBlock Grid.Row="3" Text="{Binding Source={x:Static app:App.Lang}, Path=Main.AutoDownload}" Margin="0,5,0,5" HorizontalAlignment="Center"/>
-                    <CheckBox Grid.Row="3" Content="{Binding Source={x:Static app:App.Lang}, Path=Main.AutoDownloadAnalysed}" IsChecked="{Binding AutoDownloadAnalysed}" Margin="149,3,-1,3" Grid.ColumnSpan="3"/>
+                    <TextBlock Grid.Row="5" Text="{Binding Source={x:Static app:App.Lang}, Path=Main.AutoDownload}" Margin="0,5,0,5" HorizontalAlignment="Right"/>
+                    <CheckBox Grid.Row="5" Grid.Column="2" Content="{Binding Source={x:Static app:App.Lang}, Path=Main.AutoDownloadAnalysed}" IsChecked="{Binding AutoDownloadAnalysed}"/>
+                    <!--Temporary folder-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_ -->
+                    <TextBlock Grid.Row="6" Margin="0,5,0,5" Text="{Binding Source={x:Static app:App.Lang}, Path=Main.TemporaryFolder}" VerticalAlignment="Center" HorizontalAlignment="Right"/>
+                    <Grid Grid.Row="6" Grid.Column="2">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+                        <controls:TextEditor IsReadOnly="True" Text="{Binding PathTEMP}" Margin="0" Multiline="False" VerticalAlignment="Center"/>
+                        <ToggleButton Grid.Column="1" Focusable="False" Margin="2,0,0,0" Checked="ToggleButton_Checked">
+                            <StackPanel Orientation="Horizontal" Margin="4,0,0,0">
+                                <controls:Icons Size="14" Kind="FolderSettings"/>
+                                <controls:Icons Kind="MenuDown" Size="16"/>
+                            </StackPanel>
+                        </ToggleButton>
+                    </Grid>
                 </Grid>
             </TabItem>
         </TabControl>

@@ -1,7 +1,5 @@
 ﻿using Libs;
 using Libs.Yaml;
-using Microsoft.VisualBasic;
-using Newtonsoft.Json;
 using Swordfish.NET.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -179,6 +177,7 @@ namespace yt_dlp_gui.Views {
             public double Left { get; set; } = 0;
             public double Width { get; set; } = 600;
             public double Height { get; set; } = 380;
+            public int Scale { get; set; } = 100;
             public bool ProxyEnabled { get; set; } = false;
             public string ProxyUrl { get; set; } = string.Empty;
             public bool CanCancel { get; set; } = false;
@@ -215,6 +214,7 @@ namespace yt_dlp_gui.Views {
             public string PathYTDLP { get; set; } = string.Empty;
             public string PathAria2 { get; set; } = string.Empty;
             public string PathFFMPEG { get; set; } = string.Empty;
+            public string PathTEMP { get; set; } = string.Empty;
             public bool NewVersion { get; set; } = false;
             public List<GitRelease> ReleaseData { get; set; } = new();
             public GUIConfig GUIConfig { get; set; } = new();
@@ -357,6 +357,8 @@ namespace yt_dlp_gui.Views {
             public double Left { get; set; } = 0;
             public double Width { get; set; } = 600;
             public double Height { get; set; } = 380;
+            [Description("Window - Scale")]
+            public int Scale { get; set; } = 100;
             [Description("Proxy")]
             public bool ProxyEnabled { get; set; } = false;
             public string ProxyUrl { get; set; } = string.Empty;
@@ -374,6 +376,7 @@ namespace yt_dlp_gui.Views {
             public string PathYTDLP { get; set; } = string.Empty;
             public string PathAria2 { get; set; } = string.Empty;
             public string PathFFMPEG { get; set; } = string.Empty;
+            public string PathTEMP { get; set; } = string.Empty;
             [Description("Last Checking Update Date")] public string LastVersion { get; set; } = string.Empty;
             public string LastCheckUpdate { get; set; } = string.Empty;
 

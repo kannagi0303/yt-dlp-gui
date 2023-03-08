@@ -58,6 +58,7 @@ namespace yt_dlp_gui.Models {
         public string RememberWindowState { get; set; } = "Remember Window State";
         public string RememberWindowPosition { get; set; } = "Position";
         public string RememberWindowSize { get; set; } = "Size";
+        public string Scale { get; set; } = "Scale";
         public string Proxy { get; set; } = "Proxy";
         public string ProxyEnabled { get; set; } = "Enabled";
         public string ProxyHelper { get; set; } = "socks5://user:pass@127.0.0.1:1080/";
@@ -73,6 +74,11 @@ namespace yt_dlp_gui.Models {
         public string Aria2Enabled { get; set; } = "Enabled";
         public string AutoDownload { get; set; } = "Automatically download";
         public string AutoDownloadAnalysed { get; set; } = "After analysed";
+        public string TemporaryFolder { get; set; } = "Temporary folder";
+        public string TemporaryTarget { get; set; } = "Target";
+        public string TemporaryLocale { get; set; } = "Locale";
+        public string TemporarySystem { get; set; } = "System";
+        public string TemporaryBrowse { get; set; } = "Browse...";
 
         //Label
         public string Live { get; set; } = "LIVE";

@@ -4045,12 +4045,12 @@
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type Window}">
-                    <Grid>
+                    <Grid x:Name="MainGrid">
                         <Border Background="{TemplateBinding Background}"
                                 BorderBrush="{TemplateBinding BorderBrush}"
                                 BorderThickness="{TemplateBinding BorderThickness}">
                             <Grid>
-                                <AdornerDecorator Margin="0,26,0,0">
+                                <AdornerDecorator Margin="0,26,0,0" x:Name="Adorner">
                                     <ContentPresenter />
                                 </AdornerDecorator>
                                 <Grid Height="26" x:Name="titlebar"

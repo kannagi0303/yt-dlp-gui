@@ -1,0 +1,106 @@
+﻿<ContextMenu x:Class="yt_dlp_gui.Controls.Menu"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:controls="clr-namespace:yt_dlp_gui.Controls"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800">
+    <ContextMenu.Style>
+        <Style TargetType="ContextMenu" BasedOn="{StaticResource {x:Type ContextMenu}}">
+            <Setter Property="ItemContainerStyle">
+                <Setter.Value>
+                    <Style TargetType="MenuItem" BasedOn="{StaticResource {x:Type MenuItem}}">
+                        <EventSetter Event="Click" Handler="MenuItem_Click"/>
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding Type}" Value="separator">
+                                <Setter Property="Template">
+                                    <Setter.Value>
+                                        <ControlTemplate>
+                                            <Separator/>
+                                        </ControlTemplate>
+                                    </Setter.Value>
+                                </Setter>
+                            </DataTrigger>
+                            <DataTrigger Binding="{Binding Type}" Value="title">
+                                <Setter Property="Template">
+                                    <Setter.Value>
+                                        <ControlTemplate>
+                                            <Border IsHitTestVisible="False" Background="#40000000" 
+                                                Padding="2">
+                                                <TextBlock FontWeight="Bold" FontSize="10" Margin="2,0"
+                                                       Text="{Binding Header}" HorizontalAlignment="Left"/>
+                                            </Border>
+                                        </ControlTemplate>
+                                    </Setter.Value>
+                                </Setter>
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </Setter.Value>
+            </Setter>
+            <Setter Property="ItemTemplate">
+                <Setter.Value>
+                    <HierarchicalDataTemplate ItemsSource="{Binding Items}">
+                        <Grid Margin="4,1">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto" SharedSizeGroup="MenuIcon"/>
+                                <ColumnDefinition Width="*" SharedSizeGroup="MenuHeader"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+                            <!--Icon-->
+                            <Decorator Width="16" Margin="0,0,4,0">
+                                <Decorator.Style>
+                                    <Style TargetType="Decorator">
+                                        <Style.Triggers>
+                                            <DataTrigger Binding="{Binding Icon}" Value="None">
+                                                <Setter Property="Visibility" Value="Collapsed"/>
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </Decorator.Style>
+                                <controls:Icons Kind="{Binding Icon}" Foreground="{Binding IconColor}" Size="14"/>
+                            </Decorator>
+                            <!--Text-->
+                            <ContentControl Grid.Column="1" x:Name="headercontent" Foreground="{Binding HeaderColor}" Content="{Binding Header}" VerticalAlignment="Center">
+                                <ContentControl.Style>
+                                    <Style TargetType="ContentControl">
+                                        <Setter Property="ContentTemplate" Value="{Binding HeaderTemplate}"/>
+                                        <Style.Triggers>
+                                            <DataTrigger Binding="{Binding HeaderTemplate}" Value="{x:Null}">
+                                                <Setter Property="ContentTemplate">
+                                                    <Setter.Value>
+                                                        <DataTemplate>
+                                                            <TextBlock Text="{Binding}" Foreground="{Binding Foreground, ElementName=headercontent}"/>
+                                                        </DataTemplate>
+                                                    </Setter.Value>
+                                                </Setter>
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </ContentControl.Style>
+                            </ContentControl>
+                            <!--
+                        <TextBlock Grid.Column="2" Text="{Binding Header}" Foreground="{Binding HeaderColor}"
+                                   VerticalAlignment="Center"/>
+                        -->
+                            <!--Right Arrow-->
+                            <controls:Icons Grid.Column="2" Kind="MenuRight" Size="16" Margin="4,0,0,0"
+                                                HorizontalAlignment="Right" VerticalAlignment="Center">
+                                <controls:Icons.Style>
+                                    <Style TargetType="controls:Icons">
+                                        <Style.Triggers>
+                                            <DataTrigger Binding="{Binding HasItems}" Value="False">
+                                                <Setter Property="Visibility" Value="Collapsed"/>
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </controls:Icons.Style>
+                            </controls:Icons>
+                        </Grid>
+                    </HierarchicalDataTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </ContextMenu.Style>
+</ContextMenu>

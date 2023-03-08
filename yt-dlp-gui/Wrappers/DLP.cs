@@ -59,6 +59,13 @@ namespace yt_dlp_gui.Wrappers {
             Options["-o"] = targetpath;
             return this;
         }
+        public DLP ExtractAudio(string format = "") {
+            Options["--extract-audio"] = "";
+            if (!string.IsNullOrWhiteSpace(format)) {
+                Options["--audio-format"] = format.Trim('.').ToLower();
+            }
+            return this;
+        }
         public DLP DownloadSections(string regex) {
             Options["--download-sections"] = "\"" + regex + "\"";
             return this;

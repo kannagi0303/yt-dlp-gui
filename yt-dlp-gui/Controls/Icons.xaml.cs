@@ -6,6 +6,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Media;
+using static yt_dlp_gui.App;
 
 namespace yt_dlp_gui.Controls {
     /// <summary>
@@ -145,6 +146,8 @@ namespace yt_dlp_gui.Controls {
 
         [Description("M7,10L12,15L17,10H7Z")]
         MenuDown,
+        [Description("M10,17L15,12L10,7V17Z")]
+        MenuRight,
 
         [Description("M13,9H11V7H13M13,17H11V11H13M12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12A10,10 0 0,0 12,2Z")]
         Information,
@@ -156,6 +159,9 @@ namespace yt_dlp_gui.Controls {
         Monitor,
 
         [Description("M20 18H4V8H20V18M12 6L10 4H4C2.9 4 2 4.89 2 6V18C2 19.11 2.9 20 4 20H20C21.11 20 22 19.11 22 18V8C22 6.9 21.11 6 20 6H12M11 14V12H15V9L19 13L15 17V14H11Z")]
-        FolderMoveOutline
+        FolderMoveOutline,
+
+        [Description("M4 4C2.89 4 2 4.89 2 6V18A2 2 0 0 0 4 20H20A2 2 0 0 0 22 18V8C22 6.89 21.1 6 20 6H12L10 4H4M7 22V24H9V22H7M11 22V24H13V22H11M15 22V24H17V22H15Z")]
+        FolderSettings
     }
 }
