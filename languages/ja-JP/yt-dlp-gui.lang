@@ -1,4 +1,4 @@
-﻿AppName: yt-dlp-gui
+AppName: yt-dlp-gui
 Main:
   # Basic
   Url: URL
@@ -8,7 +8,7 @@ Main:
   Thumbnail: サムネイル
   About: 情報...
   # Tab Formats
-  Formats: フォーマット
+  Formats: 形式
   Chapters: チャプター
   ChaptersNone: "[なし]"
   ChaptersAll: "[すべて]"
@@ -44,6 +44,7 @@ Main:
   RememberWindowState: ウィンドウの状態を記憶
   RememberWindowPosition: 位置
   RememberWindowSize: サイズ
+  Scale : 拡大表示
   Proxy: プロキシ
   ProxyEnabled: 有効
   ProxyHelper: "socks5://user:pass@127.0.0.1:1080/"
@@ -57,6 +58,12 @@ Main:
   ConfigurationNone: "[なし]"
   Aria2: Aria2
   Aria2Enabled: 有効
+  AutoDownload: 自動ダウンロード
+  AutoDownloadAnalysed: 分析後に
+  LimitRate: 速度制限
+  LimitRateHelper: 50K や 4.2M
+  TemporaryFolder: 一時フォルダー
+  TemporaryBrowse: 参照
   # Label
   Live: ライブ
   DownloadThumb: サムネイルをダウンロード
