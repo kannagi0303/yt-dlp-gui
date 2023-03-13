@@ -9,10 +9,17 @@ Main:
   About: 关于...
   # Tab Formats
   Formats: 格式
+  Chapters: 章节
+  ChaptersNone: "[无]"
+  ChaptersAll: "[全部章节]"
+  ChaptersSplite: "[根据章节分割]"
   Video: 视频
   Audio: 音频
   Subtitle: 字幕
+  SubtitleIgnore: "[忽略]"
+  SubtitleNone: "[无]"
   VideoRes: 视频分辨率
+  VideoDynamicRange: 视频色彩
   VideoFPS: 视频帧率
   VideoExt: 视频格式
   VideoCodec: 视频编码
@@ -37,6 +44,9 @@ Main:
   RememberWindowState: 记住窗口状态
   RememberWindowPosition: 记住窗口位置
   RememberWindowSize: 记住窗口大小
+  Proxy: 代理
+  ProxyEnabled: 启用代理
+  ProxyHelper: "socks5://user:pass@127.0.0.1:1080/"
   Cookie: Cookie
   CookieWhenNeeded: 仅在需要时
   CookieNever: 从不
@@ -47,6 +57,10 @@ Main:
   ConfigurationNone: "[不使用]"
   Aria2: Aria2
   Aria2Enabled: 启用
+  AutoDownload: 自动下载
+  AutoDownloadAnalysed: 在分析之后
+  LimitRate: 速度限制
+  LimitRateHelper: 50K or 4.2M
   # Label
   Live: 直播
   DownloadThumb: 下载缩略图
@@ -61,6 +75,10 @@ About:
   About: 关于
   Website: 网站
   Authors: 作者
+  # Extended information can be modified arbitrarily
+  Extends:
+    简中作者: カンナギ Kannagi
+    简中网址: https://github.com/Kannagi0303/yt-dlp-gui
 Releases:
   Releases: 发布
   Loading: 加载中...
