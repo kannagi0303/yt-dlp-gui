@@ -6,21 +6,26 @@ using Swordfish.NET.Collections.Auxiliary;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Globalization;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
+using System.Windows.Data;
 using System.Windows.Forms;
 using System.Windows.Media;
 using System.Windows.Shell;
+using Windows.ApplicationModel.Resources.Core;
 using WK.Libraries.SharpClipboardNS;
 using yt_dlp_gui.Controls;
 using yt_dlp_gui.Models;
 using yt_dlp_gui.Wrappers;
+
 
 namespace yt_dlp_gui.Views {
     public partial class Main :Window {
@@ -29,6 +34,7 @@ namespace yt_dlp_gui.Views {
         public Main() {
             InitializeComponent();
             DataContext = Data;
+            ToastNotificationManagerCompat.OnActivated += ToastNotificationManagerCompat_OnActivated;
 
             //Load Configs
             InitGUIConfig();
@@ -46,25 +52,42 @@ namespace yt_dlp_gui.Views {
                 Height = 380 * (Data.Scale / 100d);
             }
 
-            //Configuration Checking
+            //Configuration Checking (./configs/*.*)
             InitConfiguration();
 
-            //ScanDeps
+            //ScanDeps (YT-DLP, FFMPEG...)
             ScanDepends();
 
             //if `Target` Not exist, default app location
             if (!Directory.Exists(Data.TargetPath)) {
                 Data.TargetPath = App.AppPath;
             }
+            //Default Temp Dir
             if (string.IsNullOrWhiteSpace(Data.PathTEMP) || !Directory.Exists(GetTempPath)) {
                 Data.PathTEMP = "%YTDLPGUI_TARGET%";
             }
 
+            //Monitor Clipboard
             InitClipboard();
 
             //run update check
             Task.Run(Inits);
+
+            //Output Lang templet
+            //Yaml.Save(App.Path(App.Folders.root, "lang.yaml"), new Lang());
         }
+
+        private void ToastNotificationManagerCompat_OnActivated(ToastNotificationActivatedEventArgsCompat e) {
+            var args = ToastArguments.Parse(e.Argument);
+            if (args.Contains("action")) {
+                switch (args["action"]) {
+                    case "browse":
+                        if (File.Exists(args["file"])) _ = Util.Explorer(args["file"]);
+                        break;
+                }
+            }
+        }
+
         private void ChangeScale(int present) {
             var scaleRatio = present / 100d;
             var grid = Template.FindName("MainGrid", this) as Grid;
@@ -112,6 +135,7 @@ namespace yt_dlp_gui.Views {
         private string GetTempPath {
             get => GetEnvPath(Data.PathTEMP);
         }
+        //Regex For Clipboard
         private Regex _frgPat = new Regex("<!--StartFragment-->(.*)<!--EndFragment-->", RegexOptions.Multiline | RegexOptions.Compiled);
         private Regex _matchUrls = new Regex(@"(https?|ftp|file)\://[A-Za-z0-9\.\-]+(/[A-Za-z0-9\?\&\=;\+!'\(\)\*\-\._~%]*)*", RegexOptions.Compiled);
         public void InitClipboard() {
@@ -191,6 +215,7 @@ namespace yt_dlp_gui.Views {
                 DLP.Path_Aria2 = Data.PathAria2;
             }
             if (!string.IsNullOrWhiteSpace(Data.PathFFMPEG) && File.Exists(Data.PathFFMPEG)) {
+                DLP.Path_FFMPEG = Data.PathFFMPEG;
                 FFMPEG.Path_FFMPEG = Data.PathFFMPEG;
             }
             if (string.IsNullOrWhiteSpace(DLP.Path_DLP) ||
@@ -215,7 +240,7 @@ namespace yt_dlp_gui.Views {
                     Data.PathAria2 = DLP.Path_Aria2 = dep_aria2;
                 }
                 if (string.IsNullOrWhiteSpace(FFMPEG.Path_FFMPEG)) {
-                    Data.PathFFMPEG = FFMPEG.Path_FFMPEG = dep_ffmpeg;
+                    Data.PathFFMPEG = DLP.Path_FFMPEG = FFMPEG.Path_FFMPEG = dep_ffmpeg;
                 }
             }
         }
@@ -258,7 +283,10 @@ namespace yt_dlp_gui.Views {
                 Data.IsAnalyze = false;
 
                 if (Data.AutoDownloadAnalysed) {
-                    Download_Start();
+                    //Download_Start();
+                    if (Data.selectedVideo != null && Data.selectedAudio != null) {
+                        Download_Start_Native();
+                    }
                 }
             });
         }
@@ -266,7 +294,7 @@ namespace yt_dlp_gui.Views {
             //Analyze
             var dlp = new DLP(Data.Url);
             if (Data.NeedCookie) dlp.Cookie(Data.CookieType);
-            if (Data.ProxyEnabled && !string.IsNullOrWhiteSpace(Data.ProxyUrl)) dlp.Proxy(Data.ProxyUrl);
+            dlp.Proxy(Data.ProxyUrl, Data.ProxyEnabled);
             dlp.GetInfo();
             if (!string.IsNullOrWhiteSpace(Data.selectedConfig.file)) {
                 dlp.LoadConfig(Data.selectedConfig.file);
@@ -285,14 +313,16 @@ namespace yt_dlp_gui.Views {
                         Data.Chapters.Add(new Chapters() { title = App.Lang.Main.ChaptersAll, type = ChaptersType.None });
                         Data.Chapters.Add(new Chapters() { title = App.Lang.Main.ChaptersSplite, type = ChaptersType.Split });
                         Data.Chapters.AddRange(Data.Video.chapters);
+                        Data.hasChapter = true;
                     } else {
                         Data.Chapters.Add(new Chapters() { title = App.Lang.Main.ChaptersNone, type = ChaptersType.None });
+                        Data.hasChapter = false;
                     }
                     //Data.selectedChapter = Data.Chapters.First();
                 }
                 //读取 Formats 与 Thumbnails
                 {
-                    Debug.WriteLine(JsonConvert.SerializeObject(Data.Video.chapters, Formatting.Indented));
+                    //Debug.WriteLine(JsonConvert.SerializeObject(Data.Video.chapters, Formatting.Indented));
                     Data.Formats.LoadFromVideo(Data.Video.formats);
                     Data.Thumbnails.Reset(Data.Video.thumbnails);
                     Data.RequestedFormats.LoadFromVideo(Data.Video.requested_formats);
@@ -308,8 +338,10 @@ namespace yt_dlp_gui.Views {
                     Data.Subtitles.Clear();
                     if (subs.Any()) {
                         Data.Subtitles.Add(new Subs() { name = App.Lang.Main.SubtitleIgnore });
+                        Data.hasSubtitle = true;
                     } else {
                         Data.Subtitles.Add(new Subs() { name = App.Lang.Main.SubtitleNone });
+                        Data.hasSubtitle = false;
                     }
                     Data.Subtitles.AddRange(subs);
                 }
@@ -339,6 +371,7 @@ namespace yt_dlp_gui.Views {
                 }
                 //Data.TargetName = GetValidFileName(Data.Video.title) + ".tmp"; //预设挡案名称
                 Data.TargetName = full; //预设挡案名称
+
             });
             dlp.Err(DLP.DLPError.Sign, () => {
                 if (Data.UseCookie == UseCookie.WhenNeeded) {
@@ -346,8 +379,8 @@ namespace yt_dlp_gui.Views {
                     GetInfo();
                 } else if (Data.UseCookie == UseCookie.Ask) {
                     var mb = System.Windows.Forms.MessageBox.Show(
-                        "Cookies are required, Use it?\n",
-                        "yt-dlp-gui",
+                        $"{App.Lang.Dialog.CookieRequired}\n",
+                        $"{App.AppName}",
                         MessageBoxButtons.YesNo);
 
                     if (mb == System.Windows.Forms.DialogResult.Yes) {
@@ -363,10 +396,7 @@ namespace yt_dlp_gui.Views {
             Data.DNStatus_Audio = new();
             Data.VideoPersent = Data.AudioPersent = 0;
         }
-        private Regex regDLP = new Regex(@"^\[yt-dlp]");
-        private Regex regAria = new Regex(@"(?<=\[#\w{6}).*?(?<downloaded>[\w]+).*?\/(?<total>[\w]+).*?(?<persent>[\w.]+)%.*?CN:(?<cn>\d+).*DL:(?<speed>\w+)(.*?ETA:(?<eta>\w+))?");
-        private Regex regFF = new Regex(@"frame=.*?(?<frame>\d+).*?fps=.*?(?<fps>[\d.]+).*?size=.*?(?<size>\w+).*?time=(?<time>\S+).*?bitrate=(?<bitrate>\S+)");
-        private Regex regYTDL = new Regex(@"^\[download\].*?(?<persent>[\d\.]+).*?(?<=of).*?(?<total>\S+).*?(?<=at).*?(?<speed>\S+).*?(?<=ETA).*?(?<eta>\S+)");
+        /*
         private void GetStatus(string std, int chn = 0) {
             //Debug.WriteLine(std, "STATUS");
             if (regDLP.IsMatch(std)) {
@@ -436,13 +466,44 @@ namespace yt_dlp_gui.Views {
                 Data.DNStatus_Infos["Status"] = "Downloading";
             }
         }
-        private void Button_SaveVideo(object sender, RoutedEventArgs e) {
-            SaveStream(0);
+        */
 
+        private void Button_SaveVideo(object sender, RoutedEventArgs e) {
+            //SaveStream(0);
+            var dialog = new SaveFileDialog();
+            dialog.Filter =
+                $"{App.Lang.Files.mkv}|*.mkv|" +
+                $"{App.Lang.Files.mp4}|*.mp4|" +
+                $"{App.Lang.Files.webm}|*.webm|" +
+                $"{App.Lang.Files.mov}|*.mov|" +
+                $"{App.Lang.Files.flv}|*.flv";
+            dialog.DefaultExt = Data.selectedVideo.video_ext.ToLower();
+            dialog.FileName = Path.ChangeExtension(Path.GetFileName(Data.TargetFile), dialog.DefaultExt);
+            if (dialog.ShowDialog() == System.Windows.Forms.DialogResult.OK) {
+                var target = dialog.FileName;
+                Download_Start_Native(DownloadType.Video, target);
+            }
         }
         private void Button_SaveAudio(object sender, RoutedEventArgs e) {
-            SaveStream(1);
+            //SaveStream(1);
+            var dialog = new SaveFileDialog();
+            dialog.Filter =
+                $"{App.Lang.Files.opus}|*.opus|" +
+                $"{App.Lang.Files.aac}|*.aac|" +
+                $"{App.Lang.Files.m4a}|*.m4a|" +
+                $"{App.Lang.Files.mp3}|*.mp3|" +
+                $"{App.Lang.Files.vorbis}|*.vorbis|" +
+                $"{App.Lang.Files.alac}|*.alac|" +
+                $"{App.Lang.Files.flac}|*.flac|" +
+                $"{App.Lang.Files.wav}|*.wav";
+            dialog.DefaultExt = Data.selectedAudio.acodec.ToLower();
+            dialog.FileName = Path.ChangeExtension(Path.GetFileName(Data.TargetFile), dialog.DefaultExt);
+            if (dialog.ShowDialog() == System.Windows.Forms.DialogResult.OK) {
+                var target = dialog.FileName;
+                Download_Start_Native(DownloadType.Audio, target);
+            }
         }
+        /*
         private void SaveStream(int ch = 0) {
             var dialog = new SaveFileDialog();
             dialog.InitialDirectory = Path.GetDirectoryName(Data.TargetFile);
@@ -500,6 +561,7 @@ namespace yt_dlp_gui.Views {
                 });
             }
         }
+        */
         private void Button_ExplorerTarget(object sender, RoutedEventArgs e) {
             Util.Explorer(Data.TargetFile);
         }
@@ -512,8 +574,10 @@ namespace yt_dlp_gui.Views {
             }
         }
         private void Button_Download(object sender, RoutedEventArgs e) {
-            Download_Start();
+            //Download_Start();
+            Download_Start_Native();
         }
+        /*
         private void Download_Start() {
             Data.CanCancel = false;
             Data.IsAbouted = false;
@@ -681,7 +745,148 @@ namespace yt_dlp_gui.Views {
                 });
             }
         }
+        */
+        public enum DownloadType { Normal, Video, Audio, Thumbnail, Subtitle }
+        private async void Download_Start_Native(DownloadType type = DownloadType.Normal, string target = "") {
+            Data.CanCancel = false;
+            Data.IsAbouted = false;
+            if (Data.IsDownload) {
+                Data.IsAbouted = true;
+                foreach (var dlp in RunningDLP) {
+                    dlp.Close();
+                }
+            } else {
+                var overwrite = true;
+                RunningDLP.Clear();
+                //如果檔案已存在
+                if (File.Exists(Data.TargetFile) && type == DownloadType.Normal) {
+                    var mb = System.Windows.Forms.MessageBox.Show(
+                        $"{App.Lang.Dialog.FileExist}\n",
+                        $"{App.AppName}",
+                        MessageBoxButtons.YesNo);
+                    overwrite = mb == System.Windows.Forms.DialogResult.Yes;
+                    if (!overwrite) return; //不要复写
+                }
+                Data.IsDownload = true;
 
+                //進度更新為0
+                ClearStatus();
+                _ = Task.Run(() => {
+                    var dlp = new DLP(Data.Url);
+                    List<Task> tasks = new();
+                    tasks.Add(Task.Run(() => {
+                        //var dlp = new DLP(Data.Url);
+                        RunningDLP.Add(dlp);
+                        dlp.IsLive = Data.Video.is_live;
+                        var vid = type switch {
+                            DownloadType.Video => Data.selectedVideo.format_id,
+                            DownloadType.Audio => Data.selectedAudio.format_id,
+                            _ => $"{Data.selectedVideo.format_id}+{Data.selectedAudio.format_id}"
+                        };
+                        dlp
+                        .Temp(GetTempPath)
+                        .LoadConfig(Data.selectedConfig.file)
+                        .Cookie(Data.CookieType, Data.NeedCookie)
+                        .Proxy(Data.ProxyUrl, Data.ProxyEnabled)
+                        .UseAria2(Data.UseAria2)
+                        .LimitRate(Data.LimitRate)
+                        .DownloadSections(Data.TimeRange)
+                        .SplitChapters(Data.selectedChapter, Data.TargetFile);
+
+                        switch (type) {
+                            case DownloadType.Video:
+                                dlp
+                                .EmbedChapters(Data.EmbedChapters)
+                                .Thumbnail(Data.SaveThumbnail, Data.TargetFile, Data.EmbedThumbnail)
+                                .Subtitle(Data.selectedSub.key, Data.TargetFile, Data.EmbedSubtitles)
+                                .DownloadVideo(vid, Data.selectedVideo.video_ext, target);
+                                break;
+                            case DownloadType.Audio:
+                                dlp
+                                .EmbedChapters(Data.EmbedChapters)
+                                .Thumbnail(Data.SaveThumbnail, Data.TargetFile, Data.EmbedThumbnail)
+                                .DownloadAudio(vid, target);
+                                break;
+                            case DownloadType.Subtitle:
+                                dlp.DownloadSubtitle(Data.selectedSub.key, target);
+                                break;
+                            default:
+                                dlp
+                                .EmbedChapters(Data.EmbedChapters)
+                                .Thumbnail(Data.SaveThumbnail, Data.TargetFile, Data.EmbedThumbnail)
+                                .Subtitle(Data.selectedSub.key, Data.TargetFile, Data.EmbedSubtitles)
+                                .DownloadFormat(vid, Data.TargetFile);
+                                break;
+                        }
+                        var repoter = new StatusRepoter(Data);
+                        repoter.type = type switch {
+                            DownloadType.Video => 1,
+                            DownloadType.Audio => 2,
+                            _ => 0
+                        };
+                        dlp.Exec(std => {
+                            repoter.GetStatus(std);
+                        });
+                    }));
+                    //WaitAll Downloads, Merger Video and Audio
+                    Data.CanCancel = true;
+                    Task.WaitAll(tasks.ToArray());
+                    if (!Data.IsAbouted) {
+                        Data.DNStatus_Infos["Status"] = App.Lang.Status.Done;
+
+                        //post-process
+                        Dictionary<string, string> files = new Dictionary<string, string>();
+                        foreach (string donepath in dlp.Files) {
+                            if (File.Exists(donepath)) {
+                                if (donepath.isVideo()) files["video"] = donepath;
+                                if (donepath.isImage()) files["thumb"] = donepath;
+                                if (Data.ModifiedType == ModifiedType.Upload) {
+                                    if (DateTimeOffset.TryParseExact(Data.Video.upload_date, "yyyyMMdd", CultureInfo.InvariantCulture, DateTimeStyles.None, out DateTimeOffset tryDate)) {
+                                        File.SetLastWriteTimeUtc(donepath, tryDate.DateTime);
+                                    }
+                                }
+                            }
+                        }
+
+                        //Send notification when download completed
+                        try {
+                            if (Data.UseNotifications) {
+                                Util.NotifySound(Data.PathNotify);
+                                var toast = new ToastContentBuilder()
+                                    .AddText(Data.Video.title)
+                                    .AddText(App.Lang.Dialog.DownloadCompleted)
+                                    .AddAudio(new ToastAudio() {
+                                        Silent = true,
+                                        Loop = false,
+                                        Src = new Uri("ms-winsoundevent:Notification.Default")
+                                    });
+                                if (files.ContainsKey("video")) {
+                                    toast.AddButton(
+                                        new ToastButton()
+                                        .SetContent(App.Lang.Dialog.OpenFolder)
+                                        .AddArgument("action", "browse")
+                                        .AddArgument("file", files["video"])
+                                        .SetBackgroundActivation()
+                                    );
+                                }
+                                if (files.ContainsKey("thumb")) {
+                                    toast.AddAppLogoOverride(new Uri(files["thumb"]));
+                                }
+                                toast.AddButton(
+                                    new ToastButton()
+                                    .SetContent(App.Lang.Dialog.Close)
+                                    .AddArgument("action", "none")
+                                    .SetBackgroundActivation()
+                                );
+                                toast.Show();
+                            }
+                        } catch (Exception ex) { }
+                    }
+                    //Clear downloading status
+                    Data.IsDownload = false;
+                });
+            }
+        }
 
         private void Button_Browser(object sender, RoutedEventArgs e) {
             if (string.IsNullOrWhiteSpace(Data.TargetName)) {
@@ -695,12 +900,17 @@ namespace yt_dlp_gui.Views {
                 dialog.InitialDirectory = Path.GetDirectoryName(Data.TargetFile);
                 dialog.FileName = Path.GetFileName(Data.TargetFile);
                 if (dialog.ShowDialog() == System.Windows.Forms.DialogResult.OK) {
+                    Data.RemuxVideo = true;
                     Data.TargetPath = Path.GetDirectoryName(dialog.FileName);
+                    Data.TargetName = Path.GetFileName(dialog.FileName);
+                    Data.RemuxVideo = false;
+                    /*
                     if ((new string[] { ".mp4", ".webm", ".3gp", ".mkv" }).Any(x => Path.GetExtension(dialog.FileName).ToLower() == x)) {
                         Data.TargetName = Path.GetFileName(dialog.FileName);
                     } else {
                         Data.TargetName = Path.GetFileName(dialog.FileName) + ".tmp";
                     }
+                    */
                 }
             }
         }
@@ -716,7 +926,7 @@ namespace yt_dlp_gui.Views {
             var OrigExt = Path.GetExtension(Data.Thumbnail);
             var OrigFileName = Path.ChangeExtension(Path.GetFileName(Data.TargetFile), OrigExt);
             dialog.DefaultExt = ".jpg";
-            dialog.Filter = "Image File|*.jpg;*.webp";
+            dialog.Filter = $"{App.Lang.Files.image}|*.jpg;*.webp";
             dialog.FileName = Path.ChangeExtension(OrigFileName, ".jpg");
             if (dialog.ShowDialog() == System.Windows.Forms.DialogResult.OK) {
                 DownloadThumbnail(dialog.FileName);
@@ -745,12 +955,27 @@ namespace yt_dlp_gui.Views {
         private void Button_Subtitle(object sender, RoutedEventArgs e) {
             var dialog = new SaveFileDialog();
             dialog.InitialDirectory = Path.GetDirectoryName(Data.TargetFile);
+            //dialog.Filter = "SubRip | *.srt";
+            //dialog.DefaultExt = Data.selectedSub.key + ".srt";
             dialog.DefaultExt = ".srt";
-            dialog.Filter = "SubRip | *.srt";
-            dialog.FileName = Path.ChangeExtension(Path.GetFileName(Data.TargetFile), Data.selectedSub.key + ".srt");
+            dialog.Filter =
+                $"{App.Lang.Files.srt}|*.srt|" +
+                $"{App.Lang.Files.ass}|*.ass|" +
+                $"{App.Lang.Files.vtt}|*.vtt|" +
+                $"{App.Lang.Files.lrc}|*.lrc|" +
+                $"{App.Lang.Files.ttml}|*.ttml|" +
+                $"{App.Lang.Files.srv3}|*.srv3|" +
+                $"{App.Lang.Files.srv2}|*.srv2|" +
+                $"{App.Lang.Files.srv1}|*.srv1|" +
+                $"{App.Lang.Files.json3}|*.json3";
+            //dialog.FileName = Path.ChangeExtension(Path.GetFileName(Data.TargetFile), Data.selectedSub.key + ".srt");
+            dialog.FileName = Path.ChangeExtension(Data.TargetFile, null);
             if (dialog.ShowDialog() == System.Windows.Forms.DialogResult.OK) {
-                var target = Path.ChangeExtension(dialog.FileName, ".srt");
-                FFMPEG.DownloadUrl(Data.selectedSub.url, target);
+                var target = dialog.FileName;
+                Debug.WriteLine(dialog.FileName, "DIALOG");
+                //var target = Path.ChangeExtension(dialog.FileName, ".srt");
+                //FFMPEG.DownloadUrl(Data.selectedSub.url, target);
+                Download_Start_Native(DownloadType.Subtitle, target);
             }
         }
 
@@ -772,10 +997,6 @@ namespace yt_dlp_gui.Views {
             Data.Width = Width;
             Data.Height = Height;
         }
-
-        private void slider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e) {
-            ChangeScale(Data.Scale);
-        }
         private void ComboBox_TextChanged(object sender, TextChangedEventArgs e) {
             var combo = sender as System.Windows.Controls.ComboBox;
             if (combo.SelectedIndex == -1) {
@@ -791,7 +1012,7 @@ namespace yt_dlp_gui.Views {
                 var menu = new List<MenuDataItem>() {
                     (App.Lang.Main.TemporaryTarget, () => { Data.PathTEMP = "%YTDLPGUI_TARGET%"; }),
                     (App.Lang.Main.TemporaryLocale, () => { Data.PathTEMP = "%YTDLPGUI_LOCALE%"; }),
-                    (App.Lang.Main.TemporaryTarget, () => { Data.PathTEMP = "%TEMP%"; }),
+                    (App.Lang.Main.TemporarySystem, () => { Data.PathTEMP = "%TEMP%"; }),
                     ("-"),
                     (App.Lang.Main.TemporaryBrowse, () => {
                         var dialog = new FolderBrowserDialog();
@@ -803,6 +1024,68 @@ namespace yt_dlp_gui.Views {
                 };
                 Controls.Menu.Open(menu, b, MenuPlacement.BottomLeft);
             }
+        }
+
+        private void ToggleButton_Checked_Sound(object sender, RoutedEventArgs e) {
+            var b = sender as ToggleButton;
+            if (b.IsChecked == true) {
+                var menu = new List<MenuDataItem>() {
+                    (App.Lang.Main.SoundSystem, () => { Data.PathNotify = ""; }),
+                    ("-"),
+                    (App.Lang.Main.SoundBrowse, () => {
+                        var dialog = new OpenFileDialog();
+                        var dirname = Path.GetDirectoryName(Data.PathNotify);
+                        Debug.WriteLine(dirname);
+                        if (Directory.Exists(dirname)) {
+                            dialog.InitialDirectory = dirname;
+                            if (File.Exists(Data.PathNotify)) {
+                                dialog.FileName = Path.GetFileName(Data.PathNotify);
+                            }
+                        } else {
+                            dialog.InitialDirectory = App.AppPath;
+                        }
+                        if (dialog.ShowDialog() == System.Windows.Forms.DialogResult.OK) {
+                            Data.PathNotify = dialog.FileName;
+                        }
+                    })
+                };
+                Controls.Menu.Open(menu, b, MenuPlacement.BottomLeft);
+            }
+        }
+
+        private void Button_PlayNotify(object sender, RoutedEventArgs e) {
+            Util.NotifySound(Data.PathNotify);
+        }
+
+        private void TextBoxNumber_Changed(object sender, EventArgs e) {
+            if (Data.Scale == 0) {
+                Data.Scale = 100;
+            } else {
+                ChangeScale(Data.Scale);
+            }
+        }
+    }
+    public class LanguageConverter :IValueConverter {
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture) {
+            // 檢查輸入值是否為字串
+            if (!(value is string key))
+                return value;
+
+            // 利用反射機制查詢 Lang 物件是否包含指定的 key 屬性
+            var Lang = App.Lang.Status;
+            var propertyInfo = Lang.GetType().GetProperty(key, BindingFlags.IgnoreCase | BindingFlags.Public | BindingFlags.Instance);
+
+            // 如果 Lang 物件不包含指定的 key 屬性，則返回空字串
+            if (propertyInfo == null)
+                return key;
+
+            // 如果 Lang 物件包含指定的 key 屬性，則返回相應的值
+            return propertyInfo.GetValue(Lang)?.ToString() ?? key;
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture) {
+            // ConvertBack 未實作，因為此轉換器僅用於單向綁定
+            throw new NotImplementedException();
         }
     }
 }

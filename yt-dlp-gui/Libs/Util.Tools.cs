@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Media;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -82,6 +83,14 @@ namespace Libs {
                 return group;
             }
             return new Dictionary<string, string>();
+        }
+        public static void NotifySound(string path = "") {
+            if (string.IsNullOrWhiteSpace(path) || !File.Exists(path)) {
+                path = Microsoft.Win32.Registry.CurrentUser.OpenSubKey(@"AppEvents\Schemes\Apps\.Default\Notification.Default\.Current")?.GetValue("")?.ToString() ?? "";
+            }
+            if (!string.IsNullOrWhiteSpace(path)) {
+                new SoundPlayer(path).Play();
+            }
         }
     }
 }

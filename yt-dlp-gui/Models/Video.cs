@@ -17,5 +17,9 @@ namespace yt_dlp_gui.Models {
         public string _filename { get; set; } = string.Empty;
         public bool is_live { get; set; } = false;
         public List<Chapters>? chapters { get; set; } = null;
+        public string upload_date { get; set; } = string.Empty;
+    }
+    public enum ModifiedType {
+        Modified, Upload
     }
 }

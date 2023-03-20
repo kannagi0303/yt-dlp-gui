@@ -1,7 +1,9 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
+using System.Runtime.Serialization;
 using YamlDotNet.Core;
 using YamlDotNet.Core.Events;
 using YamlDotNet.Serialization;
@@ -60,6 +62,7 @@ namespace Libs.Yaml {
             }
 
             public IObjectDescriptor Read(object target) {
+                
                 var description = baseDescriptor.GetCustomAttribute<DescriptionAttribute>();
                 return description != null
                     ? new CommentsObjectDescriptor(baseDescriptor.Read(target), description.Description)
@@ -106,6 +109,18 @@ namespace Libs.Yaml {
                 if (string.IsNullOrWhiteSpace(value.Value.ToString())) return false;
             }
             return base.EnterMapping(key, value, context);
+        }
+    }
+    //=================
+    public class SortedTypeInspector :TypeInspectorSkeleton {
+        private readonly ITypeInspector _innerTypeInspector;
+
+        public SortedTypeInspector(ITypeInspector innerTypeInspector) {
+            _innerTypeInspector = innerTypeInspector;
+        }
+
+        public override IEnumerable<IPropertyDescriptor> GetProperties(Type type, object container) {
+            return _innerTypeInspector.GetProperties(type, container).OrderBy(x => x.Name);
         }
     }
 }

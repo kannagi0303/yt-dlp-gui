@@ -27,9 +27,9 @@
                                     <Setter.Value>
                                         <ControlTemplate>
                                             <Border IsHitTestVisible="False" Background="#40000000" 
-                                                Padding="2">
+                                                    Padding="2">
                                                 <TextBlock FontWeight="Bold" FontSize="10" Margin="2,0"
-                                                       Text="{Binding Header}" HorizontalAlignment="Left"/>
+                                                           Text="{Binding Header}" HorizontalAlignment="Left"/>
                                             </Border>
                                         </ControlTemplate>
                                     </Setter.Value>
@@ -49,7 +49,7 @@
                                 <ColumnDefinition Width="Auto"/>
                             </Grid.ColumnDefinitions>
                             <!--Icon-->
-                            <Decorator Width="16" Margin="0,0,4,0">
+                            <Decorator Grid.Column="0" Width="16" Margin="0,0,4,0">
                                 <Decorator.Style>
                                     <Style TargetType="Decorator">
                                         <Style.Triggers>
@@ -80,11 +80,6 @@
                                     </Style>
                                 </ContentControl.Style>
                             </ContentControl>
-                            <!--
-                        <TextBlock Grid.Column="2" Text="{Binding Header}" Foreground="{Binding HeaderColor}"
-                                   VerticalAlignment="Center"/>
-                        -->
-                            <!--Right Arrow-->
                             <controls:Icons Grid.Column="2" Kind="MenuRight" Size="16" Margin="4,0,0,0"
                                                 HorizontalAlignment="Right" VerticalAlignment="Center">
                                 <controls:Icons.Style>

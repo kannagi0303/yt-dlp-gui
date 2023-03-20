@@ -1,85 +1,170 @@
-﻿AppName: yt-dlp-gui (繁體中文)
+﻿# Name
+AppName: yt-dlp-gui (繁體中文)
+# Window - Main
 Main:
-  # Basic
+  # Top Menu
+  About: 關於...
+  # Tabs Label
+  Main: 主要
+  Advance: 進階
+  Options: 選項
+  # Main Tab
   Url: 網址
   Title: 標題
   Desc: 註解
-  SaveAs: 另存為...
-  Thumbnail: 縮圖
-  About: 關於...
-  # Tab Formats
-  Formats: 格式
-  Chapters: 章節
-  ChaptersNone: "[無]"
-  ChaptersAll: "[所有]"
-  ChaptersSplite: "[按照章節分割]"
-  Video: 視頻
-  Audio: 音頻
-  Subtitle: 字幕
-  SubtitleIgnore: "[不使用]"
-  SubtitleNone: "[無]"
-  VideoRes: 解析度
-  VideoDynamicRange: 色彩
-  VideoFPS: 幀率
-  VideoExt: 格式
-  VideoCodec: 編碼
-  VideoSize: 容量
-  AudioSampleRate: 採樣
-  AudioExt: 格式
-  AudioCodec: 編碼
-  AudioSize: 容量
-  # Tab Advance
-  Advance: 進階
-  EmbedSubs: 內嵌字幕
-  EmbedSubsEnabled: 啟用
-  TimeRange: 範圍
-  TimeRangeHits: --download-sections
-  TimeRangeHelper: "*10:15-15:00"
-  # Tab Options
-  Options: 選項
-  Notifications: 通知
-  NotificationsEnabled: 啟用
-  AlwaysOnTop: 保持在最上層
-  AlwaysOnTopEnabled: 啟用
-  RememberWindowState: 記憶視窗
-  RememberWindowPosition: 位置
-  RememberWindowSize: 尺寸
-  Proxy: 代理
-  ProxyEnabled: 啟用
-  ProxyHelper: "socks5://user:pass@127.0.0.1:1080/"
-  Cookie: Cookie
-  CookieWhenNeeded: 當需要時
-  CookieNever: 不使用
-  CookieAlways: 總是使用
-  CookieAsk: 詢問
-  CookieUse: 使用
-  Configuration: 設置檔
-  ConfigurationNone: "[不使用]"
-  Aria2: Aria2
-  Aria2Enabled: 啟用
-  AutoDownload: 自動下載
-  AutoDownloadAnalysed: 在分析之後
-  LimitRate: 速度限制
-  LimitRateHelper: 50K or 4.2M
-  # Label
-  Live: 直播
+  Live: 即時
   DownloadThumb: 下載縮圖
-  # button
+  # Main Tab - Buttons
   Analyze: 分析
   Browse: 瀏覽
   Download: 下載
   Record: 錄製
   Cancel: 取消
   Stop: 停止
+  # Main Tab - Thumbnail
+  SaveAs: 另存為...
+  Thumbnail: 縮圖
+  # Main Tab - Chapters
+  Chapters: 章節
+  ChaptersNone: '[無]'
+  ChaptersAll: '[所有]'
+  ChaptersSplite: '[按照章節分割]'
+  # Main Tab - Video
+  Video: 視頻
+  VideoRes: 解析度
+  VideoDynamicRange: 色彩
+  VideoFPS: 幀率
+  VideoExt: 格式
+  VideoCodec: 編碼
+  VideoSize: 容量
+  # Main Tab - Audio
+  Audio: 音頻
+  AudioSampleRate: 採樣
+  AudioExt: 格式
+  AudioCodec: 編碼
+  AudioSize: 容量
+  # Main Tab - Subtitle
+  Subtitle: 字幕
+  SubtitleIgnore: '[不使用]'
+  SubtitleNone: '[無]'
+  # Advance Tab - Configuration
+  Configuration: 設置檔
+  ConfigurationNone: '[不使用]'
+  # Advance Tab - Proxy
+  Proxy: 代理
+  ProxyEnabled: 啟用
+  ProxyHelper: socks5://user:pass@127.0.0.1:1080/
+  # Advance Tab - Cookie
+  Cookie: Cookie
+  CookieWhenNeeded: 當需要時
+  CookieNever: 不使用
+  CookieAlways: 總是使用
+  CookieAsk: 詢問
+  CookieUse: 使用
+  # Advance Tab - Aria2
+  Aria2: Aria2
+  Aria2Enabled: 啟用
+  # Advance Tab - Embeds
+  Embeds: 內嵌
+  EmbedsThumbnail: 縮圖
+  EmbedsChapters: 章節
+  EmbedsSubtitles: 字幕
+  # Advance Tab - Time Range
+  TimeRange: 時間範圍
+  TimeRangeHits: --download-sections
+  TimeRangeHelper: '*10:15-15:00'
+  # Advance Tab - Limit Rate
+  LimitRate: 速度限制
+  LimitRateHelper: 50K 或 4.2M
+  # Advance Tab - Mdified
+  Modified: 修改時間
+  ModifiedModified: 使用修改時間(預設)
+  ModifiedUpload: 使用上傳時間
+  # Options Tab - Notifications
+  Notifications: 通知
+  NotificationsEnabled: 啟用
+  NotificationsSound: 通知聲音
+  SoundDefault: 系統預設
+  SoundSystem: 系統
+  SoundBrowse: 瀏覽...
+  # Options Tab - Always On Top
+  AlwaysOnTop: 保持在最上層
+  AlwaysOnTopEnabled: 啟用
+  # Options Tab - Remember Window State
+  RememberWindowState: 記憶視窗
+  RememberWindowPosition: 位置
+  RememberWindowSize: 尺寸
+  Scale: 縮放
+  # Options Tab - Automatically download
+  AutoDownload: 自動下載
+  AutoDownloadAnalysed: 在分析之後
+  # Options Tab - Temporary folder
+  TemporaryFolder: 暫存位置
+  TemporaryTarget: 目的地
+  TemporaryLocale: 本地
+  TemporarySystem: 系統
+  TemporaryBrowse: 瀏覽...
+# Window - About
 About:
   About: 關於
   Website: 網站
   Authors: 作者
-  # Extended information can be modified arbitrarily
+  # Extended information can be freely modified and there is no limit to the number of lines.
+  # Extends :
+  #   label1: content
+  #   label2: url
   Extends:
     繁中作者: カンナギ Kannagi
     繁中網址: https://github.com/Kannagi0303/yt-dlp-gui
+# Window - Release
 Releases:
   Releases: 發行版本
   Loading: 讀取中...
   NoUpdated: 目前沒有更新版本
+# Dialog, Popups
+Dialog:
+  CookieRequired: 需要 Cookies 是否使用?
+  FileExist: 檔案已存在是否覆蓋t?
+  DownloadCompleted: 下載完成!
+  OpenFolder: 開啟資料夾
+  Close: 關閉
+# File Types
+Files:
+  image: 圖片類型
+  mkv: Matroska Multimedia Container
+  mp4: MPEG-4 Part 14
+  webm: WebM Container Format
+  mov: QuickTime Movie
+  flv: Flash Video
+  opus: Opus Interactive Audio Codec
+  aac: Advanced Audio Coding
+  m4a: MPEG-4 Audio Layer
+  mp3: MPEG-1 Audio Layer III
+  vorbis: Vorbis Audio Codec
+  alac: Apple Lossless Audio Codec
+  flac: Free Lossless Audio Codec
+  wav: Waveform Audio File Format
+  srt: SubRip Subtitle Format
+  ass: Advanced SubStation Alpha
+  vtt: WebVTT (Web Video Text Tracks)
+  lrc: Lyric File Format
+  ttml: Timed Text Markup Language
+  srv3: SRV3 Format
+  srv2: SRV2 Format
+  srv1: SRV1 Format
+  json3: JSON3 Format
+# Status Area Infomation
+Status:
+  Downloader: 下載器
+  Total: 總計
+  Speed: 速度
+  Elapsed: 預計
+  Connections: 連線
+  Frame: 幀數
+  FPS: 幀率
+  Time: 時間
+  Status: 狀態
+  Native: 原生
+  Downloading: 下載中
+  Downloaded: 已下載
+  Done: 完成

@@ -1,85 +1,168 @@
-﻿AppName: yt-dlp-gui
+﻿# Name
+AppName: yt-dlp-gui
+# Window - Main
 Main:
-  # Basic
+  # Top Menu
+  About: About...
+  # Tabs Label
+  Main: Main
+  Advance: Advance
+  Options: Options
+  # Main Tab
   Url: Url
   Title: Title
   Desc: Description
-  SaveAs: Save As...
-  Thumbnail: Thumbnail
-  About: About...
-  # Tab Formats
-  Formats: Formats
-  Chapters: Chapters
-  ChaptersNone: "[None]"
-  ChaptersAll: "[All]"
-  ChaptersSplite: "[Split by Chapters]"
-  Video: Video
-  Audio: Audio
-  Subtitle: Subtitle
-  SubtitleIgnore: "[Ignore]"
-  SubtitleNone: "[None]"
-  VideoRes: Resolution
-  VideoDynamicRange: DR
-  VideoFPS: FPS
-  VideoExt: Ext.
-  VideoCodec: Codec
-  VideoSize: FileSize
-  AudioSampleRate: ASR
-  AudioExt: Ext.
-  AudioCodec: Codec
-  AudioSize: FileSize
-  # Tab Advance
-  Advance: Advance
-  EmbedSubs: Embed Subtitles
-  EmbedSubsEnabled: Enabled
-  TimeRange: Time Range
-  TimeRangeHits: --download-sections
-  TimeRangeHelper: "*10:15-15:00"
-  # Tab Options
-  Options: Options
-  Notifications: Notifications
-  NotificationsEnabled: Enabled
-  AlwaysOnTop: Always On Top
-  AlwaysOnTopEnabled: Enabled
-  RememberWindowState: Remember Window State
-  RememberWindowPosition: Position
-  RememberWindowSize: Size
-  Proxy: Proxy
-  ProxyEnabled: Enabled
-  ProxyHelper: "socks5://user:pass@127.0.0.1:1080/"
-  Cookie: Cookie
-  CookieWhenNeeded: When Needed
-  CookieNever: Never
-  CookieAlways: Always
-  CookieAsk: Ask
-  CookieUse: Use
-  Configuration: Configuration
-  ConfigurationNone: "[None]"
-  Aria2: Aria2
-  Aria2Enabled: Enabled
-  AutoDownload: Automatically download
-  AutoDownloadAnalysed: After analysed
-  LimitRate: Limit Rate
-  LimitRateHelper: 50K or 4.2M
-  # Label
   Live: LIVE
   DownloadThumb: Download Thumbnail
-  # button
+  # Main Tab - Buttons
   Analyze: Analyze
   Browse: Browse
   Download: Download
   Record: Record
   Cancel: Cancel
   Stop: Stop
+  # Main Tab - Thumbnail
+  SaveAs: Save As...
+  Thumbnail: Thumbnail
+  # Main Tab - Chapters
+  Chapters: Chapters
+  ChaptersNone: '[None]'
+  ChaptersAll: '[All]'
+  ChaptersSplite: '[Split by Chapters]'
+  # Main Tab - Video
+  Video: Video
+  VideoRes: Resolution
+  VideoDynamicRange: DR
+  VideoFPS: FPS
+  VideoExt: Ext.
+  VideoCodec: Codec
+  VideoSize: FileSize
+  # Main Tab - Audio
+  Audio: Audio
+  AudioSampleRate: ASR
+  AudioExt: Ext.
+  AudioCodec: Codec
+  AudioSize: FileSize
+  # Main Tab - Subtitle
+  Subtitle: Subtitle
+  SubtitleIgnore: '[Ignore]'
+  SubtitleNone: '[None]'
+  # Advance Tab - Configuration
+  Configuration: Configuration
+  ConfigurationNone: '[None]'
+  # Advance Tab - Proxy
+  Proxy: Proxy
+  ProxyEnabled: Enabled
+  ProxyHelper: socks5://user:pass@127.0.0.1:1080/
+  # Advance Tab - Cookie
+  Cookie: Cookie
+  CookieWhenNeeded: When Needed
+  CookieNever: Never
+  CookieAlways: Always
+  CookieAsk: Ask
+  CookieUse: Use
+  # Advance Tab - Aria2
+  Aria2: Aria2
+  Aria2Enabled: Enabled
+  # Advance Tab - Embeds
+  Embeds: Embeds
+  EmbedsThumbnail: Thumbnail
+  EmbedsChapters: Chapters
+  EmbedsSubtitles: Subtitles
+  # Advance Tab - Time Range
+  TimeRange: Time Range
+  TimeRangeHits: --download-sections
+  TimeRangeHelper: '*10:15-15:00'
+  # Advance Tab - Limit Rate
+  LimitRate: Limit Rate
+  LimitRateHelper: 50K or 4.2M
+  # Advance Tab - Mdified
+  Modified: Modified
+  ModifiedModified: Modified Date
+  ModifiedUpload: Upload Date
+  # Options Tab - Notifications
+  Notifications: Notifications
+  NotificationsEnabled: Enabled
+  NotificationsSound: Notifications Sound
+  SoundDefault: Default
+  SoundSystem: System
+  SoundBrowse: Browse...
+  # Options Tab - Always On Top
+  AlwaysOnTop: Always On Top
+  AlwaysOnTopEnabled: Enabled
+  # Options Tab - Remember Window State
+  RememberWindowState: Remember Window State
+  RememberWindowPosition: Position
+  RememberWindowSize: Size
+  Scale: Scale
+  # Options Tab - Automatically download
+  AutoDownload: Automatically download
+  AutoDownloadAnalysed: After analysed
+  # Options Tab - Temporary folder
+  TemporaryFolder: Temporary folder
+  TemporaryTarget: Target
+  TemporaryLocale: Locale
+  TemporarySystem: System
+  TemporaryBrowse: Browse...
+# Window - About
 About:
   About: About
   Website: Website
   Authors: Authors
-  # Extended information can be modified arbitrarily
-  Extends:
-    Localization Author: カンナギ Kannagi
-    Localization Website: https://github.com/Kannagi0303/yt-dlp-gui
+  # Extended information can be freely modified and there is no limit to the number of lines.
+  # Extends :
+  #   label1: content
+  #   label2: url
+  Extends: {}
+# Window - Release
 Releases:
   Releases: Releases
   Loading: Loading...
   NoUpdated: There is currently no updated version.
+# Dialog, Popups
+Dialog:
+  CookieRequired: Cookies are required, Use it?
+  FileExist: File Already exist. Overwrite it?
+  DownloadCompleted: Video Download Completed!
+  OpenFolder: Open Folder
+  Close: Close
+# File Types
+Files:
+  image: Image File
+  mkv: Matroska Multimedia Container
+  mp4: MPEG-4 Part 14
+  webm: WebM Container Format
+  mov: QuickTime Movie
+  flv: Flash Video
+  opus: Opus Interactive Audio Codec
+  aac: Advanced Audio Coding
+  m4a: MPEG-4 Audio Layer
+  mp3: MPEG-1 Audio Layer III
+  vorbis: Vorbis Audio Codec
+  alac: Apple Lossless Audio Codec
+  flac: Free Lossless Audio Codec
+  wav: Waveform Audio File Format
+  srt: SubRip Subtitle Format
+  ass: Advanced SubStation Alpha
+  vtt: WebVTT (Web Video Text Tracks)
+  lrc: Lyric File Format
+  ttml: Timed Text Markup Language
+  srv3: SRV3 Format
+  srv2: SRV2 Format
+  srv1: SRV1 Format
+  json3: JSON3 Format
+# Status Area Infomation
+Status:
+  Downloader: Downloader
+  Total: Total
+  Speed: Speed
+  Elapsed: Elapsed
+  Connections: Connections
+  Frame: Frame
+  FPS: FPS
+  Time: Time
+  Status: Status
+  Native: Native
+  Downloading: Downloading
+  Downloaded: Downloaded
+  Done: Done
