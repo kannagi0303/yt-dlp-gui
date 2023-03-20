@@ -8,14 +8,6 @@ Please refer to the [wiki](https://github.com/kannagi0303/yt-dlp-gui/wiki) for u
 * Front-end of [yt-dlp](https://github.com/yt-dlp/yt-dlp) (and Compatible Applications)
 * Windows Only (7 or above)
 
-> ## To all long-term users:
->
-> From the past to present, I have been using yt-dlp by splitting it up and using two threads to simultaneously download videos and audio, and then skipping yt-dlp to call ffmpeg to merge the files at the end of the process.
-> 
-> As the requirements become more diverse and for future expandability, I plan to remove the above method and switch to a more native approach. In the future, you will see progress bars that do not start simultaneously but rather one after the other. Overall, there should not be much difference in speed.
-> 
-> If you have any thoughts or opinions, please let me know. Thank you for your long-term support.
-
 ### Screenshots
 <img src="screenshot01.png" width="640"/>
 
