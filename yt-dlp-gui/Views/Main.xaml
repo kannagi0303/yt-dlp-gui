@@ -33,7 +33,6 @@
                     </Button.Style>
                     <controls:Icons Size="18" Kind="NewBox"/>
                 </Button>
-
                 <Menu WindowChrome.IsHitTestVisibleInChrome="True">
                     <Menu.ItemsPanel>
                         <ItemsPanelTemplate>
@@ -731,10 +730,10 @@
                 </StackPanel>
                 <!--Scale-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_ -->
                 <TextBlock Grid.Row="4" Text="{Binding Source={x:Static app:App.Lang}, Path=Main.Scale}" HorizontalAlignment="Right" VerticalAlignment="Center"/>
-                <Grid Grid.Row="4" Grid.Column="2" HorizontalAlignment="Left">
+                <Grid Grid.Row="4" Grid.Column="2" >
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition/>
-                        <ColumnDefinition Width="36"/>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="Auto"/>
                     </Grid.ColumnDefinitions>
                     <TextBox MinWidth="36" Padding="2" Margin="0,2,2,0" VerticalAlignment="Center">
                         <i:Interaction.Behaviors>

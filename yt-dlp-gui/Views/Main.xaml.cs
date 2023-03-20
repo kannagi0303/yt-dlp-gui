@@ -20,7 +20,6 @@ using System.Windows.Data;
 using System.Windows.Forms;
 using System.Windows.Media;
 using System.Windows.Shell;
-using Windows.ApplicationModel.Resources.Core;
 using WK.Libraries.SharpClipboardNS;
 using yt_dlp_gui.Controls;
 using yt_dlp_gui.Models;
@@ -90,17 +89,16 @@ namespace yt_dlp_gui.Views {
 
         private void ChangeScale(int present) {
             var scaleRatio = present / 100d;
-            var grid = Template.FindName("MainGrid", this) as Grid;
+            var grid = Template.FindName("MainGrid", this) as Grid; 
             if (grid != null) {
                 var scaleTransform = new ScaleTransform(scaleRatio, scaleRatio);
                 grid.LayoutTransform = scaleTransform;
-
                 WindowChrome.SetWindowChrome(this, new() {
                     CaptionHeight = 22 * scaleRatio,
                     ResizeBorderThickness = new Thickness(6),
                     CornerRadius = new CornerRadius(0),
                     GlassFrameThickness = new Thickness(1),
-                    NonClientFrameEdges = NonClientFrameEdges.Left,
+                    NonClientFrameEdges = NonClientFrameEdges.None,
                     UseAeroCaptionButtons = false
                 });
                 grid.UpdateLayout();
@@ -1060,9 +1058,12 @@ namespace yt_dlp_gui.Views {
         private void TextBoxNumber_Changed(object sender, EventArgs e) {
             if (Data.Scale == 0) {
                 Data.Scale = 100;
-            } else {
-                ChangeScale(Data.Scale);
+            } else if (Data.Scale < 80) {
+                Data.Scale = 80;
+            } else if (Data.Scale > 200) {
+                Data.Scale = 200;
             }
+            ChangeScale(Data.Scale);
         }
     }
     public class LanguageConverter :IValueConverter {
