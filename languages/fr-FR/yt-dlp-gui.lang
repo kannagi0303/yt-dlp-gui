@@ -1,83 +1,170 @@
-﻿AppName: yt-dlp-gui
+# Name
+AppName: yt-dlp-gui
+# Window - Main
 Main:
-  # Basic
-  Url: Lien
+  # Top Menu
+  About: A propos...
+  # Tabs Label
+  Main: Principal
+  Advance: Avancé
+  Options: Options
+  # Main Tab
+  Url: Url
   Title: Titre
   Desc: Description
-  SaveAs: Enregistrer sous...
-  Thumbnail: Vignette
-  About: A propos...
-  # Tab Formats
-  Formats: Formats
-  Chapters: Chapitres
-  ChaptersNone: "[Aucun]"
-  ChaptersAll: "[Tout]"
-  ChaptersSplite: "[Ventilation par chapitres]"
-  Video: Vidéo
-  Audio: Audio
-  Subtitle: Sous-titre
-  SubtitleIgnore: "[Ignorer]"
-  SubtitleNone: "[Aucun]"
-  VideoRes: Résolution
-  VideoDynamicRange: DR
-  VideoFPS: FPS
-  VideoExt: Ext.
-  VideoCodec: Codec
-  VideoSize: Taille du Fichier
-  AudioSampleRate: ASR
-  AudioExt: Ext.
-  AudioCodec: Codec
-  AudioSize: Taille fichier
-  # Tab Advance
-  Advance: Avancé
-  EmbedSubs: Embarquer Sous-titres
-  EmbedSubsEnabled: Activé
-  TimeRange: Plage de temps
-  TimeRangeHits: --download-sections
-  TimeRangeHelper: "*10:15-15:00"
-  # Tab Options
-  Options: Options
-  Notifications: Notifications
-  NotificationsEnabled: Activé
-  AlwaysOnTop: Toujours au dessus
-  AlwaysOnTopEnabled: Activé
-  RememberWindowState: Retenir État Fenêtre
-  RememberWindowPosition: Position
-  RememberWindowSize: Taille
-  Proxy: Proxy
-  ProxyEnabled: Activé
-  ProxyHelper: "socks5://user:pass@127.0.0.1:1080/"
-  Cookie: Cookie
-  CookieWhenNeeded: Si Besoin
-  CookieNever: Jamais
-  CookieAlways: Toujours
-  CookieAsk: Demander
-  CookieUse: Utiliser
-  Configuration: Configuration
-  ConfigurationNone: "[Aucun]"
-  Aria2: Aria2
-  Aria2Enabled: Activé
-  AutoDownload: Téléchargement Auto
-  AutoDownloadAnalysed: Après analyse
-  # Label
-  Live: LIVE
+  Live: DIRECT
   DownloadThumb: Télécharger la Vignette
-  # button
+  # Main Tab - Buttons
   Analyze: Analyser
   Browse: Parcourir
   Download: Télécharger
   Record: Enregistrer
   Cancel: Annuler
   Stop: Arrêter
+  # Main Tab - Thumbnail
+  SaveAs: Enregistrer sous...
+  Thumbnail: Vignette
+  # Main Tab - Chapters
+  Chapters: Chapitres
+  ChaptersNone: "[Aucun]"
+  ChaptersAll: "[Tout]"
+  ChaptersSplite: "[Ventilation par chapitres]"
+  # Main Tab - Video
+  Video: Vidéo
+  VideoRes: Résolution
+  VideoDynamicRange: DR
+  VideoFPS: FPS
+  VideoExt: Ext.
+  VideoCodec: Codec
+  VideoSize: Taille du Fichier
+  # Main Tab - Audio
+  Audio: Audio
+  AudioSampleRate: ASR
+  AudioExt: Ext.
+  AudioCodec: Codec
+  AudioSize: Taille fichier
+  # Main Tab - Subtitle
+  Subtitle: Sous-titre
+  SubtitleIgnore: "[Ignorer]"
+  SubtitleNone: "[Aucun]"
+  # Advance Tab - Configuration
+  Configuration: Configuration
+  ConfigurationNone: "[Aucun]"
+  # Advance Tab - Proxy
+  Proxy: Proxy
+  ProxyEnabled: Activé
+  ProxyHelper: "socks5://user:pass@127.0.0.1:1080/"
+  # Advance Tab - Cookie
+  Cookie: Cookie
+  CookieWhenNeeded: Si Besoin
+  CookieNever: Jamais
+  CookieAlways: Toujours
+  CookieAsk: Demander
+  CookieUse: Utiliser
+  # Advance Tab - Aria2
+  Aria2: Aria2
+  Aria2Enabled: Activé
+  # Advance Tab - Embeds
+  Embeds: Intégrations
+  EmbedsThumbnail: Vignette
+  EmbedsChapters: Chapitres
+  EmbedsSubtitles: Sous-titres
+  # Advance Tab - Time Range
+  TimeRange: Plage de temps
+  TimeRangeHits: --download-sections
+  TimeRangeHelper: "*10:15-15:00"
+  # Advance Tab - Limit Rate
+  LimitRate: Taux Limite
+  LimitRateHelper: 50K ou 4.2M
+  # Advance Tab - Mdified
+  Modified: Modifié
+  ModifiedModified: Date Modifiée
+  ModifiedUpload: Date de Téléchargement
+  # Options Tab - Notifications
+  Notifications: Notifications
+  NotificationsEnabled: Activé
+  NotificationsSound: Son de Notifications
+  SoundDefault: Défaut
+  SoundSystem: Système
+  SoundBrowse: Parcourir...
+  # Options Tab - Always On Top
+  AlwaysOnTop: Toujours au dessus
+  AlwaysOnTopEnabled: Activé
+  # Options Tab - Remember Window State
+  RememberWindowState: Retenir État Fenêtre
+  RememberWindowPosition: Position
+  RememberWindowSize: Taille
+  Scale: Scale
+  # Options Tab - Automatically download
+  AutoDownload: Téléchargement Auto
+  AutoDownloadAnalysed: Après analyse
+  # Options Tab - Temporary folder
+  TemporaryFolder: Dossier temporaire
+  TemporaryTarget: Cible
+  TemporaryLocale: Locale
+  TemporarySystem: Système
+  TemporaryBrowse: Parcourir...
+# Window - About
 About:
   About: A propos
   Website: Site web
   Authors: Auteurs
-  # Extended information can be modified arbitrarily
+  # Les informations étendues peuvent être modifiées librement et le nombre de lignes n'est pas limité.
+  # Extends :
+  #   label1: content
+  #   label2: url
   Extends:
     Localization Author: fds39
     Localization Website: https://github.com/fds39
+# Window - Release
 Releases:
-  Releases: Releases
-  Loading: Telechargement en cours...
+  Releases: Version
+  Loading: Chargement...
   NoUpdated: Il n'existe actuellement aucune mise à jour.
+# Dialog, Popups
+Dialog:
+  CookieRequired: Des Cookies Sont Nécessaires, les Utiliser ?
+  FileExist: Le Fichier Existe Déjà. L'Écraser ?
+  DownloadCompleted: Video Download Completed!
+  OpenFolder: Ouvrir un Dossier
+  Close: Fermer
+# File Types
+Files:
+  image: Fichier image
+  mkv: Container multimédia Matroska
+  mp4: MPEG-4 Part 14
+  webm: Format Container WebM
+  mov: QuickTime Movie
+  flv: Flash Video
+  opus: Opus Interactive Audio Codec
+  aac: Advanced Audio Coding
+  m4a: MPEG-4 Audio Layer
+  mp3: MPEG-1 Audio Layer III
+  vorbis: Vorbis Audio Codec
+  alac: Apple Lossless Audio Codec
+  flac: Free Lossless Audio Codec
+  wav: Waveform Audio File Format
+  srt: SubRip Subtitle Format
+  ass: Advanced SubStation Alpha
+  vtt: WebVTT (Web Video Text Tracks)
+  lrc: Lyric File Format
+  ttml: Timed Text Markup Language
+  srv3: SRV3 Format
+  srv2: SRV2 Format
+  srv1: SRV1 Format
+  json3: JSON3 Format
+# Status Area Infomation
+Status:
+  Downloader: Téléchargeur
+  Total: Total
+  Speed: Vitesse
+  Elapsed: Ecoulé
+  Connections: Connexions
+  Frame: 
+  FPS: FPS
+  Time: Time
+  Status: Status
+  Native: Natif
+  Downloading: Téléchargement
+  Downloaded: Téléchargé
+  Done: Fait
