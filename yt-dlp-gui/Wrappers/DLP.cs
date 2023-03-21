@@ -187,7 +187,8 @@ namespace yt_dlp_gui.Wrappers {
                     var key = x.Key;
                     switch (key) {
                         case "[temp]":
-                            key = "--paths";
+                            //key = "--paths";
+                            key = "--output";
                             break;
                         case "[chapter]":
                         case "[thumbnail]":
@@ -252,8 +253,10 @@ namespace yt_dlp_gui.Wrappers {
         private static Regex ErrSign = new Regex(@"^(?=.*?ERROR)(?=.*?sign)(?=.*?confirm)", RegexOptions.IgnoreCase);
         private static Regex ErrUnsupported = new Regex(@"^(?=.*?ERROR)(?=.*?Unsupported)", RegexOptions.IgnoreCase);
         public Process Exec(Action<string> stdall = null, Action<string> stdout = null, Action<string> stderr = null) {
-            //var fn = App.Path(App.Folders.bin, "yt-dlp.exe");
             var fn = Path_DLP;
+            if (!File.Exists(fn)) {
+                return null;
+            }
             var info = new ProcessStartInfo() {
                 FileName = fn,
                 Arguments = Args,
@@ -279,7 +282,9 @@ namespace yt_dlp_gui.Wrappers {
                 if (!string.IsNullOrWhiteSpace(e.Data)) {
                     stdall?.Invoke(e.Data);
                     stderr?.Invoke(e.Data);
-                    if (ErrSign.IsMatch(e.Data)) StdErr.Add(DLPError.Sign);
+                    if (ErrSign.IsMatch(e.Data)) {
+                        StdErr.Add(DLPError.Sign);
+                    }
                     if (ErrUnsupported.IsMatch(e.Data)) StdErr.Add(DLPError.Unsupported);
                 }
             };

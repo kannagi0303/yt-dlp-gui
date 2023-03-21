@@ -118,7 +118,7 @@ namespace yt_dlp_gui.Views {
             public void SelectFormatBest() {
                 selectedChapter = Chapters.FirstOrDefault();
                 var defVideoFmt = FormatsVideo.FirstOrDefault();
-                var defAudioFmt = FormatsVideo.FirstOrDefault();
+                var defAudioFmt = FormatsAudio.FirstOrDefault();
                 if (UseFormat) {
                     selectedVideo = defVideoFmt;
                     selectedAudio = defAudioFmt;

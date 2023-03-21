@@ -124,7 +124,20 @@
                         </controls:TextEditor.ContextMenu>
                     </controls:TextEditor>
                     <ToggleButton Grid.Column="1" Margin="4,2,0,2" Padding="6,0" IsChecked="{Binding IsMonitor}">
-                        <controls:Icons Kind="Monitor" Size="14"/>
+                        <controls:Icons Size="14">
+                            <controls:Icons.Style>
+                                <Style TargetType="controls:Icons">
+                                    <Setter Property="Kind" Value="Monitor"/>
+                                    <Setter Property="Foreground" Value="#FFEBEBEB"/>
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding IsMonitor}" Value="True">
+                                            <Setter Property="Kind" Value="MonitorEye"/>
+                                            <Setter Property="Foreground" Value="#FF50A4FA"/>
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </controls:Icons.Style>
+                        </controls:Icons>
                     </ToggleButton>
                     <Button Grid.Column="2" IsEnabled="{Binding Enable.Analyze}" Margin="2" Click="Button_Analyze">
                         <StackPanel Orientation="Horizontal" Margin="4,0">

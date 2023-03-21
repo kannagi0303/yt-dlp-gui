@@ -140,31 +140,13 @@ namespace yt_dlp_gui.Views {
             Data.PropertyChanged += (s, e) => {
                 switch (e.PropertyName) {
                     case nameof(Data.ClipboardText):
-                        int maxTries = 10;
-                        int delayTime = 1000; // milliseconds
-
-                        int numTries = 0;
-                        while (numTries < maxTries) {
-                            try {
-                                var content = System.Windows.Clipboard.GetText(System.Windows.TextDataFormat.Html);
-                                if (!string.IsNullOrWhiteSpace(content)) {
-                                    content = _frgPat.Match(content).Groups?[1].Value.Trim() ?? "";
-                                } else {
-                                    content = System.Windows.Clipboard.GetText(System.Windows.TextDataFormat.Text);
-                                }
-                                var m = _matchUrls.Match(content);
-                                if (m.Success) {
-                                    var capUrl = m.Value;
-                                    if (Util.UrlVaild(capUrl)) {
-                                        Data.Url = capUrl;
-                                        Analyze_Start();
-                                    }
-                                }
-                                numTries = 0;
-                                break;
-                            } catch (Exception) {
-                                numTries++;
-                                Thread.Sleep(delayTime);
+                        var content = Data.ClipboardText;
+                        var m = _matchUrls.Match(content);
+                        if (m.Success) {
+                            var capUrl = m.Value;
+                            if (Util.UrlVaild(capUrl)) {
+                                Data.Url = capUrl;
+                                Analyze_Start();
                             }
                         }
                         break;
@@ -178,10 +160,30 @@ namespace yt_dlp_gui.Views {
             sc.ClipboardChanged += (s, e) => {
                 if (!Data.IsMonitor || Data.IsAnalyze || Data.IsDownload) return;
                 if (e.ContentType == SharpClipboard.ContentTypes.Text) {
-                    var text = System.Windows.Clipboard.GetText(System.Windows.TextDataFormat.Text);
-                    Data.ClipboardText = text;
+                    Data.ClipboardText = GetClipbaordText();
                 }
             };
+        }
+        private string GetClipbaordText() {
+            int maxTries = 10;
+            int delayTime = 1000; // milliseconds
+            int numTries = 0;
+            while (numTries < maxTries) {
+                try {
+                    var content = System.Windows.Clipboard.GetText(System.Windows.TextDataFormat.Html);
+                    if (!string.IsNullOrWhiteSpace(content)) {
+                        content = _frgPat.Match(content).Groups?[1].Value.Trim() ?? "";
+                    } else {
+                        content = System.Windows.Clipboard.GetText(System.Windows.TextDataFormat.Text);
+                    }
+                    numTries = 0;
+                    return content;
+                } catch (Exception) {
+                    numTries++;
+                    Thread.Sleep(delayTime);
+                }
+            }
+            return string.Empty;
         }
         public void InitGUIConfig() {
             Data.GUIConfig.Load(App.Path(App.Folders.root, App.AppName + ".yaml"));
@@ -344,21 +346,11 @@ namespace yt_dlp_gui.Views {
                     Data.Subtitles.AddRange(subs);
                 }
                 var BestUrl = Data.Thumbnails.LastOrDefault()?.url;
-                //var ThumbUrl = string.Empty;
                 if (BestUrl != null && Web.Head(BestUrl)) {
                     Data.Thumbnail = BestUrl;
-                    //ThumbUrl = BestUrl;
                 } else {
                     Data.Thumbnail = Data.Video.thumbnail;
-                    //ThumbUrl = Data.Video.thumbnail;
                 }
-                //Download Thumb to Temp Folder
-                /*
-                Directory.CreateDirectory(App.Path(App.Folders.temp));
-                var ThumbPath = App.Path(App.Folders.temp, Path.ChangeExtension(Data.Video.id, ".jpg"));
-                FFMPEG.DownloadUrl(ThumbUrl, ThumbPath);
-                Data.Thumbnail = ThumbPath;
-                */
 
                 Data.SelectFormatBest(); //Make ComboBox Selected Item
                 var full = string.Empty;
