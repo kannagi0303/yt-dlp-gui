@@ -1,85 +1,170 @@
+# Name
 AppName: yt-dlp-gui (简体中文)
+# Window - Main
 Main:
-  # Basic
+  # Top Menu
+  About: 关于...
+  # Tabs Label
+  Main: 主页面
+  Advance: 高级
+  Options: 选项
+  # Main Tab
   Url: 网址
   Title: 标题
   Desc: 描述
-  SaveAs: 保存为...
-  Thumbnail: 缩略图
-  About: 关于...
-  # Tab Formats
-  Formats: 格式
-  Chapters: 章节
-  ChaptersNone: "[无]"
-  ChaptersAll: "[全部章节]"
-  ChaptersSplite: "[根据章节分割]"
-  Video: 视频
-  Audio: 音频
-  Subtitle: 字幕
-  SubtitleIgnore: "[忽略]"
-  SubtitleNone: "[无]"
-  VideoRes: 视频分辨率
-  VideoDynamicRange: 视频色彩
-  VideoFPS: 视频帧率
-  VideoExt: 视频格式
-  VideoCodec: 视频编码
-  VideoSize: 视频大小
-  AudioSampleRate: 音频采样率
-  AudioExt: 音频格式
-  AudioCodec: 音频编码
-  AudioSize: 音频大小
-  # Tab Formats
-  Advance: 高级
-  EmbedSubs: 嵌入字幕
-  EmbedSubsEnabled: 启用嵌入字幕
-  TimeRange: 时间范围
-  TimeRangeHits: --download-sections
-  TimeRangeHelper: "*10:15-15:00"
-  # Tab Options
-  Options: 选项
-  Notifications: 通知
-  NotificationsEnabled: 启用通知
-  AlwaysOnTop: 始终置顶
-  AlwaysOnTopEnabled: 启用始终置顶
-  RememberWindowState: 记住窗口状态
-  RememberWindowPosition: 记住窗口位置
-  RememberWindowSize: 记住窗口大小
-  Proxy: 代理
-  ProxyEnabled: 启用代理
-  ProxyHelper: "socks5://user:pass@127.0.0.1:1080/"
-  Cookie: Cookie
-  CookieWhenNeeded: 仅在需要时
-  CookieNever: 从不
-  CookieAlways: 总是
-  CookieAsk: 询问时
-  CookieUse: 使用
-  Configuration: 配置文件
-  ConfigurationNone: "[不使用]"
-  Aria2: Aria2
-  Aria2Enabled: 启用
-  AutoDownload: 自动下载
-  AutoDownloadAnalysed: 在分析之后
-  LimitRate: 速度限制
-  LimitRateHelper: 50K or 4.2M
-  # Label
   Live: 直播
   DownloadThumb: 下载缩略图
-  # button
+  # Main Tab - Buttons
   Analyze: 分析
   Browse: 浏览
   Download: 下载
   Record: 录制
   Cancel: 取消
   Stop: 停止
+  # Main Tab - Thumbnail
+  SaveAs: 保存为...
+  Thumbnail: 缩略图
+  # Main Tab - Chapters
+  Chapters: 章节
+  ChaptersNone: '[无]'
+  ChaptersAll: '[全部章节]'
+  ChaptersSplite: '[根据章节分割]'
+  # Main Tab - Video
+  Video: 视频
+  VideoRes: 视频分辨率
+  VideoDynamicRange: 视频色彩
+  VideoFPS: 视频帧率
+  VideoExt: 视频格式
+  VideoCodec: 视频编码
+  VideoSize: 视频大小
+  # Main Tab - Audio
+  Audio: 音频
+  AudioSampleRate: 音频采样率
+  AudioExt: 音频格式
+  AudioCodec: 音频编码
+  AudioSize: 音频大小
+  # Main Tab - Subtitle
+  Subtitle: 字幕
+  SubtitleIgnore: '[忽略]'
+  SubtitleNone: '[无]'
+  # Advance Tab - Configuration
+  Configuration: 配置文件
+  ConfigurationNone: '[不使用]'
+  # Advance Tab - Proxy
+  Proxy: 代理
+  ProxyEnabled: 启用代理
+  ProxyHelper: socks5://user:pass@127.0.0.1:1080/
+  # Advance Tab - Cookie
+  Cookie: Cookie
+  CookieWhenNeeded: 仅在需要时
+  CookieNever: 从不
+  CookieAlways: 总是
+  CookieAsk: 询问
+  CookieUse: 使用
+  # Advance Tab - Aria2
+  Aria2: Aria2
+  Aria2Enabled: 启用
+  # Advance Tab - Embeds
+  Embeds: 内嵌
+  EmbedsThumbnail: 缩略图
+  EmbedsChapters: 章节
+  EmbedsSubtitles: 字幕
+  # Advance Tab - Time Range
+  TimeRange: 时间范围
+  TimeRangeHits: --download-sections
+  TimeRangeHelper: '*10:15-15:00'
+  # Advance Tab - Limit Rate
+  LimitRate: 速度限制
+  LimitRateHelper: 例如 50K 或 4.2M
+  # Advance Tab - Mdified
+  Modified: 修改时间
+  ModifiedModified: 使用修改时间(预设)
+  ModifiedUpload: 使用上传时间
+  # Options Tab - Notifications
+  Notifications: 通知
+  NotificationsEnabled: 启用通知
+  NotificationsSound: 通知声音
+  SoundDefault: 默认
+  SoundSystem: 系统
+  SoundBrowse: 浏览...
+  # Options Tab - Always On Top
+  AlwaysOnTop: 始终置顶
+  AlwaysOnTopEnabled: 启用始终置顶
+  # Options Tab - Remember Window State
+  RememberWindowState: 记住窗口状态
+  RememberWindowPosition: 记住窗口位置
+  RememberWindowSize: 记住窗口尺寸
+  Scale: 缩放
+  # Options Tab - Automatically download
+  AutoDownload: 自动下载
+  AutoDownloadAnalysed: 在分析之后
+  # Options Tab - Temporary folder
+  TemporaryFolder: 缓存位置
+  TemporaryTarget: 目的地
+  TemporaryLocale: 本地
+  TemporarySystem: 系统
+  TemporaryBrowse: 浏览...
+# Window - About
 About:
   About: 关于
   Website: 网站
   Authors: 作者
-  # Extended information can be modified arbitrarily
+  # Extended information can be freely modified and there is no limit to the number of lines.
+  # Extends :
+  #   label1: content
+  #   label2: url
   Extends:
     简中作者: カンナギ Kannagi
-    简中网址: https://github.com/Kannagi0303/yt-dlp-gui
+    简中网址: https://github.com/kannagi0303/yt-dlp-gui/tree/master/languages/zh-CN
+# Window - Release
 Releases:
-  Releases: 发布
+  Releases: 发布版本
   Loading: 加载中...
   NoUpdated: 没有更新
+# Dialog, Popups
+Dialog:
+  CookieRequired: 需要 Cookies 是否使用？
+  FileExist: 文件已存在是否覆盖？
+  DownloadCompleted: 下载完成！
+  OpenFolder: 打开文件夹
+  Close: 关闭
+# File Types
+Files:
+  image: 图片类型
+  mkv: Matroska Multimedia Container
+  mp4: MPEG-4 Part 14
+  webm: WebM Container Format
+  mov: QuickTime Movie
+  flv: Flash Video
+  opus: Opus Interactive Audio Codec
+  aac: Advanced Audio Coding
+  m4a: MPEG-4 Audio Layer
+  mp3: MPEG-1 Audio Layer III
+  vorbis: Vorbis Audio Codec
+  alac: Apple Lossless Audio Codec
+  flac: Free Lossless Audio Codec
+  wav: Waveform Audio File Format
+  srt: SubRip Subtitle Format
+  ass: Advanced SubStation Alpha
+  vtt: WebVTT (Web Video Text Tracks)
+  lrc: Lyric File Format
+  ttml: Timed Text Markup Language
+  srv3: SRV3 Format
+  srv2: SRV2 Format
+  srv1: SRV1 Format
+  json3: JSON3 Format
+# Status Area Infomation
+Status:
+  Downloader: 下载器
+  Total: 总计
+  Speed: 速度
+  Elapsed: 预计
+  Connections: 连接
+  Frame: 帧数
+  FPS: 帧率
+  Time: 时间
+  Status: 状态
+  Native: 原生
+  Downloading: 下载中
+  Downloaded: 已下载
+  Done: 完成
