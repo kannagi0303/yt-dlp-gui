@@ -683,6 +683,7 @@
                 <TextBlock Grid.Row="7" Text="{Binding Source={x:Static app:App.Lang}, Path=Main.Modified}" VerticalAlignment="Center" HorizontalAlignment="Right"/>
                 <ComboBox Grid.Row="7" Grid.Column="2" SelectedValue="{Binding ModifiedType}" SelectedValuePath="Tag" IsEnabled="{Binding Enable.UseCookie}" HorizontalAlignment="Left">
                     <ComboBoxItem Content="{Binding Source={x:Static app:App.Lang}, Path=Main.ModifiedModified}" Tag="{x:Static m:ModifiedType.Modified}"/>
+                    <ComboBoxItem Content="{Binding Source={x:Static app:App.Lang}, Path=Main.ModifiedCreated}" Tag="{x:Static m:ModifiedType.Created}"/>
                     <ComboBoxItem Content="{Binding Source={x:Static app:App.Lang}, Path=Main.ModifiedUpload}" Tag="{x:Static m:ModifiedType.Upload}"/>
                 </ComboBox>
             </Grid>

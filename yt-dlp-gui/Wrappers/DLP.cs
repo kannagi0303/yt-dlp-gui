@@ -56,6 +56,12 @@ namespace yt_dlp_gui.Wrappers {
             Options["--output"] = targetpath.QP();
             return this;
         }
+        public DLP MTime(ModifiedType type = ModifiedType.Modified) {
+            if (type == ModifiedType.Created) {
+                Options["--no-mtime"] = "";
+            }
+            return this;
+        }
         public DLP Temp(string path) {
             Options["--cache-dir"] = path.QP();
             Options["[temp]"] = path.QP("temp");
@@ -206,10 +212,12 @@ namespace yt_dlp_gui.Wrappers {
                 return string.Join(" ", args);
             }
         }
-        public DLP DownloadFormat(string format_id, string targetpath) {
+        public DLP DownloadFormat(string format_id, string targetpath, string originext) {
             Debug.WriteLine($"id:{format_id} path:{targetpath}", "DownloadFormat");
             Options["--format"] = format_id;
-            Options["--remux-video"] = targetpath.getExt();
+            if (targetpath.getExt() != originext) {
+                Options["--remux-video"] = targetpath.getExt();
+            }
             Options["--output"] = Path.ChangeExtension(targetpath, ".%(ext)s").QP();
             Files.Add(targetpath);
             return this;

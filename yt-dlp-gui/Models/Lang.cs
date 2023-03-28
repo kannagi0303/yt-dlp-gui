@@ -177,6 +177,7 @@ namespace yt_dlp_gui.Models {
         [Description("Advance Tab - Mdified")]
         [YamlMember(Order = 1151)] public string Modified { get; set; } = "Modified";
         [YamlMember(Order = 1152)] public string ModifiedModified { get; set; } = "Modified Date";
+        [YamlMember(Order = 1153)] public string ModifiedCreated { get; set; } = "Created Date";
         [YamlMember(Order = 1153)] public string ModifiedUpload { get; set; } = "Upload Date";
 
         [Description("Options Tab - Notifications")]

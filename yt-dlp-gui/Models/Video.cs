@@ -20,6 +20,6 @@ namespace yt_dlp_gui.Models {
         public string upload_date { get; set; } = string.Empty;
     }
     public enum ModifiedType {
-        Modified, Upload
+        Modified, Upload, Created
     }
 }

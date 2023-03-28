@@ -132,6 +132,7 @@ namespace yt_dlp_gui.Views {
                 if (RemuxVideo) return;
                 if (!string.IsNullOrWhiteSpace(TargetName)) {
                     if (selectedVideo != null && selectedAudio != null) {
+                        /*
                         if (selectedVideo.type == FormatType.package) {
                             TargetName = Path.ChangeExtension(TargetName, selectedVideo.video_ext);
                         } else if (selectedVideo.video_ext == "webm" && selectedAudio.audio_ext == "webm") {
@@ -140,8 +141,23 @@ namespace yt_dlp_gui.Views {
                             TargetName = Path.ChangeExtension(TargetName, "mp4");
                         } else {
                             TargetName = Path.ChangeExtension(TargetName, "mkv");
+                        }*/
+                        TargetName = Path.ChangeExtension(TargetName, OriginExt);
+                    }
+                }
+            }
+            public string OriginExt {
+                get {
+                    if (selectedVideo != null && selectedAudio != null) {
+                        if (selectedVideo.type == FormatType.package) {
+                            return selectedVideo.video_ext.ToLower().Trim('.');
+                        } else if (selectedVideo.video_ext == "webm" && selectedAudio.audio_ext == "webm") {
+                            return "webm";
+                        } else if (selectedVideo.video_ext == "mp4" && selectedAudio.audio_ext == "m4a") {
+                            return "mp4";
                         }
                     }
+                    return "mkv";
                 }
             }
             public Lang Lang { get; set; } = new();

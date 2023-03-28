@@ -79,6 +79,7 @@ Main:
   # Advance Tab - Mdified
   Modified: 修改時間
   ModifiedModified: 使用修改時間(預設)
+  ModifiedCreated: 使用建立時間
   ModifiedUpload: 使用上傳時間
   # Options Tab - Notifications
   Notifications: 通知
