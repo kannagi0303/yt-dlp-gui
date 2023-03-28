@@ -1,11 +1,11 @@
 ﻿# Name
-AppName: yt-dlp-gui
+AppName: yt-dlp-gui (Polski)
 # Window - Main
 Main:
   # Top Menu
   About: O programie
   # Tabs Label
-  Main: Główne
+  Main: Okno Główne
   Advance: Zaawansowane
   Options: Opcje
   # Main Tab
@@ -89,7 +89,7 @@ Main:
   SoundSystem: Systemowy
   SoundBrowse: Przeglądaj...
   # Options Tab - Always On Top
-  AlwaysOnTop: Zawsze Na Wirzchu
+  AlwaysOnTop: Zawsze Na Wierzchu
   AlwaysOnTopEnabled: Włącz
   # Options Tab - Remember Window State
   RememberWindowState: Pamiętaj Stan Okna
@@ -101,7 +101,7 @@ Main:
   AutoDownloadAnalysed: Po analizie
   # Options Tab - Temporary folder
   TemporaryFolder: Folder tymczasowy
-  TemporaryTarget: Tam gdzie plik
+  TemporaryTarget: Tam gdzie pobierasz
   TemporaryLocale: Lokalny
   TemporarySystem: Systemowy
   TemporaryBrowse: Przeglądaj...
@@ -114,10 +114,9 @@ About:
   # Extends :
   #   label1: content
   #   label2: url
-  Extends: {
+  Extends:
     Tłumaczenie: Marcin Wilk
     Strona tłumaczenia: https://github.com/nicrame/yt-dlp-gui/tree/master/languages/pl-PL
-	}
 # Window - Release
 Releases:
   Releases: Wydania
