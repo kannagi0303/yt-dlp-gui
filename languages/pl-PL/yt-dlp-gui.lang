@@ -1,85 +1,173 @@
-﻿AppName: yt-dlp-gui
+﻿# Name
+AppName: yt-dlp-gui
+# Window - Main
 Main:
-  # Basic
+  # Top Menu
+  About: O programie
+  # Tabs Label
+  Main: Główne
+  Advance: Zaawansowane
+  Options: Opcje
+  # Main Tab
   Url: Link
   Title: Tytuł
   Desc: Opis
-  SaveAs: Zapisz jako...
-  Thumbnail: Miniatura
-  About: O programie...
-  # Tab Formats
-  Formats: Formaty
-  Chapters: Rzdziały
-  ChaptersNone: "[Żadne]"
-  ChaptersAll: "[Wszystkie]"
-  ChaptersSplite: "[Podziel na rozdziały]"
-  Video: Wideo
-  Audio: Audio
-  Subtitle: Napisy
-  SubtitleIgnore: "[Ignoruj]"
-  SubtitleNone: "[Żadne]"
-  VideoRes: Rozdzielczość
-  VideoDynamicRange: SzerDyn
-  VideoFPS: FPS
-  VideoExt: Rozsz.
-  VideoCodec: Kodek
-  VideoSize: RozmiarPliku
-  AudioSampleRate: KHz
-  AudioExt: Rozsz.
-  AudioCodec: Kodek
-  AudioSize: RozmiarPliku
-  # Tab Formats
-  Advance: Zaawansowane
-  EmbedSubs: Dołącz Napisy
-  EmbedSubsEnabled: Włącz
-  TimeRange: Zakres Czasu
-  TimeRangeHits: --download-sections
-  TimeRangeHelper: "*10:15-15:00"
-  # Tab Options
-  Options: Opcje
-  Notifications: Powiadomienia
-  NotificationsEnabled: Włącz
-  AlwaysOnTop: Zawsze Na Wierzchu
-  AlwaysOnTopEnabled: Włącz
-  RememberWindowState: Pamiętaj Miejsce Okna
-  RememberWindowPosition: Pozycja
-  RememberWindowSize: Rozmiar
-  Proxy: Proxy
-  ProxyEnabled: Włącz
-  ProxyHelper: "socks5://uużytkownik:hasło@127.0.0.1:1080/"
-  Cookie: Ciasteczko
-  CookieWhenNeeded: Gdy Wymagane
-  CookieNever: Nigdy
-  CookieAlways: Zawsze
-  CookieAsk: Zapytaj
-  CookieUse: Użyj
-  Configuration: Konfiguracja
-  ConfigurationNone: "[Brak]"
-  Aria2: Aria2
-  Aria2Enabled: Włącz
-  AutoDownload: Automatycznie pobieraj
-  AutoDownloadAnalysed: Po analizie
-  LimitRate: Limit Prędkości Pobierania
-  LimitRateHelper: 50K lub 4.2M
-  # Label
   Live: NA ŻYWO
   DownloadThumb: Pobierz Miniaturę
-  # button
-  Analyze: Analiza
+  # Main Tab - Buttons
+  Analyze: Analizuj
   Browse: Przeglądaj
   Download: Pobierz
   Record: Nagraj
   Cancel: Anuluj
   Stop: Stop
+  # Main Tab - Thumbnail
+  SaveAs: Zapisz jako...
+  Thumbnail: Miniatura
+  # Main Tab - Chapters
+  Chapters: Rozdziały
+  ChaptersNone: '[Brak]'
+  ChaptersAll: '[Wszystkie]'
+  ChaptersSplite: '[Podziel na rozdziały]'
+  # Main Tab - Video
+  Video: Wideo
+  VideoRes: Rozdzel.
+  VideoDynamicRange: SzerDyn
+  VideoFPS: FPS
+  VideoExt: Roz.
+  VideoCodec: Kodek
+  VideoSize: Wielkość
+  # Main Tab - Audio
+  Audio: Audio
+  AudioSampleRate: Rozdziel.
+  AudioExt: Roz.
+  AudioCodec: Kodek
+  AudioSize: Wielkość
+  # Main Tab - Subtitle
+  Subtitle: Napisy
+  SubtitleIgnore: '[Ignoruj]'
+  SubtitleNone: '[Brak]'
+  # Advance Tab - Configuration
+  Configuration: Konfiguracja
+  ConfigurationNone: '[Brak]'
+  # Advance Tab - Proxy
+  Proxy: Proxy
+  ProxyEnabled: Włącz
+  ProxyHelper: socks5://uużytk:hasło@127.0.0.1:1080/
+  # Advance Tab - Cookie
+  Cookie: Ciasteczka
+  CookieWhenNeeded: Kiedy wymagane
+  CookieNever: Nigdy
+  CookieAlways: Zawsze
+  CookieAsk: Pytaj
+  CookieUse: Użyj
+  # Advance Tab - Aria2
+  Aria2: Aria2
+  Aria2Enabled: Włącz
+  # Advance Tab - Embeds
+  Embeds: Dołączaj
+  EmbedsThumbnail: Miniatury
+  EmbedsChapters: Rozdziały
+  EmbedsSubtitles: Napisy
+  # Advance Tab - Time Range
+  TimeRange: Zakres czasu
+  TimeRangeHits: --download-sections
+  TimeRangeHelper: '*10:15-15:00'
+  # Advance Tab - Limit Rate
+  LimitRate: Prędkość Pobierania
+  LimitRateHelper: Np. 50K lub 4.2M
+  # Advance Tab - Mdified
+  Modified: Data pliku
+  ModifiedModified: Data modyfikacji
+  ModifiedCreated: Data utworzenia
+  ModifiedUpload: Data przesłania
+  # Options Tab - Notifications
+  Notifications: Powiadomienia
+  NotificationsEnabled: Włącz
+  NotificationsSound: Dźwięk Powiadomień
+  SoundDefault: Domyślny
+  SoundSystem: Systemowy
+  SoundBrowse: Przeglądaj...
+  # Options Tab - Always On Top
+  AlwaysOnTop: Zawsze Na Wirzchu
+  AlwaysOnTopEnabled: Włącz
+  # Options Tab - Remember Window State
+  RememberWindowState: Pamiętaj Stan Okna
+  RememberWindowPosition: Pozycja
+  RememberWindowSize: Rozmiar
+  Scale: Skala
+  # Options Tab - Automatically download
+  AutoDownload: Pobierz automatycznie
+  AutoDownloadAnalysed: Po analizie
+  # Options Tab - Temporary folder
+  TemporaryFolder: Folder tymczasowy
+  TemporaryTarget: Tam gdzie plik
+  TemporaryLocale: Lokalny
+  TemporarySystem: Systemowy
+  TemporaryBrowse: Przeglądaj...
+# Window - About
 About:
   About: O programie
   Website: Strona
   Authors: Autorzy
-  # Extended information can be modified arbitrarily
-  Extends:
+  # Extended information can be freely modified and there is no limit to the number of lines.
+  # Extends :
+  #   label1: content
+  #   label2: url
+  Extends: {
     Tłumaczenie: Marcin Wilk
     Strona tłumaczenia: https://github.com/nicrame/yt-dlp-gui/tree/master/languages/pl-PL
+	}
+# Window - Release
 Releases:
-  Releases: Wydanie
-  Loading: Ładowanie...
-  NoUpdated: Obecnie nie ma dostępnej aktualizacji.
+  Releases: Wydania
+  Loading: Ładuję...
+  NoUpdated: Obecnie nie ma nowszej wersji.
+# Dialog, Popups
+Dialog:
+  CookieRequired: Ciasteczka sa wymagane. Czy ich użyć?
+  FileExist: Plik już istnieje. Czy go zastąpić?
+  DownloadCompleted: Pobieranie Wideo Ukończone!
+  OpenFolder: Otwórz Folder
+  Close: Zamknij
+# File Types
+Files:
+  image: Plik Obrazu
+  mkv: Kontener Multimedialny Matroska
+  mp4: MPEG-4 Part 14
+  webm: Format Kontenera WebM
+  mov: QuickTime Movie
+  flv: Flash Video
+  opus: Kodek Opus Interactive Audio
+  aac: Advanced Audio Coding
+  m4a: MPEG-4 Audio Layer
+  mp3: MPEG-1 Audio Layer III
+  vorbis: Kodek Vorbis Audio
+  alac: Kodek Apple Lossless Audio
+  flac: Wolnościowy Kodek Lossless Audio
+  wav: Format Waveform Audio
+  srt: Format Napisów SubRip
+  ass: Advanced SubStation Alpha
+  vtt: WebVTT (Web Video Text Tracks)
+  lrc: Format Napisów Lyric
+  ttml: Timed Text Markup Language
+  srv3: SRV3 Format
+  srv2: SRV2 Format
+  srv1: SRV1 Format
+  json3: JSON3 Format
+# Status Area Infomation
+Status:
+  Downloader: Pobieranie
+  Total: Total
+  Speed: Prędkość
+  Elapsed: Upłynęło
+  Connections: Połączeń
+  Frame: Klatka
+  FPS: FPS
+  Time: Czas
+  Status: Status
+  Native: Natywne
+  Downloading: Pobieranie
+  Downloaded: Pobrane
+  Done: Ukończone
+ 
