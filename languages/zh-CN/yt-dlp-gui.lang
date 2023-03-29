@@ -45,18 +45,18 @@ Main:
   AudioSize: 音频大小
   # Main Tab - Subtitle
   Subtitle: 字幕
-  SubtitleIgnore: '[忽略]'
+  SubtitleIgnore: '[不使用]'
   SubtitleNone: '[无]'
   # Advance Tab - Configuration
   Configuration: 配置文件
   ConfigurationNone: '[不使用]'
   # Advance Tab - Proxy
   Proxy: 代理
-  ProxyEnabled: 启用代理
+  ProxyEnabled: 启用
   ProxyHelper: socks5://user:pass@127.0.0.1:1080/
   # Advance Tab - Cookie
   Cookie: Cookie
-  CookieWhenNeeded: 仅在需要时
+  CookieWhenNeeded: 仅需要时
   CookieNever: 从不
   CookieAlways: 总是
   CookieAsk: 询问
@@ -79,6 +79,7 @@ Main:
   # Advance Tab - Mdified
   Modified: 修改时间
   ModifiedModified: 使用修改时间(预设)
+  ModifiedCreated: 使用创建时间
   ModifiedUpload: 使用上传时间
   # Options Tab - Notifications
   Notifications: 通知
@@ -120,7 +121,7 @@ About:
 Releases:
   Releases: 发布版本
   Loading: 加载中...
-  NoUpdated: 没有更新
+  NoUpdated: 目前没有更新
 # Dialog, Popups
 Dialog:
   CookieRequired: 需要 Cookies 是否使用？
