@@ -1,79 +1,110 @@
-AppName: yt-dlp-gui
+AppName: yt-dlp-gui (日本語)
+# Window - Main
 Main:
-  # Basic
+  # Top Menu
+  About: 情報...
+  # Tabs Label
+  Main: メイン
+  Advance: 詳細
+  Options: オプション
+  # Main Tab
   Url: URL
   Title: タイトル
   Desc: 説明
-  SaveAs: 名前を付けて保存...
-  Thumbnail: サムネイル
-  About: 情報...
-  # Tab Formats
-  Formats: 形式
-  Chapters: チャプター
-  ChaptersNone: "[なし]"
-  ChaptersAll: "[すべて]"
-  ChaptersSplite: "[チャプターごとに分割]"
-  Video: 映像
-  Audio: 音声
-  Subtitle: 字幕
-  SubtitleIgnore: "[無視]"
-  SubtitleNone: "[なし]"
-  VideoRes: 解像度
-  VideoDynamicRange: DR
-  VideoFPS: FPS
-  VideoExt: 拡張子
-  VideoCodec: コーデック
-  VideoSize: サイズ
-  AudioSampleRate: ASR
-  AudioExt: 拡張子
-  AudioCodec: コーデック
-  AudioSize: サイズ
-  # Tab Advance
-  Advance: 詳細
-  EmbedSubs: 字幕を埋め込む
-  EmbedSubsEnabled: 有効
-  TimeRange: 時間の範囲
-  TimeRangeHits: --download-sections
-  TimeRangeHelper: "*10:15-15:00"
-  # Tab Options
-  Options: オプション
-  Notifications: 通知
-  NotificationsEnabled: 有効
-  AlwaysOnTop: 常に手前に表示
-  AlwaysOnTopEnabled: 有効
-  RememberWindowState: ウィンドウの状態を記憶
-  RememberWindowPosition: 位置
-  RememberWindowSize: サイズ
-  Scale : 拡大表示
-  Proxy: プロキシ
-  ProxyEnabled: 有効
-  ProxyHelper: "socks5://user:pass@127.0.0.1:1080/"
-  Cookie: クッキー
-  CookieWhenNeeded: 必要な時に
-  CookieNever: なし
-  CookieAlways: 常に
-  CookieAsk: 質問する
-  CookieUse: 使用
-  Configuration: 構成
-  ConfigurationNone: "[なし]"
-  Aria2: Aria2
-  Aria2Enabled: 有効
-  AutoDownload: 自動ダウンロード
-  AutoDownloadAnalysed: 分析後に
-  LimitRate: 速度制限
-  LimitRateHelper: 50K や 4.2M
-  TemporaryFolder: 一時フォルダー
-  TemporaryBrowse: 参照
-  # Label
   Live: ライブ
   DownloadThumb: サムネイルをダウンロード
-  # button
+  # Main Tab - Buttons
   Analyze: 分析
   Browse: 参照
   Download: ダウンロード
   Record: 録画
   Cancel: キャンセル
   Stop: 中止
+  # Main Tab - Thumbnail
+  SaveAs: 名前を付けて保存...
+  Thumbnail: サムネイル
+  # Main Tab - Chapters
+  Chapters: チャプター
+  ChaptersNone: '[なし]'
+  ChaptersAll: '[すべて]'
+  ChaptersSplite: '[チャプターごとに分割]'
+  # Main Tab - Video
+  Video: 映像
+  VideoRes: 解像度
+  VideoDynamicRange: DR
+  VideoFPS: FPS
+  VideoExt: 拡張子
+  VideoCodec: コーデック
+  VideoSize: サイズ
+  # Main Tab - Audio
+  Audio: 音声
+  AudioSampleRate: ASR
+  AudioExt: 拡張子
+  AudioCodec: コーデック
+  AudioSize: サイズ
+  # Main Tab - Subtitle
+  Subtitle: 字幕
+  SubtitleIgnore: '[無視]'
+  SubtitleNone: '[なし]'
+  # Advance Tab - Configuration
+  Configuration: 構成
+  ConfigurationNone: '[なし]'
+  # Advance Tab - Proxy
+  Proxy: プロキシ
+  ProxyEnabled: 有効
+  ProxyHelper: socks5://user:pass@127.0.0.1:1080/
+  # Advance Tab - Cookie
+  Cookie: クッキー
+  CookieWhenNeeded: 必要な時に
+  CookieNever: なし
+  CookieAlways: 常に
+  CookieAsk: 質問する
+  CookieUse: 使用
+  # Advance Tab - Aria2
+  Aria2: Aria2
+  Aria2Enabled: 有効
+  # Advance Tab - Embeds
+  Embeds: 埋め込み
+  EmbedsThumbnail: サムネイル
+  EmbedsChapters: チャプター
+  EmbedsSubtitles: 字幕
+  TimeRange: 時間の範囲
+  # Advance Tab - Time Range
+  TimeRangeHits: --download-sections
+  TimeRangeHelper: '*10:15-15:00'
+  # Advance Tab - Limit Rate
+  LimitRate: 速度制限
+  LimitRateHelper: 50K や 4.2M のように
+  # Advance Tab - Mdified
+  Modified: ファイルの更新日時
+  ModifiedModified: 更新日 (YouTube上)
+  ModifiedCreated: 作成日 (今)
+  ModifiedUpload: アップロード日 (YouTube上)
+  # Options Tab - Notifications
+  Notifications: 通知
+  NotificationsEnabled: 有効
+  NotificationsSound: 通知音
+  SoundDefault: 標準
+  SoundSystem: システム
+  SoundBrowse: 参照...
+  # Options Tab - Always On Top
+  AlwaysOnTop: 常に手前に表示
+  AlwaysOnTopEnabled: 有効
+  # Options Tab - Remember Window State
+  RememberWindowState: ウィンドウの状態を記憶
+  RememberWindowPosition: 位置
+  RememberWindowSize: サイズ
+  Scale : 拡大表示
+  # Options Tab - Automatically download
+  AutoDownload: 自動ダウンロード
+  AutoDownloadAnalysed: 分析後に
+  # Options Tab - Temporary folder
+  TemporaryFolder: 一時フォルダー
+  TemporaryTarget: Target
+  TemporaryLocale: Locale
+  TemporarySystem: システム
+  TemporaryBrowse: 参照
+# Window - About
 About:
   About: このソフトについて
   Website: サイト
@@ -86,3 +117,50 @@ Releases:
   Releases: リリース
   Loading: 読み込み中...
   NoUpdated: 最新版はありません。
+# Dialog, Popups
+Dialog:
+  CookieRequired: クッキーが必要です。使いますか？
+  FileExist: ファイルは既に存在します。上書しますか？
+  DownloadCompleted: 動画をダウンロード完了！
+  OpenFolder: フォルダーを開く
+  Close: 閉じる
+# File Types
+Files:
+  image: 画像ファイル
+  mkv: Matroska マルチメディアコンテナ
+  mp4: MPEG-4 Part 14
+  webm: WebM コンテナ形式
+  mov: QuickTime 動画
+  flv: フラッシュ動画
+  opus: Opus 双方向音声コーデック
+  aac: Advanced Audio Coding
+  m4a: MPEG-4 Audio Layer
+  mp3: MPEG-1 Audio Layer III
+  vorbis: Vorbis 音声コーデック
+  alac: Apple 無劣化音声コーデック
+  flac: Free 無劣化 音声コーデック
+  wav: Waveform 音声ファイル形式
+  srt: SubRip 字幕形式
+  ass: Advanced SubStation Alpha
+  vtt: WebVTT (Web Video Text Tracks)
+  lrc: 歌詞ファイル形式
+  ttml: Timed Text Markup Language
+  srv3: SRV3 形式
+  srv2: SRV2 形式
+  srv1: SRV1 形式
+  json3: JSON3 形式
+# Status Area Infomation
+Status:
+  Downloader: ダウンローダー
+  Total: 計
+  Speed: 速度
+  Elapsed: 推定残り時間
+  Connections: 接続
+  Frame: フレーム
+  FPS: FPS
+  Time: 時間
+  Status: 状態
+  Native: オリジナル
+  Downloading: ダウンロード中
+  Downloaded: ダウンロード済み
+  Done: 完了
