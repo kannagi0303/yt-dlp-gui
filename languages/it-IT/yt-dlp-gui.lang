@@ -1,0 +1,170 @@
+﻿# Name
+AppName: yt-dlp-gui
+# Window - Main
+Main:
+  # Top Menu
+  About: Informazioni su...
+  # Tabs Label
+  Main: Principale
+  Advance: Avanzate
+  Options: Opzioni
+  # Main Tab
+  Url: Url
+  Title: Opzioni
+  Desc: Descrizione
+  Live: LIVE
+  DownloadThumb: Scarica miniatura
+  # Main Tab - Buttons
+  Analyze: Analizza
+  Browse: Sfoglia
+  Download: Scarica
+  Record: Registra
+  Cancel: Annulla
+  Stop: Stop
+  # Main Tab - Thumbnail
+  SaveAs: Salva come...
+  Thumbnail: Miniatura
+  # Main Tab - Chapters
+  Chapters: Capitoli
+  ChaptersNone: '[Nessuno]'
+  ChaptersAll: '[Tutti]'
+  ChaptersSplite: '[Diviso per capitoli]'
+  # Main Tab - Video
+  Video: Video
+  VideoRes: Risoluzione
+  VideoDynamicRange: DR
+  VideoFPS: FPS
+  VideoExt: Ext
+  VideoCodec: Codec
+  VideoSize: Dimensione file
+  # Main Tab - Audio
+  Audio: Audio
+  AudioSampleRate: ASR
+  AudioExt: Ext
+  AudioCodec: Codec
+  AudioSize: Dimensione file
+  # Main Tab - Subtitle
+  Subtitle: Sottotitolo
+  SubtitleIgnore: '[Ignora]'
+  SubtitleNone: '[Nessuno]'
+  # Advance Tab - Configuration
+  Configuration: Configurazione
+  ConfigurationNone: '[Nessuna]'
+  # Advance Tab - Proxy
+  Proxy: Proxy
+  ProxyEnabled: Abilitato
+  ProxyHelper: socks5://user:pass@127.0.0.1:1080/
+  # Advance Tab - Cookie
+  Cookie: Cookie
+  CookieWhenNeeded: Quando ce n'è bisogno
+  CookieNever: Mai
+  CookieAlways: Sempre
+  CookieAsk: Chiedi
+  CookieUse: Usa
+  # Advance Tab - Aria2
+  Aria2: Aria2
+  Aria2Enabled: Abilitato
+  # Advance Tab - Embeds
+  Embeds: Incorpora
+  EmbedsThumbnail: Miniatura
+  EmbedsChapters: Capitoli
+  EmbedsSubtitles: Sottotitoli
+  # Advance Tab - Time Range
+  TimeRange: Intervallo di tempo
+  TimeRangeHits: --download-sections
+  TimeRangeHelper: '*10:15-15:00'
+  # Advance Tab - Limit Rate
+  LimitRate: Limite velocità
+  LimitRateHelper: 50K o 4.2M
+  # Advance Tab - Mdified
+  Modified: Modifiche
+  ModifiedModified: Ultima modifica
+  ModifiedCreated: Data di creazione
+  ModifiedUpload: Data di caricamento
+  # Options Tab - Notifications
+  Notifications: Notifiche
+  NotificationsEnabled: Abilitate
+  NotificationsSound: Suono di notifica
+  SoundDefault: Predefinito
+  SoundSystem: Sistema
+  SoundBrowse: Sfoglia...
+  # Options Tab - Always On Top
+  AlwaysOnTop: Sempre in primo piano
+  AlwaysOnTopEnabled: Abilitato
+  # Options Tab - Remember Window State
+  RememberWindowState: Ricorda lo stato della finestra
+  RememberWindowPosition: Posizione
+  RememberWindowSize: Dimensione
+  Scale: Scala
+  # Options Tab - Automatically download
+  AutoDownload: Scarica automaticamente
+  AutoDownloadAnalysed: Dopo aver analizzato
+  # Options Tab - Temporary folder
+  TemporaryFolder: Cartella temporanea
+  TemporaryTarget: Target
+  TemporaryLocale: Locale
+  TemporarySystem: Sistema
+  TemporaryBrowse: Sfoglia...
+# Window - About
+About:
+  About: Informazioni su
+  Website: Sito web
+  Authors: Autori
+  # Extended information can be freely modified and there is no limit to the number of lines.
+  # Extends :
+  #   label1: content
+  #   label2: url
+  Extends:
+    Traduzione: Massimo Pissarello
+# Window - Release
+Releases:
+  Releases: Versioni
+  Loading: Caricamento in corso...
+  NoUpdated: Al momento non esiste una versione aggiornata.
+# Dialog, Popups
+Dialog:
+  CookieRequired: I cookie sono obbligatori, li uso?
+  FileExist: File già esistente. Lo sovrascrivo?
+  DownloadCompleted: Scaricamento del video completato!
+  OpenFolder: Apri cartella
+  Close: Chiudi
+# File Types
+Files:
+  image: Image File
+  mkv: Matroska Multimedia Container
+  mp4: MPEG-4 Part 14
+  webm: WebM Container Format
+  mov: QuickTime Movie
+  flv: Flash Video
+  opus: Opus Interactive Audio Codec
+  aac: Advanced Audio Coding
+  m4a: MPEG-4 Audio Layer
+  mp3: MPEG-1 Audio Layer III
+  vorbis: Vorbis Audio Codec
+  alac: Apple Lossless Audio Codec
+  flac: Free Lossless Audio Codec
+  wav: Waveform Audio File Format
+  srt: SubRip Subtitle Format
+  ass: Advanced SubStation Alpha
+  vtt: WebVTT (Web Video Text Tracks)
+  lrc: Lyric File Format
+  ttml: Timed Text Markup Language
+  srv3: SRV3 Format
+  srv2: SRV2 Format
+  srv1: SRV1 Format
+  json3: JSON3 Format
+# Status Area Infomation
+Status:
+  Downloader: Scaricamento con
+  Total: Totale
+  Speed: Velocità
+  Elapsed: Al termine
+  Connections: Connessioni
+  Frame: Fotogrammi
+  FPS: FPS
+  Time: Tempo
+  Status: Stato
+  Native: Nativo
+  Downloading: Scaricamento in corso
+  Downloaded: Scaricati
+  Done: Fatto
