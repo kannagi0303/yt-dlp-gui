@@ -1,0 +1,170 @@
+AppName: yt-dlp-gui (Português)
+# Window - Main
+Main:
+  # Top Menu
+  About: Informações...
+  # Tabs Label
+  Main: Principal
+  Advance: Avançado
+  Options: Opções
+  # Main Tab
+  Url: URL
+  Title: Título
+  Desc: Descrição
+  Live: Ao Vivo
+  DownloadThumb: Baixar Miniatura
+  # Main Tab - Buttons
+  Analyze: Analisar
+  Browse: Procurar
+  Download: Baixar
+  Record: Gravar
+  Cancel: Cancelar
+  Stop: Parar
+  # Main Tab - Thumbnail
+  SaveAs: Salvar como...
+  Thumbnail: Miniatura
+  # Main Tab - Chapters
+  Chapters: Capítulos
+  ChaptersNone: '[Nenhum]'
+  ChaptersAll: '[Todos]'
+  ChaptersSplite: '[Dividir por capítulos]'
+  # Main Tab - Video
+  Video: Vídeo
+  VideoRes: Resolução
+  VideoDynamicRange: DR
+  VideoFPS: FPS
+  VideoExt: Extensão
+  VideoCodec: Codec
+  VideoSize: Tamanho
+  # Main Tab - Audio
+  Audio: Áudio
+  AudioSampleRate: ASR
+  AudioExt: Extensão
+  AudioCodec: Codec
+  AudioSize: Tamanho
+  # Main Tab - Subtitle
+  Subtitle: Legenda
+  SubtitleIgnore: '[Ignorar]'
+  SubtitleNone: '[Nenhuma]'
+  # Advance Tab - Configuration
+  Configuration: Configuração
+  ConfigurationNone: '[Nenhuma]'
+  # Advance Tab - Proxy
+  Proxy: Proxy
+  ProxyEnabled: Ativado
+  ProxyHelper: socks5://usuário:senha@127.0.0.1:1080/
+  # Advance Tab - Cookie
+  Cookie: Cookie
+  CookieWhenNeeded: Quando necessário
+  CookieNever: Nunca
+  CookieAlways: Sempre
+  CookieAsk: Perguntar
+  CookieUse: Usar
+  # Advance Tab - Aria2
+  Aria2: Aria2
+  Aria2Enabled: Ativado
+  # Advance Tab - Embeds
+  Embeds: Incorporações
+  EmbedsThumbnail: Miniatura
+  EmbedsChapters: Capítulos
+  EmbedsSubtitles: Legendas
+  TimeRange: Intervalo de Tempo
+  # Advance Tab - Time Range
+  TimeRangeHits: --seções-de-download
+  TimeRangeHelper: '*10:15-15:00'
+  # Advance Tab - Limit Rate
+  LimitRate: Limitar Taxa
+  LimitRateHelper: Como 50K ou 4.2M
+  # Advance Tab - Modified
+  Modified: Data de modificação do arquivo
+  ModifiedModified: Data de modificação (YouTube)
+  ModifiedCreated: Data de criação (Agora)
+  ModifiedUpload: Data de upload (YouTube)
+  # Options Tab - Notifications
+  Notifications: Notificações
+  NotificationsEnabled: Ativadas
+  NotificationsSound: Som de notificação
+  SoundDefault: Padrão
+  SoundSystem: Sistema
+  SoundBrowse: Procurar...
+  # Options Tab - Always On Top
+  AlwaysOnTop: Sempre em Primeiro Plano
+  AlwaysOnTopEnabled: Ativado
+  # Options Tab - Remember Window State
+  RememberWindowState: Lembrar Estado da Janela
+  RememberWindowPosition: Posição
+  RememberWindowSize: Tamanho
+  Scale : Ampliar
+  # Options Tab - Automatically download
+  AutoDownload: Download Automático
+  AutoDownloadAnalysed: Após Análise
+  # Options Tab - Temporary folder
+  TemporaryFolder: Pasta Temporária
+  TemporaryTarget: Destino
+  TemporaryLocale: Local
+  TemporarySystem: Sistema
+  TemporaryBrowse: Procurar
+# Window - About
+About:
+  About: Sobre este software
+  Website: Site
+  Authors: Autores
+  # Extended information can be freely modified and there is no limit to the number of lines.
+  # Extends :
+  #   label1: content
+  #   label2: url
+  Extends:
+    Tradução para o Português: RichardLeite
+    Site: https://github.com/RichardLeite
+# Window - Release
+Releases:
+  Releases: Lançamentos
+  Loading: Carregando...
+  NoUpdated: Não há atualizações disponíveis.
+# Dialog, Popups
+Dialog:
+  CookieRequired: É necessário um cookie. Deseja usá-lo?
+  FileExist: O arquivo já existe. Deseja sobrescrevê-lo?
+  DownloadCompleted: Download do vídeo concluído!
+  OpenFolder: Abrir Pasta
+  Close: Fechar
+# File Types
+Files:
+  image: Arquivo de Imagem
+  mkv: Matroska Multimedia Container
+  mp4: MPEG-4 Part 14
+  webm: WebM Container Format
+  mov: QuickTime Movie
+  flv: Flash Video
+  opus: Opus Interactive Audio Codec
+  aac: Advanced Audio Coding
+  m4a: MPEG-4 Audio Layer
+  mp3: MPEG-1 Audio Layer III
+  vorbis: Vorbis Audio Codec
+  alac: Apple Lossless Audio Codec
+  flac: Free Lossless Audio Codec
+  wav: Waveform Audio File Format
+  srt: SubRip Subtitle Format
+  ass: Advanced SubStation Alpha
+  vtt: WebVTT (Web Video Text Tracks)
+  lrc: Lyric File Format
+  ttml: Timed Text Markup Language
+  srv3: Formato SRV3
+  srv2: Formato SRV2 
+  srv1: Formato SRV1 
+  json3: Formato JSON3 
+# Status Area Infomation
+Status:
+  Downloader: Downloader
+  Total: Total
+  Speed: Velocidade
+  Elapsed: Decorrido
+  Connections: Conexões
+  Frame: Frame
+  FPS: FPS
+  Time: Tempo
+  Status: Status
+  Native: Nativo
+  Downloading: Baixando
+  Downloaded: Baixado
+  Done: Pronto
