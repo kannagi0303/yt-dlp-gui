@@ -1,0 +1,169 @@
+﻿# Name
+AppName: yt-dlp-gui (한국어)
+# Window - Main
+Main:
+  # Top Menu
+  About: 정보...
+  # Tabs Label
+  Main: 주 메뉴
+  Advance: 고급
+  Options: 옵션
+  # Main Tab
+  Url: URL
+  Title: 제목
+  Desc: 설명
+  Live: 라이브
+  DownloadThumb: 썸네일 다운로드
+  # Main Tab - Buttons
+  Analyze: 분석
+  Browse: 검색
+  Download: 다운로드
+  Record: 녹화
+  Cancel: 취소
+  Stop: 정지
+  # Main Tab - Thumbnail
+  SaveAs: 다음 이름으로 저장...
+  Thumbnail: 썸네일
+  # Main Tab - Chapters
+  Chapters: 챕터
+  ChaptersNone: '[없음]'
+  ChaptersAll: '[모두]'
+  ChaptersSplite: '[챕터별 분리]'
+  # Main Tab - Video
+  Video: 비디오
+  VideoRes: 해상도
+  VideoDynamicRange: DR
+  VideoFPS: FPS
+  VideoExt: 확장자
+  VideoCodec: 코덱
+  VideoSize: 파일 크기
+  # Main Tab - Audio
+  Audio: 오디오
+  AudioSampleRate: ASR
+  AudioExt: 확장자
+  AudioCodec: 코덱
+  AudioSize: 파일 크기
+  # Main Tab - Subtitle
+  Subtitle: 자막
+  SubtitleIgnore: '[무시]'
+  SubtitleNone: '[없음]'
+  # Advance Tab - Configuration
+  Configuration: 설정
+  ConfigurationNone: '[없음]'
+  # Advance Tab - Proxy
+  Proxy: 프록시
+  ProxyEnabled: 활성화
+  ProxyHelper: socks5://user:pass@127.0.0.1:1080/
+  # Advance Tab - Cookie
+  Cookie: 쿠키
+  CookieWhenNeeded: 필요할 때
+  CookieNever: 사용 안함
+  CookieAlways: 항상 사용
+  CookieAsk: 뭍기
+  CookieUse: 사용
+  # Advance Tab - Aria2
+  Aria2: Aria2
+  Aria2Enabled: 활성화
+  # Advance Tab - Embeds
+  Embeds: Embeds
+  EmbedsThumbnail: 썸네일
+  EmbedsChapters: 챕터
+  EmbedsSubtitles: 자막
+  # Advance Tab - Time Range
+  TimeRange: 시간 범위
+  TimeRangeHits: --download-sections
+  TimeRangeHelper: '*10:15-15:00'
+  # Advance Tab - Limit Rate
+  LimitRate: 속도 제한
+  LimitRateHelper: 50K or 4.2M
+  # Advance Tab - Mdified
+  Modified: 수정됨
+  ModifiedModified: 수정 날짜
+  ModifiedCreated: 생성 날짜
+  ModifiedUpload: 업로드 날짜
+  # Options Tab - Notifications
+  Notifications: 알림
+  NotificationsEnabled: 활성화
+  NotificationsSound: 알림 소리
+  SoundDefault: 기본
+  SoundSystem: 시스템
+  SoundBrowse: 검색...
+  # Options Tab - Always On Top
+  AlwaysOnTop: 항상 위에 표시
+  AlwaysOnTopEnabled: 활성화
+  # Options Tab - Remember Window State
+  RememberWindowState: 창 위치 및 형태 기억하기
+  RememberWindowPosition: 위치
+  RememberWindowSize: 사이즈
+  Scale: Scale
+  # Options Tab - Automatically download
+  AutoDownload: 자동 다운로드
+  AutoDownloadAnalysed: 분석 후에
+  # Options Tab - Temporary folder
+  TemporaryFolder: 임시 폴더
+  TemporaryTarget: 대상
+  TemporaryLocale: 지역
+  TemporarySystem: 시스템
+  TemporaryBrowse: 검색...
+# Window - About
+About:
+  About: 정보
+  Website: 홈페이지
+  Authors: 만든 이
+  # Extended information can be freely modified and there is no limit to the number of lines.
+  # Extends :
+  #   label1: content
+  #   label2: url
+  Extends: {}
+# Window - Release
+Releases:
+  Releases: 릴리즈
+  Loading: 로딩 중...
+  NoUpdated: 새 업데이트가 없습니다.
+# Dialog, Popups
+Dialog:
+  CookieRequired: 쿠기가 필요합니다. 사용하시겠습니까?
+  FileExist: 파일이 이미 존재합니다. 덮어쓰시겠습니까?
+  DownloadCompleted: 비디오 다운로드 완료!
+  OpenFolder: 폴더 열기
+  Close: 닫기
+# File Types
+Files:
+  image: 이미지 파일
+  mkv: Matroska Multimedia Container
+  mp4: MPEG-4 Part 14
+  webm: WebM Container Format
+  mov: QuickTime Movie
+  flv: Flash Video
+  opus: Opus Interactive Audio Codec
+  aac: Advanced Audio Coding
+  m4a: MPEG-4 Audio Layer
+  mp3: MPEG-1 Audio Layer III
+  vorbis: Vorbis Audio Codec
+  alac: Apple Lossless Audio Codec
+  flac: Free Lossless Audio Codec
+  wav: Waveform Audio File Format
+  srt: SubRip Subtitle Format
+  ass: Advanced SubStation Alpha
+  vtt: WebVTT (Web Video Text Tracks)
+  lrc: Lyric File Format
+  ttml: Timed Text Markup Language
+  srv3: SRV3 Format
+  srv2: SRV2 Format
+  srv1: SRV1 Format
+  json3: JSON3 Format
+# Status Area Infomation
+Status:
+  Downloader: 다운로더
+  Total: 총
+  Speed: 속도
+  Elapsed: 소요 시간
+  Connections: 연결
+  Frame: 프레임
+  FPS: FPS
+  Time: 시간
+  Status: 상태
+  Native: Native
+  Downloading: 다운로드 중
+  Downloaded: 다운로드 완료
+  Done: 종료
