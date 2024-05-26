@@ -1,0 +1,171 @@
+# Name
+AppName: yt-dlp-gui
+# Window - Main
+Main:
+  # Top Menu
+  About: Про...
+  # Tabs Label
+  Main: Основне
+  Advance: Розширені
+  Options: Налаштування
+  # Main Tab
+  Url: Посилання
+  Title: Назва
+  Desc: Опис
+  Live: LIVE
+  DownloadThumb: Завантажити мініатюру
+  # Main Tab - Buttons
+  Analyze: Аналізувати
+  Browse: Вибрати
+  Download: Завантажити
+  Record: Записати
+  Cancel: Відмінити
+  Stop: Стоп
+  # Main Tab - Thumbnail
+  SaveAs: Зберегти як...
+  Thumbnail: Мініатюра
+  # Main Tab - Chapters
+  Chapters: Розділи
+  ChaptersNone: '[Нема]'
+  ChaptersAll: '[Всі]'
+  ChaptersSplite: '[Поділ за розділами]'
+  # Main Tab - Video
+  Video: Відео
+  VideoRes: Якість
+  VideoDynamicRange: DR
+  VideoFPS: FPS
+  VideoExt: Ext
+  VideoCodec: Кодек
+  VideoSize: Розмір
+  # Main Tab - Audio
+  Audio: Аудіо
+  AudioSampleRate: ASR
+  AudioExt: Ext
+  AudioCodec: Кодек
+  AudioSize: Розмір
+  # Main Tab - Subtitle
+  Subtitle: Субтитри
+  SubtitleIgnore: '[Ігнорувати]'
+  SubtitleNone: '[Нема]'
+  # Advance Tab - Configuration
+  Configuration: Конфігурація
+  ConfigurationNone: '[Нема]'
+  # Advance Tab - Proxy
+  Proxy: Проксі
+  ProxyEnabled: Увімкнено
+  ProxyHelper: socks5://user:pass@127.0.0.1:1080/
+  # Advance Tab - Cookie
+  Cookie: Cookie
+  CookieWhenNeeded: Коли потрібно
+  CookieNever: Ніколи
+  CookieAlways: Завжди
+  CookieAsk: Запитати
+  CookieUse: Використати
+  # Advance Tab - Aria2
+  Aria2: Aria2
+  Aria2Enabled: Увімкнено
+  # Advance Tab - Embeds
+  Embeds: Вставки
+  EmbedsThumbnail: Мініатюра
+  EmbedsChapters: Розділи
+  EmbedsSubtitles: Субтитри
+  # Advance Tab - Time Range
+  TimeRange: Часовий діапазон
+  TimeRangeHits: --download-sections
+  TimeRangeHelper: '*10:15-15:00'
+  # Advance Tab - Limit Rate
+  LimitRate: Ліміт
+  LimitRateHelper: 50K або 4.2M
+  # Advance Tab - Mdified
+  Modified: Змінено
+  ModifiedModified: Дата зміни
+  ModifiedCreated: Дата створення
+  ModifiedUpload: Дата завантаження
+  # Options Tab - Notifications
+  Notifications: Сповіщення
+  NotificationsEnabled: Увімкнено
+  NotificationsSound: Звук сповіщень
+  SoundDefault: Стандартно
+  SoundSystem: Система
+  SoundBrowse: Вибрати...
+  # Options Tab - Always On Top
+  AlwaysOnTop: Завжди на передньому плані
+  AlwaysOnTopEnabled: Увімкнено
+  # Options Tab - Remember Window State
+  RememberWindowState: Запам'ятати стан вікна
+  RememberWindowPosition: Позиція
+  RememberWindowSize: Розмір
+  Scale: Масштаб
+  # Options Tab - Automatically download
+  AutoDownload: Завантажити автоматично
+  AutoDownloadAnalysed: Після аналізу
+  # Options Tab - Temporary folder
+  TemporaryFolder: Тимчасова папка
+  TemporaryTarget: Target
+  TemporaryLocale: Locale
+  TemporarySystem: Системна
+  TemporaryBrowse: Вибрати...
+# Window - About
+About:
+  About: Про програму
+  Website: Сайт
+  Authors: Автори
+  # Extended information can be freely modified and there is no limit to the number of lines.
+  # Extends :
+  #   label1: content
+  #   label2: url
+  Extends:
+    Переклав: Noob-Lol
+    Профіль: https://github.com/Noob-Lol
+# Window - Release
+Releases:
+  Releases: Релізи
+  Loading: Завантаження...
+  NoUpdated: Нових оновлень не знайдено.
+# Dialog, Popups
+Dialog:
+  CookieRequired: Cookies необхідні, використати їх?
+  FileExist: Файл вже існує. Перезаписати його?
+  DownloadCompleted: Завантаження відео завершено!
+  OpenFolder: Відкрити папку
+  Close: Закрити
+# File Types
+Files:
+  image: Image File
+  mkv: Matroska Multimedia Container
+  mp4: MPEG-4 Part 14
+  webm: WebM Container Format
+  mov: QuickTime Movie
+  flv: Flash Video
+  opus: Opus Interactive Audio Codec
+  aac: Advanced Audio Coding
+  m4a: MPEG-4 Audio Layer
+  mp3: MPEG-1 Audio Layer III
+  vorbis: Vorbis Audio Codec
+  alac: Apple Lossless Audio Codec
+  flac: Free Lossless Audio Codec
+  wav: Waveform Audio File Format
+  srt: SubRip Subtitle Format
+  ass: Advanced SubStation Alpha
+  vtt: WebVTT (Web Video Text Tracks)
+  lrc: Lyric File Format
+  ttml: Timed Text Markup Language
+  srv3: SRV3 Format
+  srv2: SRV2 Format
+  srv1: SRV1 Format
+  json3: JSON3 Format
+# Status Area Infomation
+Status:
+  Downloader: Завантажувач
+  Total: Всього
+  Speed: Швидкість
+  Elapsed: Залишилося часу
+  Connections: З'єднання
+  Frame: Frame
+  FPS: FPS
+  Time: Час
+  Status: Статус
+  Native: Вбудований
+  Downloading: Завантаження
+  Downloaded: Завантажено
+  Done: Виконано
