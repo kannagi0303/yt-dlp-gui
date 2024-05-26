@@ -1,4 +1,4 @@
-﻿# Name
+# Name
 AppName: yt-dlp-gui
 # Window - Main
 Main:
@@ -28,7 +28,7 @@ Main:
   Chapters: Розділи
   ChaptersNone: '[Нема]'
   ChaptersAll: '[Всі]'
-  ChaptersSplite: '[Розділити по розділам]'
+  ChaptersSplite: '[Поділ за розділами]'
   # Main Tab - Video
   Video: Відео
   VideoRes: Якість
@@ -46,10 +46,10 @@ Main:
   # Main Tab - Subtitle
   Subtitle: Субтитри
   SubtitleIgnore: '[Ігнорувати]'
-  SubtitleNone: '[Ні]'
+  SubtitleNone: '[Нема]'
   # Advance Tab - Configuration
   Configuration: Конфігурація
-  ConfigurationNone: '[None]'
+  ConfigurationNone: '[Нема]'
   # Advance Tab - Proxy
   Proxy: Проксі
   ProxyEnabled: Увімкнено
@@ -63,7 +63,7 @@ Main:
   CookieUse: Використати
   # Advance Tab - Aria2
   Aria2: Aria2
-  Aria2Enabled: Enabled
+  Aria2Enabled: Увімкнено
   # Advance Tab - Embeds
   Embeds: Вставки
   EmbedsThumbnail: Мініатюра
@@ -78,7 +78,7 @@ Main:
   LimitRateHelper: 50K або 4.2M
   # Advance Tab - Mdified
   Modified: Змінено
-  ModifiedModified: Дата змінення
+  ModifiedModified: Дата зміни
   ModifiedCreated: Дата створення
   ModifiedUpload: Дата завантаження
   # Options Tab - Notifications
@@ -115,7 +115,7 @@ About:
   #   label1: content
   #   label2: url
   Extends:
-    Переклав українською: Noob-lol
+    Переклав: Noob-Lol
     Профіль: https://github.com/Noob-Lol
 # Window - Release
 Releases:
@@ -159,8 +159,8 @@ Status:
   Downloader: Завантажувач
   Total: Всього
   Speed: Швидкість
-  Elapsed: Пройшло
-  Connections: Підключень
+  Elapsed: Залишилося часу
+  Connections: З'єднання
   Frame: Frame
   FPS: FPS
   Time: Час
