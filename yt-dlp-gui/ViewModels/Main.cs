@@ -4,6 +4,7 @@ using Swordfish.NET.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
@@ -463,8 +464,8 @@ namespace yt_dlp_gui.Views {
                             }
                         }
                         s.Downloaded = decimal.Parse(d[3]);
-                        if (decimal.TryParse(d[5], out decimal d_speed)) s.Speed = d_speed;
-                        if (decimal.TryParse(d[6], out decimal d_elapsed)) s.Elapsed = d_elapsed;
+                        if (decimal.TryParse(d[5], CultureInfo.InvariantCulture, out decimal d_speed)) s.Speed = d_speed;
+                        if (decimal.TryParse(d[6], CultureInfo.InvariantCulture, out decimal d_elapsed)) s.Elapsed = d_elapsed;
 
                         UpdatePersent(s.Persent);
 
