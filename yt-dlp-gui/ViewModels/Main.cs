@@ -455,11 +455,11 @@ namespace yt_dlp_gui.Views {
                         // yt-dlp
                         if (!Data.DNStatus_Infos.ContainsKey("Downloader")) Data.DNStatus_Infos["Downloader"] = App.Lang.Status.Native;
                         var d = std.Split(',');
-                        if (decimal.TryParse(d[4], out decimal d_total)) {
+                        if (decimal.TryParse(d[4], CultureInfo.InvariantCulture, out decimal d_total)) {
                             s.Total = d_total;
                             s.Persent = decimal.Parse(d[3]) / d_total * 100; ;
                         } else {
-                            if (decimal.TryParse(d[1].TrimEnd('%'), out decimal d_persent)) {
+                            if (decimal.TryParse(d[1].TrimEnd('%'), CultureInfo.InvariantCulture, out decimal d_persent)) {
                                 s.Persent = d_persent;
                             }
                         }
@@ -480,7 +480,7 @@ namespace yt_dlp_gui.Views {
                         // aria2
                         Data.DNStatus_Infos["Downloader"] = "aria2c";
                         var d = Util.GetGroup(regAria, std);
-                        if (decimal.TryParse(d["persent"], out decimal o_persent)) {
+                        if (decimal.TryParse(d["persent"], CultureInfo.InvariantCulture, out decimal o_persent)) {
                             UpdatePersent(o_persent);
                         }
                         Data.DNStatus_Infos["Downloaded"] = d["downloaded"];
@@ -503,7 +503,7 @@ namespace yt_dlp_gui.Views {
                         // youtube-dl
                         if (!Data.DNStatus_Infos.ContainsKey("Downloader")) Data.DNStatus_Infos["Downloader"] = "youtube-dl";
                         var d = Util.GetGroup(regYTDL, std);
-                        if (decimal.TryParse(d["persent"], out decimal o_persent)) {
+                        if (decimal.TryParse(d["persent"], CultureInfo.InvariantCulture, out decimal o_persent)) {
                             UpdatePersent(o_persent);
                         }
                         Data.DNStatus_Infos["Total"] = d.GetValueOrDefault("total", "");
