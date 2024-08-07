@@ -697,19 +697,21 @@
                 </Grid.ColumnDefinitions>
                 <Grid.RowDefinitions>
                     <!-- 0 -->
-                    <RowDefinition/>
+                    <RowDefinition Height="Auto"/>
                     <!-- 1 -->
-                    <RowDefinition/>
+                    <RowDefinition Height="Auto"/>
                     <!-- 2 -->
-                    <RowDefinition/>
+                    <RowDefinition Height="Auto"/>
                     <!-- 3 -->
-                    <RowDefinition/>
+                    <RowDefinition Height="Auto"/>
                     <!-- 4 -->
                     <RowDefinition/>
                     <!-- 5 -->
-                    <RowDefinition/>
+                    <RowDefinition Height="Auto"/>
                     <!-- 6 -->
-                    <RowDefinition/>
+                    <RowDefinition Height="Auto"/>
+                    <!-- 7 -->
+                    <RowDefinition Height="Auto"/>
                 </Grid.RowDefinitions>
                 <!--Notifications-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_ -->
                 <TextBlock Grid.Row="0" Text="{Binding Source={x:Static app:App.Lang}, Path=Main.Notifications}" HorizontalAlignment="Right" VerticalAlignment="Center"/>
@@ -764,15 +766,25 @@
                 <Grid Grid.Row="6" Grid.Column="2">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition/>
-                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="25"/>
+                        <ColumnDefinition Width="15"/>
                     </Grid.ColumnDefinitions>
-                    <controls:TextEditor IsReadOnly="True" Text="{Binding PathTEMP}" Margin="0" Multiline="False" VerticalAlignment="Center"/>
-                    <ToggleButton Grid.Column="1" Focusable="False" Margin="2,0,0,0" Checked="ToggleButton_Checked">
+                    <controls:TextEditor IsReadOnly="True" Text="{Binding PathTEMP}" Margin="0,0,25,0" Multiline="False" VerticalAlignment="Center" Grid.ColumnSpan="2"/>
+                    <ToggleButton Grid.Column="1" Focusable="False" Margin="2,0,0,0" Checked="ToggleButton_Checked" Grid.ColumnSpan="2">
                         <StackPanel Orientation="Horizontal" Margin="4,0,0,0">
                             <controls:Icons Size="14" Kind="FolderSettings"/>
                             <controls:Icons Kind="MenuDown" Size="16"/>
                         </StackPanel>
                     </ToggleButton>
+                </Grid>
+                <!--Name format-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_ -->
+                <TextBlock Grid.Row="7" Margin="0,5,0,5" Text="{Binding Source={x:Static app:App.Lang}, Path=Main.NameFormat}" VerticalAlignment="Center" HorizontalAlignment="Right"/>
+                <Grid Grid.Row="7" Grid.Column="2">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+                    <controls:TextEditor IsReadOnly="False" Text="{Binding FileNameFormat}" Margin="0,2,0,0" Multiline="False" VerticalAlignment="Center"/>
                 </Grid>
             </Grid>
         </TabItem>

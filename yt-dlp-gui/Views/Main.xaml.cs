@@ -299,7 +299,7 @@ namespace yt_dlp_gui.Views {
             if (!string.IsNullOrWhiteSpace(Data.selectedConfig.file)) {
                 dlp.LoadConfig(Data.selectedConfig.file);
             }
-            if (Data.UseOutput) dlp.Output("%(title)s.%(ext)s"); //if not used config, default template
+            if (Data.UseOutput) dlp.Output(Data.FileNameFormat); //if not used config, default template
             ClearStatus();
             dlp.Exec(null, std => {
                 //取得JSON

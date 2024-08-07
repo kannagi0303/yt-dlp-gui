@@ -193,6 +193,7 @@ namespace yt_dlp_gui.Views {
             public bool AutoDownloadAnalysed { get; set; } = false;
             public bool RememberWindowStatePosition { get; set; } = false;
             public bool RememberWindowStateSize { get; set; } = false;
+            public string FileNameFormat { get; set; } = "%(title)s.%(ext)s";
             public double Top { get; set; } = 0;
             public double Left { get; set; } = 0;
             public double Width { get; set; } = 600;
@@ -410,7 +411,8 @@ namespace yt_dlp_gui.Views {
             [YamlMember(Order = 1402)] public bool SaveThumbnail { get; set; } = true;
             [YamlMember(Order = 1403)] public bool UseNotifications { get; set; } = true;
             [YamlMember(Order = 1404)] public bool AutoDownloadAnalysed { get; set; } = false;
-            
+            [YamlMember(Order = 1405)] public string FileNameFormat { get; set; } = "%(title)s.%(ext)s";
+
             [Description("Last Checking Update Date")]
             [YamlMember(Order = 9001)] public string LastVersion { get; set; } = string.Empty;
             [YamlMember(Order = 9002)] public string LastCheckUpdate { get; set; } = string.Empty;
