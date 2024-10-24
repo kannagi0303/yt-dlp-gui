@@ -1,0 +1,169 @@
+# الاسم
+AppName: واجهة yt-dlp
+# نافذة - الرئيسية
+Main:
+  # القائمة العلوية
+  About: حول...
+  # تسميات التبويبات
+  Main: الرئيسية
+  Advance: متقدم
+  Options: الخيارات
+  # تبويب الرئيسي
+  Url: الرابط
+  Title: العنوان
+  Desc: الوصف
+  Live: مباشر
+  DownloadThumb: تحميل الصورة المصغرة
+  # تبويب الرئيسي - الأزرار
+  Analyze: تحليل
+  Browse: تصفح
+  Download: تحميل
+  Record: تسجيل
+  Cancel: إلغاء
+  Stop: إيقاف
+  # تبويب الرئيسي - الصورة المصغرة
+  SaveAs: حفظ باسم...
+  Thumbnail: الصورة المصغرة
+  # تبويب الرئيسي - الفصول
+  Chapters: الفصول
+  ChaptersNone: '[لا يوجد]'
+  ChaptersAll: '[الكل]'
+  ChaptersSplite: '[تقسيم حسب الفصول]'
+  # تبويب الرئيسي - الفيديو
+  Video: الفيديو
+  VideoRes: الدقة
+  VideoDynamicRange: المدى الديناميكي
+  VideoFPS: الإطارات في الثانية (FPS)
+  VideoExt: الامتداد
+  VideoCodec: الترميز
+  VideoSize: حجم الملف
+  # تبويب الرئيسي - الصوت
+  Audio: الصوت
+  AudioSampleRate: معدل العينات الصوتية
+  AudioExt: الامتداد
+  AudioCodec: الترميز
+  AudioSize: حجم الملف
+  # تبويب الرئيسي - الترجمة
+  Subtitle: الترجمة
+  SubtitleIgnore: '[تجاهل]'
+  SubtitleNone: '[لا يوجد]'
+  # تبويب متقدم - الإعدادات
+  Configuration: الإعدادات
+  ConfigurationNone: '[لا يوجد]'
+  # تبويب متقدم - الوكيل
+  Proxy: الوكيل
+  ProxyEnabled: ممكّن
+  ProxyHelper: socks5://user:pass@127.0.0.1:1080/
+  # تبويب متقدم - الكوكيز
+  Cookie: الكوكيز
+  CookieWhenNeeded: عند الحاجة
+  CookieNever: أبداً
+  CookieAlways: دائماً
+  CookieAsk: اسأل
+  CookieUse: استخدام
+  # تبويب متقدم - Aria2
+  Aria2: Aria2
+  Aria2Enabled: ممكّن
+  # تبويب متقدم - التضمين
+  Embeds: التضمين
+  EmbedsThumbnail: الصورة المصغرة
+  EmbedsChapters: الفصول
+  EmbedsSubtitles: الترجمة
+  # تبويب متقدم - نطاق الوقت
+  TimeRange: نطاق الوقت
+  TimeRangeHits: --download-sections
+  TimeRangeHelper: '*10:15-15:00'
+  # تبويب متقدم - الحد الأقصى للسرعة
+  LimitRate: الحد الأقصى للسرعة
+  LimitRateHelper: 50K أو 4.2M
+  # تبويب متقدم - التعديل
+  Modified: التعديل
+  ModifiedModified: تاريخ التعديل
+  ModifiedCreated: تاريخ الإنشاء
+  ModifiedUpload: تاريخ التحميل
+  # تبويب الخيارات - الإشعارات
+  Notifications: الإشعارات
+  NotificationsEnabled: ممكّن
+  NotificationsSound: صوت الإشعارات
+  SoundDefault: الافتراضي
+  SoundSystem: النظام
+  SoundBrowse: تصفح...
+  # تبويب الخيارات - دائماً في الأعلى
+  AlwaysOnTop: دائماً في الأعلى
+  AlwaysOnTopEnabled: ممكّن
+  # تبويب الخيارات - تذكر حالة النافذة
+  RememberWindowState: تذكر حالة النافذة
+  RememberWindowPosition: الموقع
+  RememberWindowSize: الحجم
+  Scale: المقياس
+  # تبويب الخيارات - التحميل التلقائي
+  AutoDownload: التحميل التلقائي
+  AutoDownloadAnalysed: بعد التحليل
+  # تبويب الخيارات - المجلد المؤقت
+  TemporaryFolder: المجلد المؤقت
+  TemporaryTarget: الهدف
+  TemporaryLocale: اللغة المحلية
+  TemporarySystem: النظام
+  TemporaryBrowse: تصفح...
+# نافذة - حول
+About:
+  About: حول
+  Website: الموقع الإلكتروني
+  Authors: المؤلفون
+  # يمكن تعديل المعلومات الإضافية بحرية ولا يوجد حد لعدد السطور.
+  # معلومات إضافية:
+  #   label1: المحتوى
+  #   label2: الرابط
+  Extends: {}
+# نافذة - الإصدارات
+Releases:
+  Releases: الإصدارات
+  Loading: جاري التحميل...
+  NoUpdated: لا توجد نسخة محدثة حالياً.
+# الحوارات، النوافذ المنبثقة
+Dialog:
+  CookieRequired: الكوكيز مطلوبة، هل تريد استخدامها؟
+  FileExist: الملف موجود بالفعل. هل تريد الكتابة فوقه؟
+  DownloadCompleted: تم اكتمال تحميل الفيديو!
+  OpenFolder: فتح المجلد
+  Close: إغلاق
+# أنواع الملفات
+Files:
+  image: ملف صورة
+  mkv: حاوية الوسائط المتعددة ماتروسكا
+  mp4: جزء من MPEG-4
+  webm: صيغة حاوية WebM
+  mov: فيلم QuickTime
+  flv: فيديو فلاش
+  opus: ترميز صوتي تفاعلي Opus
+  aac: ترميز صوتي متقدم (AAC)
+  m4a: طبقة صوت MPEG-4
+  mp3: طبقة صوت MPEG-1 III
+  vorbis: ترميز صوت Vorbis
+  alac: ترميز الصوت Apple Lossless
+  flac: ترميز الصوت Free Lossless
+  wav: صيغة ملف الصوت Waveform
+  srt: صيغة ترجمة SubRip
+  ass: صيغة ترجمة Advanced SubStation Alpha
+  vtt: صيغة WebVTT (مسارات نص الفيديو)
+  lrc: صيغة ملف كلمات الأغاني
+  ttml: لغة Timed Text Markup
+  srv3: صيغة SRV3
+  srv2: صيغة SRV2
+  srv1: صيغة SRV1
+  json3: صيغة JSON3
+# معلومات منطقة الحالة
+Status:
+  Downloader: مدير التحميل
+  Total: الإجمالي
+  Speed: السرعة
+  Elapsed: الوقت المنقضي
+  Connections: الاتصالات
+  Frame: الإطار
+  FPS: الإطارات في الثانية
+  Time: الوقت
+  Status: الحالة
+  Native: أصلي
+  Downloading: جاري التحميل
+  Downloaded: تم التحميل
+  Done: تم
