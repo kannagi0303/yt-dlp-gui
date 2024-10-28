@@ -6,7 +6,7 @@ Main:
   About: Acerca de...
   # Tabs Label
   Main: Principal
-  Advance: Advanzado
+  Advance: Avanzado
   Options: Opciones
   # Main Tab
   Url: Url
@@ -114,8 +114,8 @@ About:
   #   label1: content
   #   label2: url
   Extends:
-    Traducir: marcosSea
-    Sitio Web: https://github.com/marcosSea
+    Traducción: xjuanfxx
+    Sitio Web: https://github.com/xjuanfxx
 # Window - Release
 Releases:
   Releases: Lanzamientos
@@ -124,7 +124,7 @@ Releases:
 # Dialog, Popups
 Dialog:
   CookieRequired: Se requieren cookies, ¿Usarlas?
-  FileExist: El archivo ya existe. ¿Sobrescribirlo?
+  FileExist: El archivo ya existe. ¿Desea sobrescribirlo?
   DownloadCompleted: Descarga de video completada!
   OpenFolder: Abrir carpeta
   Close: Cerrar
