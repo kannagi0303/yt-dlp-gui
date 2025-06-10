@@ -7,15 +7,12 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Threading;
-using yt_dlp_gui.Models;
+using yt_dlp_gui.Models; // ADDED
 using yt_dlp_gui.Views;
-using yt_dlp_gui.Wrappers;
+using yt_dlp_gui.Wrappers; // ADDED
 
 namespace yt_dlp_gui
 {
-    /// <summary>
-    /// Interaction logic for App.xaml
-    /// </summary>
     public partial class App : Application
     {
         public static Config AppConfig { get; set; } = new();
@@ -30,7 +27,7 @@ namespace yt_dlp_gui
             DispatcherUnhandledException += App_DispatcherUnhandledException;
             TaskScheduler.UnobservedTaskException += TaskScheduler_UnobservedTaskException;
             System.AppDomain.CurrentDomain.UnhandledException += CurrentDomain_UnhandledException;
-            InitTheme(); // From App.Theme.cs
+            InitTheme();
         }
 
         private void CurrentDomain_UnhandledException(object sender, UnhandledExceptionEventArgs e)
@@ -48,8 +45,7 @@ namespace yt_dlp_gui
             var exception = e.Exception as Exception;
             MessageBox.Show(exception?.Message, "Error:Dispatcher");
         }
-        
-        // ---- Merged from App.Path.cs ----
+
         public static string AppData = Path.Combine(
             Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
             "yt-dlp-gui");
@@ -69,7 +65,6 @@ namespace yt_dlp_gui
             if (!Directory.Exists(PathTEMP)) Directory.CreateDirectory(PathTEMP);
         }
 
-        // ---- Merged from App.Theme.cs ----
         public ResourceDictionary ThemeDictionary
         {
             get { return Resources.MergedDictionaries[0]; }
