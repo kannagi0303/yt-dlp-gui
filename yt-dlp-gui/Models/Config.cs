@@ -1,31 +1,13 @@
 using System;
-using System; // Added by previous overwrite, ensure it's kept
 using System.ComponentModel;
 using Libs.Yaml; // Assuming this is needed for Yaml.Open/Save
 using yt_dlp_gui.App; // Assuming this is needed for App.Path, App.Folders, App.AppName
 using System.IO; // Required for Path.Combine
+using YamlDotNet.Serialization; // Added for YamlIgnore attribute
 
 namespace yt_dlp_gui.Models {
-    public enum UseCookie {
-        Never,
-        WhenNeeded,
-        Always,
-        Ask
-    }
-    public enum CookieType {
-        Chrome,
-        Edge,
-        Firefox,
-        Opera,
-        Vivaldi,
-        Chromium,
-        Chrome_Beta
-    }
-    public enum ModifiedType {
-        Modified,
-        Created,
-        Upload
-    }
+    // Enum definitions for UseCookie, CookieType, ModifiedType are removed from here.
+    // They are expected to be defined in Cookies.cs and Video.cs respectively.
 
     public class Config : INotifyPropertyChanged {
         public static Config Default { get; set; } = new Config(); // To allow static Load/Save behavior
@@ -76,7 +58,7 @@ namespace yt_dlp_gui.Models {
         public string name { get; set; } = string.Empty;
         public string file { get; set; } = string.Empty;
 
-        [YamlIgnore]
+        [YamlIgnore] // Ensuring this is [YamlIgnore] and not [YamlIgnoreAttribute]
         public bool AutoSaveConfig { get; set; } = false;
 
         public Config() {

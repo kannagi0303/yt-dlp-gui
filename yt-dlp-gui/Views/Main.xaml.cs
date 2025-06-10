@@ -26,12 +26,12 @@ using yt_dlp_gui.Models;
 using yt_dlp_gui.Wrappers;
 using yt_dlp_gui.App; // Added for ThemeManager
 using System.Collections.ObjectModel; // For ObservableCollection
-using System.IO; // For Path
-using System.Linq; // For FirstOrDefault, Any
-using System.Threading.Tasks; // For Task
-using yt_dlp_gui.Wrappers; // For DLP
-using System.Windows; // For Application.Current.Dispatcher
-using System.Globalization; // For NumberStyles and CultureInfo
+// System.IO; // For Path - DUPLICATE, REMOVED (present earlier)
+// using System.Linq; // For FirstOrDefault, Any - DUPLICATE, REMOVED (present earlier)
+// using System.Threading.Tasks; // For Task - DUPLICATE, REMOVED (present earlier)
+// using yt_dlp_gui.Wrappers; // For DLP - DUPLICATE, REMOVED (present earlier)
+// using System.Windows; // For Application.Current.Dispatcher - DUPLICATE, REMOVED (present earlier)
+// using System.Globalization; // For NumberStyles and CultureInfo - DUPLICATE, REMOVED (present earlier)
 
 
 namespace yt_dlp_gui.Views {

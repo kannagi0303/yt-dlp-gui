@@ -5,7 +5,7 @@ using System.Windows;
 
 namespace yt_dlp_gui {
     using IoPath = System.IO.Path;
-    public partial class App :Application {
+    public partial class App : System.Windows.Application { // Explicitly qualified Application
         public static string AppExe;
         public static string AppPath;
         public static string AppName;
