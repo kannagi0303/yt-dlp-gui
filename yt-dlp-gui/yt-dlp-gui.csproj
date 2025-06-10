@@ -7,6 +7,8 @@
     <ApplicationIcon>Resources\logo.ico</ApplicationIcon>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
+    <EnableWindowsTargeting>true</EnableWindowsTargeting>
+    <RootNamespace>yt_dlp_gui</RootNamespace>
   </PropertyGroup>
 
   <ItemGroup>
