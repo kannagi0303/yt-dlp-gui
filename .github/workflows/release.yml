@@ -38,13 +38,13 @@ jobs:
       # 3. Restore NuGet dependencies
       - name: Restore dependencies
         # IMPORTANT: Replace 'YtDlpGui.sln' with the actual name of your .sln file
-        run: dotnet restore YtDlpGui.sln
+        run: dotnet restore yt-dlp-gui.sln
 
       # 4. Build and publish the application
       - name: Build and Publish
         # This command creates a single, self-contained .exe file
         # IMPORTANT: Replace 'YtDlpGui.sln' with the actual name of your .sln file
-        run: dotnet publish YtDlpGui.sln --configuration Release --runtime win-x64 --self-contained true -p:PublishSingleFile=true -o ./publish
+        run: dotnet publish yt-dlp-gui.sln --configuration Release --runtime win-x64 --self-contained true -p:PublishSingleFile=true -o ./publish
 
       # 5. Package the executable into a .zip file for the release
       - name: Package Release
