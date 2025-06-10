@@ -31,9 +31,6 @@
     <Compile Include="App/App.Path.cs">
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
-    <Compile Include="App/App.Theme.cs">
-      <DependentUpon>App.xaml</DependentUpon>
-    </Compile>
     <Compile Include="App/YtdlpUpdater.cs">
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
