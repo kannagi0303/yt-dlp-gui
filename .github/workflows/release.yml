@@ -19,6 +19,9 @@ jobs:
       with:
         dotnet-version: '6.0.x' # Based on project's target: net6.0-windows
 
+    - name: Clean solution
+      run: dotnet clean yt-dlp-gui/yt-dlp-gui.csproj --configuration Release
+
     - name: Restore dependencies
       run: dotnet restore yt-dlp-gui/yt-dlp-gui.csproj
 
