@@ -3,12 +3,11 @@
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
     <TargetFramework>net6.0-windows</TargetFramework>
+    <RootNamespace>yt_dlp_gui</RootNamespace>
     <UseWPF>true</UseWPF>
     <ApplicationIcon>Resources\logo.ico</ApplicationIcon>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
-    <EnableWindowsTargeting>true</EnableWindowsTargeting>
-    <RootNamespace>yt_dlp_gui</RootNamespace>
   </PropertyGroup>
 
   <ItemGroup>
