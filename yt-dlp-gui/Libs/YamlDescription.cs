@@ -5,7 +5,6 @@ using YamlDotNet.Core.Events; // Required for MappingStart, MappingEnd, Scalar, 
 using YamlDotNet.Serialization;
 using YamlDotNet.Serialization.ObjectFactories; // Although ObjectDeserializer and ObjectSerializer are used, ObjectFactories might not be strictly needed for this specific converter's WriteYaml.
 
-
 namespace yt_dlp_gui.Libs
 {
     public class YamlDescription : IYamlTypeConverter
