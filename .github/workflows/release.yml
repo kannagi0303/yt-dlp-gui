@@ -1,76 +1,63 @@
-name: .NET Release Build for Windows
+# A name for your workflow
+name: Build and Release .NET Application
 
+#
+# 1. THIS IS THE AUTO-BUILD TRIGGER
+#
+# This workflow runs automatically on two conditions:
+#  - When you push a new tag that starts with 'v' (e.g., v1.0, v1.2.3)
+#  - When you manually trigger it from the GitHub Actions tab (workflow_dispatch)
+#
 on:
   push:
     tags:
-      - 'v*.*.*' # Trigger on tags like v1.0.0
+      - 'v*'
+  workflow_dispatch:
+
+# Grant permissions for the workflow to write to your repository (to create a release)
+permissions:
+  contents: write
 
 jobs:
   build-and-release-windows:
-    name: Build and Release Windows Executable
-    runs-on: windows-latest
+    name: Build and Release for Windows
+    runs-on: windows-latest # Use a Windows runner for the .NET build
 
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v4
+      # 1. Check out your repository's code
+      - name: Check out code
+        uses: actions/checkout@v4
 
-    - name: Setup .NET SDK
-      uses: actions/setup-dotnet@v4
-      with:
-        dotnet-version: '6.0.x' # Based on project's target: net6.0-windows
+      # 2. Set up the .NET environment
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          # Use a Long Term Support (LTS) version of .NET
+          dotnet-version: 8.0.x 
 
-    - name: Restore dependencies
-      run: dotnet restore yt-dlp-gui/yt-dlp-gui.csproj
+      # 3. Restore NuGet dependencies
+      - name: Restore dependencies
+        # IMPORTANT: Replace 'YtDlpGui.sln' with the actual name of your .sln file
+        run: dotnet restore YtDlpGui.sln
 
-    - name: Build application
-      run: dotnet build yt-dlp-gui/yt-dlp-gui.csproj --configuration Release --no-restore
+      # 4. Build and publish the application
+      - name: Build and Publish
+        # This command creates a single, self-contained .exe file
+        # IMPORTANT: Replace 'YtDlpGui.sln' with the actual name of your .sln file
+        run: dotnet publish YtDlpGui.sln --configuration Release --runtime win-x64 --self-contained true -p:PublishSingleFile=true -o ./publish
 
-    - name: Publish application (single executable)
-      run: dotnet publish yt-dlp-gui/yt-dlp-gui.csproj --configuration Release --no-build --runtime win-x64 --self-contained true -p:PublishSingleFile=true -p:IncludeNativeLibrariesForSelfExtract=true -o ./publish_output
-      # -p:IncludeNativeLibrariesForSelfExtract=true is often helpful for WPF single-file executables
+      # 5. Package the executable into a .zip file for the release
+      - name: Package Release
+        run: Compress-Archive -Path ./publish/* -DestinationPath ./yt-dlp-gui-windows.zip
 
-    - name: Determine Release Version from Tag
-      id: get_version
-      run: echo "RELEASE_VERSION=${GITHUB_REF#refs/tags/}" >> $env:GITHUB_ENV
-      shell: bash
-
-    - name: Create GitHub Release
-      id: create_release
-      uses: actions/create-release@v1
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      with:
-        tag_name: ${{ env.RELEASE_VERSION }}
-        release_name: Release ${{ env.RELEASE_VERSION }}
-        body: |
-          Automated release for version ${{ env.RELEASE_VERSION }}.
-          Contains the Windows executable for yt-dlp-gui.
-        draft: false
-        prerelease: false
-
-    - name: Upload Release Asset (EXE)
-      id: upload-release-asset-exe
-      uses: actions/upload-release-asset@v1
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      with:
-        upload_url: ${{ steps.create_release.outputs.upload_url }}
-        asset_path: ./publish_output/yt-dlp-gui.exe # Assuming the output exe is named yt-dlp-gui.exe
-        asset_name: yt-dlp-gui-${{ env.RELEASE_VERSION }}.exe
-        asset_content_type: application/vnd.microsoft.portable-executable
-
-    # Optional: Zip the output and upload as another asset
-    # - name: Zip publish output
-    #   run: Compress-Archive -Path ./publish_output/* -DestinationPath ./publish_output/yt-dlp-gui-${{ env.RELEASE_VERSION }}.zip
-    #   shell: pwsh
-
-    # - name: Upload Release Asset (ZIP)
-    #   id: upload-release-asset-zip
-    #   uses: actions/upload-release-asset@v1
-    #   env:
-    #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-    #   with:
-    #     upload_url: ${{ steps.create_release.outputs.upload_url }}
-    #     asset_path: ./publish_output/yt-dlp-gui-${{ env.RELEASE_VERSION }}.zip
-    #     asset_name: yt-dlp-gui-${{ env.RELEASE_VERSION }}.zip
-    #     asset_content_type: application/zip
+      # 6. Create the GitHub Release and upload the .zip file
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          # The release will be named after the tag you push (e.g., "v1.0")
+          tag_name: ${{ github.ref }}
+          # This will automatically generate release notes from your commit messages
+          generate_release_notes: true
+          # Attach the packaged .zip file to the release
+          files: |
+            ./yt-dlp-gui-windows.zip
