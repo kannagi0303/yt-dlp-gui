@@ -6,11 +6,11 @@
         xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:controls="clr-namespace:yt_dlp_gui.Controls"
-        xmlns:m="clr-namespace:yt_dlp_gui.Models" 
-        xmlns:local="clr-namespace:yt_dlp_gui.Views" 
+        xmlns:m="clr-namespace:yt_dlp_gui.Models"
+        xmlns:local="clr-namespace:yt_dlp_gui.Views"
         xmlns:b="clr-namespace:yt_dlp_gui.Controls.Behaviors"
         xmlns:converters="clr-namespace:yt_dlp_gui.Converters"
-        mc:Ignorable="d" Style="{DynamicResource WindowStyle}" 
+        mc:Ignorable="d" Style="{DynamicResource WindowStyle}"
         Title="{Binding Source={x:Static app:App.Lang}, Path=AppName}" Width="600" Height="380"
         Background="{StaticResource BackgroundColour}"
         Closed="Window_Closed"
@@ -24,7 +24,7 @@
                 </ResourceDictionary.MergedDictionaries>
 
             <converters:NullOrEmptyToVisibilityConverter x:Key="NullOrEmptyToVisibilityConverter"/>
-            
+
             <ControlTemplate TargetType="ContentControl" x:Key="WindowExtend">
                 <StackPanel Orientation="Horizontal">
                     <Button BorderBrush="Transparent" Background="Transparent"
@@ -62,15 +62,14 @@
                     </Menu>
                 </StackPanel>
             </ControlTemplate>
-            
+
             <local:LanguageConverter x:Key="languageConverter"/>
-            
+
         </ResourceDictionary>
     </Window.Resources>
     <TabControl Grid.Row="3" TabStripPlacement="Top" Margin="6,4">
         <TabItem Header="{Binding Source={x:Static app:App.Lang}, Path=Main.Main}">
             <Grid Margin="4" Grid.IsSharedSizeScope="True">
-                <Button Content="Toggle Theme" Click="ToggleThemeButton_Click" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="5,5,0,0" Padding="5,2"/>
                 <Grid.Resources>
                     <Style TargetType="ComboBox" BasedOn="{StaticResource {x:Type ComboBox}}">
                         <Setter Property="Margin" Value="0,2"/>
@@ -87,7 +86,7 @@
                     </Style>
                 </Grid.Resources>
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="Auto"/> 
+                    <RowDefinition Height="Auto"/>
                     <RowDefinition Height="Auto"/>
                     <RowDefinition Height="Auto"/>
                     <RowDefinition Height="*"/>
@@ -103,15 +102,17 @@
                     <ColumnDefinition Width="2"/>
                     <ColumnDefinition Width="3*"/>
                 </Grid.ColumnDefinitions>
+                
+                <Button Content="Toggle Theme" Click="ToggleThemeButton_Click" Grid.Row="0" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="5,5,0,0" Padding="5,2"/>
+
                 <Grid Grid.Row="1" Grid.ColumnSpan="3">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition/>
                         <ColumnDefinition Width="Auto"/>
                         <ColumnDefinition Width="Auto" SharedSizeGroup="Button"/>
                     </Grid.ColumnDefinitions>
-                    <controls:TextEditor Helper="{Binding Source={x:Static app:App.Lang}, Path=Main.Url}" Margin="0,2" IsEnabled="{Binding Enable.Url}" 
-                                         WordWrap="True"
-                                         Text="{Binding Url}" Syntax="url" EnableHyperlinks="False">
+                    <controls:TextEditor Helper="{Binding Source={x:Static app:App.Lang}, Path=Main.Url}" Margin="0,2" IsEnabled="{Binding Enable.Url}"
+                                         WordWrap="True" Text="{Binding Url}" Syntax="url" EnableHyperlinks="False">
                         <controls:TextEditor.ContextMenu>
                             <ContextMenu>
                                 <MenuItem Command="ApplicationCommands.Cut">
@@ -147,6 +148,7 @@
                         </StackPanel>
                     </Button>
                 </Grid>
+
                 <Grid Grid.Row="2" Grid.Column="2" Grid.RowSpan="3">
                     <Grid.RowDefinitions>
                         <RowDefinition Height="Auto"/>
@@ -207,7 +209,7 @@
                                 </TextBlock>
                             </Grid>
                         </Border>
-                        <CheckBox Grid.Column="2" Content="{Binding Source={x:Static app:App.Lang}, Path=Main.DownloadThumb}" VerticalAlignment="Center" 
+                        <CheckBox Grid.Column="2" Content="{Binding Source={x:Static app:App.Lang}, Path=Main.DownloadThumb}" VerticalAlignment="Center"
                                   IsEnabled="{Binding Enable.SaveThumbnail}"
                                   Margin="2,0" IsChecked="{Binding SaveThumbnail}"
                                   HorizontalAlignment="Left"/>
@@ -232,6 +234,7 @@
                         </ItemsControl.ItemTemplate>
                     </ItemsControl>
                 </Grid>
+                
                 <controls:TextEditor Grid.Row="2" Helper="{Binding Source={x:Static app:App.Lang}, Path=Main.Title}" Text="{Binding Video.title}"
                                      Margin="0,2" IsReadOnly="True" WordWrap="True"
                                      EnableHyperlinks="False">
@@ -245,6 +248,7 @@
                         </ContextMenu>
                     </controls:TextEditor.ContextMenu>
                 </controls:TextEditor>
+                
                 <controls:TextEditor Grid.Row="3" Helper="{Binding Source={x:Static app:App.Lang}, Path=Main.Title}"
                                      Margin="0,2" Syntax="desc"
                                      Multiline="True" EnableHyperlinks="True" IsReadOnly="True"
@@ -259,6 +263,7 @@
                         </ContextMenu>
                     </controls:TextEditor.ContextMenu>
                 </controls:TextEditor>
+
                 <Grid Grid.Row="4" VerticalAlignment="Top">
                     <Grid.RowDefinitions>
                         <RowDefinition Height="Auto"/>
@@ -268,6 +273,7 @@
                         <RowDefinition Height="Auto"/>
                         <RowDefinition Height="Auto"/>
                     </Grid.RowDefinitions>
+                    
                     <Grid Grid.Row="1">
                         <Grid.Style>
                             <Style TargetType="Grid">
@@ -327,6 +333,7 @@
                             </ComboBox.ItemTemplate>
                         </ComboBox>
                     </Grid>
+                    
                     <Grid Grid.Row="2">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="Auto" SharedSizeGroup="Label"/>
@@ -383,7 +390,6 @@
                                     </Grid>
                                 </DataTemplate>
                             </ComboBox.ItemTemplate>
-                            <d:ComboBoxItem IsSelected="True">1920×1080 vp9 30fps 76.58MB</d:ComboBoxItem>
                         </ComboBox>
                         <ProgressBar Grid.Column="1" Value="{Binding VideoPersent}" Margin="1,3" IsHitTestVisible="False"
                                      BorderThickness="0" Background="Transparent" Foreground="#3000ff00">
@@ -403,6 +409,7 @@
                             <controls:Icons Size="14" Kind="Download"/>
                         </Button>
                     </Grid>
+                    
                     <Grid Grid.Row="3">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="Auto" SharedSizeGroup="Label"/>
@@ -466,7 +473,6 @@
                                     </Grid>
                                 </DataTemplate>
                             </ComboBox.ItemTemplate>
-                            <d:ComboBoxItem IsSelected="True">1920×1080 vp9 30fps 76.58MB</d:ComboBoxItem>
                         </ComboBox>
                         <ProgressBar Grid.Column="1" Value="{Binding AudioPersent}" Margin="1,3" IsHitTestVisible="False"
                                      BorderThickness="0" Background="Transparent" Foreground="#3000ff00">
@@ -486,6 +492,7 @@
                             <controls:Icons Size="14" Kind="Download"/>
                         </Button>
                     </Grid>
+                    
                     <Grid Grid.Row="4">
                         <Grid.Style>
                             <Style TargetType="Grid">
@@ -526,6 +533,7 @@
                         </Button>
                     </Grid>
                 </Grid>
+                
                 <Grid Grid.Row="5" Grid.ColumnSpan="3">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition/>
