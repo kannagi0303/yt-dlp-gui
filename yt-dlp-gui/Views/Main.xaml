@@ -19,51 +19,53 @@
     <Window.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
-                <!-- Existing merged dictionaries for themes etc. -->
+                <!-- Existing merged dictionaries for themes etc. should be here if any were present before -->
+                <!-- If themes were managed by ThemeManager and MergedDictionaries was empty, it can stay empty -->
             </ResourceDictionary.MergedDictionaries>
+
             <converters:NullOrEmptyToVisibilityConverter x:Key="NullOrEmptyToVisibilityConverter"/>
-        </ResourceDictionary>
-        <!-- Moved WindowExtend into the main ResourceDictionary -->
-        <ControlTemplate TargetType="ContentControl" x:Key="WindowExtend">
-            <StackPanel Orientation="Horizontal">
-                <Button BorderBrush="Transparent" Background="Transparent"
-                        Width="40" WindowChrome.IsHitTestVisibleInChrome="True"
-                        Click="Button_Release">
-                    <Button.Style>
-                        <Style TargetType="Button" BasedOn="{StaticResource {x:Type Button}}">
-                            <Setter Property="Visibility" Value="Collapsed"/>
-                            <Style.Triggers>
-                                <DataTrigger Binding="{Binding NewVersion}" Value="True">
-                                    <Setter Property="Visibility" Value="Visible"/>
-                                </DataTrigger>
-                            </Style.Triggers>
-                        </Style>
-                    </Button.Style>
-                    <controls:Icons Size="18" Kind="NewBox"/>
-                </Button>
-                <Menu WindowChrome.IsHitTestVisibleInChrome="True">
-                    <Menu.ItemsPanel>
-                        <ItemsPanelTemplate>
-                            <VirtualizingStackPanel Orientation="Horizontal"/>
-                        </ItemsPanelTemplate>
-                    </Menu.ItemsPanel>
-                    <MenuItem Style="{StaticResource TopLevelMenu}"
-                              VerticalAlignment="Center" Padding="0">
-                        <MenuItem.Icon>
-                            <controls:Icons Kind="MenuDown" VerticalAlignment="Center" HorizontalAlignment="Center"/>
-                        </MenuItem.Icon>
-                        <MenuItem Header="{Binding Source={x:Static app:App.Lang}, Path=Main.About}" Click="MenuItem_About_Click">
+
+            <ControlTemplate TargetType="ContentControl" x:Key="WindowExtend">
+                <StackPanel Orientation="Horizontal">
+                    <Button BorderBrush="Transparent" Background="Transparent"
+                            Width="40" WindowChrome.IsHitTestVisibleInChrome="True"
+                            Click="Button_Release">
+                        <Button.Style>
+                            <Style TargetType="Button" BasedOn="{StaticResource {x:Type Button}}">
+                                <Setter Property="Visibility" Value="Collapsed"/>
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding NewVersion}" Value="True">
+                                        <Setter Property="Visibility" Value="Visible"/>
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </Button.Style>
+                        <controls:Icons Size="18" Kind="NewBox"/>
+                    </Button>
+                    <Menu WindowChrome.IsHitTestVisibleInChrome="True">
+                        <Menu.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <VirtualizingStackPanel Orientation="Horizontal"/>
+                            </ItemsPanelTemplate>
+                        </Menu.ItemsPanel>
+                        <MenuItem Style="{StaticResource TopLevelMenu}"
+                                  VerticalAlignment="Center" Padding="0">
                             <MenuItem.Icon>
-                                <controls:Icons Size="14" Kind="Information"/>
+                                <controls:Icons Kind="MenuDown" VerticalAlignment="Center" HorizontalAlignment="Center"/>
                             </MenuItem.Icon>
+                            <MenuItem Header="{Binding Source={x:Static app:App.Lang}, Path=Main.About}" Click="MenuItem_About_Click">
+                                <MenuItem.Icon>
+                                    <controls:Icons Size="14" Kind="Information"/>
+                                </MenuItem.Icon>
+                            </MenuItem>
                         </MenuItem>
-                    </MenuItem>
-                </Menu>
-            </StackPanel>
-        </ControlTemplate>
-        <local:LanguageConverter x:Key="languageConverter"/>
-        <!-- Removed duplicate Window.Resources, converter is now in the RD above -->
-    </ResourceDictionary> <!-- Closed the main RD -->
+                    </Menu>
+                </StackPanel>
+            </ControlTemplate>
+
+            <local:LanguageConverter x:Key="languageConverter"/>
+
+        </ResourceDictionary>
     </Window.Resources>
     <TabControl Grid.Row="3" TabStripPlacement="Top" Margin="6,4">
         <TabItem Header="{Binding Source={x:Static app:App.Lang}, Path=Main.Main}">
