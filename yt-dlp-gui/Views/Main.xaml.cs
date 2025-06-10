@@ -219,7 +219,7 @@ namespace yt_dlp_gui.Views {
             this.DataContext = this; // Set DataContext for data binding
             // DataContext = Data; // This was the previous DataContext. If still needed, consider a ViewModel that combines 'Data' and 'DownloadQueue'
 
-            ToastNotificationManagerCompat.OnActivated += ToastNotificationManagerCompat_OnActivated;
+            ToastNotificationManagerCompat.OnActivated += ToastNotificationManagerCompat_OnActivated; // Uncommented
 
             //Load Configs
             InitGUIConfig();
@@ -262,6 +262,7 @@ namespace yt_dlp_gui.Views {
             //Yaml.Save(App.Path(App.Folders.root, "lang.yaml"), new Lang());
         }
 
+        // Uncommented
         private void ToastNotificationManagerCompat_OnActivated(ToastNotificationActivatedEventArgsCompat e) {
             var args = ToastArguments.Parse(e.Argument);
             if (args.Contains("action")) {
@@ -272,6 +273,7 @@ namespace yt_dlp_gui.Views {
                 }
             }
         }
+
 
         private void ChangeScale(int present) {
             var scaleRatio = present / 100d;
