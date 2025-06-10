@@ -1,0 +1,63 @@
+# A name for your workflow
+name: Build and Release .NET Application
+
+#
+# 1. THIS IS THE AUTO-BUILD TRIGGER
+#
+# This workflow runs automatically on two conditions:
+#  - When you push a new tag that starts with 'v' (e.g., v1.0, v1.2.3)
+#  - When you manually trigger it from the GitHub Actions tab (workflow_dispatch)
+#
+on:
+  push:
+    tags:
+      - 'v*'
+  workflow_dispatch:
+
+# Grant permissions for the workflow to write to your repository (to create a release)
+permissions:
+  contents: write
+
+jobs:
+  build-and-release-windows:
+    name: Build and Release for Windows
+    runs-on: windows-latest # Use a Windows runner for the .NET build
+
+    steps:
+      # 1. Check out your repository's code
+      - name: Check out code
+        uses: actions/checkout@v4
+
+      # 2. Set up the .NET environment
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          # Use a Long Term Support (LTS) version of .NET
+          dotnet-version: 8.0.x 
+
+      # 3. Restore NuGet dependencies
+      - name: Restore dependencies
+        # IMPORTANT: Replace 'YtDlpGui.sln' with the actual name of your .sln file
+        run: dotnet restore yt-dlp-gui.sln
+
+      # 4. Build and publish the application
+      - name: Build and Publish
+        # This command creates a single, self-contained .exe file
+        # IMPORTANT: Replace 'YtDlpGui.sln' with the actual name of your .sln file
+        run: dotnet publish yt-dlp-gui.sln --configuration Release --runtime win-x64 --self-contained true -p:PublishSingleFile=true -o ./publish
+
+      # 5. Package the executable into a .zip file for the release
+      - name: Package Release
+        run: Compress-Archive -Path ./publish/* -DestinationPath ./yt-dlp-gui-windows.zip
+
+      # 6. Create the GitHub Release and upload the .zip file
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          # The release will be named after the tag you push (e.g., "v1.0")
+          tag_name: ${{ github.ref }}
+          # This will automatically generate release notes from your commit messages
+          generate_release_notes: true
+          # Attach the packaged .zip file to the release
+          files: |
+            ./yt-dlp-gui-windows.zip

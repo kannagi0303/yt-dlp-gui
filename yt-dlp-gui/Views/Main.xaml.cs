@@ -24,15 +24,201 @@ using WK.Libraries.SharpClipboardNS;
 using yt_dlp_gui.Controls;
 using yt_dlp_gui.Models;
 using yt_dlp_gui.Wrappers;
+using yt_dlp_gui.App; // Added for ThemeManager
+using System.Collections.ObjectModel; // For ObservableCollection
+using System.IO; // For Path
+using System.Linq; // For FirstOrDefault, Any
+using System.Threading.Tasks; // For Task
+using yt_dlp_gui.Wrappers; // For DLP
+using System.Windows; // For Application.Current.Dispatcher
+using System.Globalization; // For NumberStyles and CultureInfo
 
 
 namespace yt_dlp_gui.Views {
     public partial class Main :Window {
         private readonly ViewData Data = new();
         private List<DLP> RunningDLP = new();
+        public ObservableCollection<DownloadItem> DownloadQueue { get; set; }
+        private bool _isProcessingQueue = false;
+        private readonly object _queueLock = new object(); // For thread safety with _isProcessingQueue
+
+        private async Task ProcessQueueAsync() {
+            lock (_queueLock) {
+                if (_isProcessingQueue) {
+                    System.Diagnostics.Debug.WriteLine("ProcessQueueAsync: Already processing.");
+                    return;
+                }
+                _isProcessingQueue = true;
+            }
+            System.Diagnostics.Debug.WriteLine("ProcessQueueAsync: Starting to process queue.");
+
+            DownloadItem? currentItem = null;
+            while (true) {
+                // Find next item to process
+                currentItem = DownloadQueue.FirstOrDefault(item => item.Status == DownloadStatus.Queued);
+
+                if (currentItem == null) {
+                    System.Diagnostics.Debug.WriteLine("ProcessQueueAsync: No more queued items.");
+                    break; // No more items to process
+                }
+
+                System.Diagnostics.Debug.WriteLine($"ProcessQueueAsync: Processing item: {currentItem.Url}");
+                currentItem.Status = DownloadStatus.Downloading;
+                currentItem.Progress = 0; // Reset progress
+                currentItem.ErrorMessage = null; // Clear previous errors
+
+                var dlp = new DLP(currentItem.Url);
+
+                string outputTemplate = Path.Combine(currentItem.OutputPath, "%(title)s.%(ext)s");
+                // Ensure the output template is quoted properly if it contains spaces.
+                // The .QS() extension method should handle this.
+                dlp.Options["-o"] = outputTemplate.QS();
+
+                if (!string.IsNullOrWhiteSpace(currentItem.SelectedVideoFormat)) {
+                    dlp.Options["--format"] = currentItem.SelectedVideoFormat;
+                }
+
+                if (currentItem.DownloadAudioOnly) {
+                    dlp.Options["-x"] = "";
+                    if (!string.IsNullOrWhiteSpace(currentItem.SelectedAudioFormat)) {
+                        dlp.Options["--audio-format"] = currentItem.SelectedAudioFormat;
+                    }
+                }
+
+                System.Diagnostics.Debug.WriteLine($"ProcessQueueAsync: Calling DLP.Exec for {currentItem.Url}");
+                try {
+                    await Task.Run(() => {
+                        var process = dlp.Exec(
+                            itemToUpdate: currentItem, // Pass the current item
+                            stdall: (item, output) => {
+                                if (item == null) return;
+
+                                // Attempt to parse filename (existing logic)
+                                if (output.Contains("[info] MAPPING: ") && item.FileName == "Fetching title...") {
+                                    try {
+                                        string potentialFilename = output.Substring(output.IndexOf("[info] MAPPING: ") + "[info] MAPPING: ".Length).Trim();
+                                        if (!string.IsNullOrWhiteSpace(potentialFilename)) {
+                                            Application.Current.Dispatcher.Invoke(() => {
+                                                item.FileName = Path.GetFileName(potentialFilename);
+                                            });
+                                        }
+                                    } catch (Exception ex) {
+                                        System.Diagnostics.Debug.WriteLine($"Error parsing filename from output: {ex.Message}");
+                                    }
+                                }
+
+                                // Attempt to parse progress
+                                // Format: "[yt-dlp],%(progress._percent_str)s,%(progress._eta_str)s,..."
+                                if (output.StartsWith("[yt-dlp],")) {
+                                    var parts = output.Split(',');
+                                    if (parts.Length > 1) {
+                                        var percentStr = parts[1].Replace("%", "").Trim();
+                                        if (double.TryParse(percentStr, NumberStyles.Any, CultureInfo.InvariantCulture, out double progressValue)) {
+                                            Application.Current.Dispatcher.Invoke(() => {
+                                                item.Progress = progressValue;
+                                            });
+                                        }
+                                    }
+                                }
+                            },
+                            stdout: null, // stdall is now handling both filename and progress; stdout can be null
+                            stderr: (item, error) => { // Ensure this callback also uses the item
+                                if (item != null && item.Status == DownloadStatus.Downloading) {
+                                    if (string.IsNullOrEmpty(item.ErrorMessage)) item.ErrorMessage = error;
+                                    else item.ErrorMessage += $"; {error}";
+                                }
+                            }
+                        );
+
+                        if (process != null && process.ExitCode == 0 && dlp.StdErr.Count == 0) {
+                            if (currentItem != null) {
+                                if (currentItem.FileName == "Fetching title..." && dlp.Files.Any()) {
+                                    Application.Current.Dispatcher.Invoke(() => {
+                                       currentItem.FileName = Path.GetFileName(dlp.Files.First());
+                                    });
+                                } else if (currentItem.FileName == "Fetching title...") {
+                                     Application.Current.Dispatcher.Invoke(() => {
+                                       currentItem.FileName = "Unknown Title";
+                                    });
+                                }
+                                currentItem.Status = DownloadStatus.Completed;
+                                currentItem.Progress = 100;
+                                System.Diagnostics.Debug.WriteLine($"ProcessQueueAsync: Item completed: {currentItem.Url}");
+                            }
+                        } else {
+                            if (currentItem != null) {
+                                currentItem.Status = DownloadStatus.Failed;
+                                if (string.IsNullOrEmpty(currentItem.ErrorMessage)) {
+                                    currentItem.ErrorMessage = $"Download failed. Exit code: {process?.ExitCode}. DLP Errors: {string.Join(", ", dlp.StdErr)}";
+                                }
+                                System.Diagnostics.Debug.WriteLine($"ProcessQueueAsync: Item failed: {currentItem.Url}. Error: {currentItem.ErrorMessage}");
+                            }
+                        }
+                    });
+                } catch (Exception ex) {
+                    if (currentItem != null) {
+                        currentItem.Status = DownloadStatus.Failed;
+                        currentItem.ErrorMessage = $"An exception occurred: {ex.Message}";
+                        System.Diagnostics.Debug.WriteLine($"ProcessQueueAsync: Exception for item {currentItem.Url}. Error: {ex.Message}");
+                    }
+                }
+            } // end while
+
+            lock (_queueLock) {
+                _isProcessingQueue = false;
+            }
+            System.Diagnostics.Debug.WriteLine("ProcessQueueAsync: Finished processing queue.");
+        }
+
+        private void LoadSettingsToUI() { // Renamed from LoadProxySettings
+            if (Config.Default == null) {
+                System.Diagnostics.Debug.WriteLine("Config.Default is null in LoadSettingsToUI. Attempting to load.");
+                Config.Load();
+                if (Config.Default == null) { // If still null, means Load didn't initialize it or file was empty
+                    System.Diagnostics.Debug.WriteLine("Config.Default is still null after Load. Creating new Config instance for Default.");
+                    Config.Default = new Config();
+                }
+            }
+            // Proxy Settings
+            ProxyEnableCheckBox.IsChecked = Config.Default.ProxyEnabled;
+            ProxyUrlTextBox.Text = Config.Default.ProxyUrl ?? string.Empty;
+            ProxyPortTextBox.Text = Config.Default.ProxyPort ?? string.Empty;
+            ProxyUsernameTextBox.Text = Config.Default.ProxyUsername ?? string.Empty;
+            ProxyPasswordTextBox.Text = Config.Default.ProxyPassword ?? string.Empty;
+            System.Diagnostics.Debug.WriteLine("Proxy settings loaded into UI.");
+
+            // Load Video Format Setting
+            VideoFormatTextBox.Text = Config.Default.PreferredVideoFormat ?? "bv*+ba/b";
+            System.Diagnostics.Debug.WriteLine($"Loaded PreferredVideoFormat: {VideoFormatTextBox.Text}");
+
+            // Load Audio Options Settings
+            AudioOnlyCheckBox.IsChecked = Config.Default.DownloadAudioOnly;
+            bool audioFormatSet = false;
+            foreach (ComboBoxItem item in AudioFormatComboBox.Items) {
+                if (item.Content?.ToString() == Config.Default.PreferredAudioFormat) {
+                    AudioFormatComboBox.SelectedItem = item;
+                    audioFormatSet = true;
+                    break;
+                }
+            }
+            if (!audioFormatSet) {
+                AudioFormatComboBox.Text = Config.Default.PreferredAudioFormat;
+            }
+            System.Diagnostics.Debug.WriteLine($"Loaded DownloadAudioOnly: {AudioOnlyCheckBox.IsChecked}, PreferredAudioFormat: {Config.Default.PreferredAudioFormat}");
+
+            // Load Download Folder Path
+            DownloadPathTextBox.Text = Config.Default.DownloadFolderPath ?? Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyVideos), "yt-dlp-gui");
+            System.Diagnostics.Debug.WriteLine($"Loaded DownloadFolderPath: {DownloadPathTextBox.Text}");
+        }
+
         public Main() {
             InitializeComponent();
-            DataContext = Data;
+            LoadSettingsToUI(); // Call LoadSettingsToUI
+
+            DownloadQueue = new ObservableCollection<DownloadItem>();
+            this.DataContext = this; // Set DataContext for data binding
+            // DataContext = Data; // This was the previous DataContext. If still needed, consider a ViewModel that combines 'Data' and 'DownloadQueue'
+
             ToastNotificationManagerCompat.OnActivated += ToastNotificationManagerCompat_OnActivated;
 
             //Load Configs
@@ -434,11 +620,42 @@ namespace yt_dlp_gui.Views {
             }
         }
         private void Button_Download(object sender, RoutedEventArgs e) {
-            //Download_Start();
-            Download_Start_Native();
+            string url = Data.Url; // Assuming Data.Url holds the text from the main URL input
+            if (string.IsNullOrWhiteSpace(url)) {
+                MessageBox.Show("Please enter a valid URL.", "Input Error", MessageBoxButton.OK, MessageBoxImage.Warning); // TODO: Localize
+                return;
+            }
+
+            // Ensure DownloadFolderPath exists
+            if (Config.Default == null) Config.Load(); // Make sure config is loaded
+            string downloadDirectory = Config.Default?.DownloadFolderPath ?? Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyVideos), "yt-dlp-gui");
+            try {
+                Directory.CreateDirectory(downloadDirectory);
+            } catch (Exception ex) {
+                MessageBox.Show($"Error creating download directory '{downloadDirectory}': {ex.Message}", "Directory Error", MessageBoxButton.OK, MessageBoxImage.Error); // TODO: Localize
+                return;
+            }
+
+            var newItem = new DownloadItem(url) {
+                // Populate from global config active at the time of adding
+                SelectedVideoFormat = Config.Default?.PreferredVideoFormat ?? "bv*+ba/b",
+                DownloadAudioOnly = Config.Default?.DownloadAudioOnly ?? false,
+                SelectedAudioFormat = Config.Default?.PreferredAudioFormat ?? "mp3",
+                FileName = "Fetching title...",
+                OutputPath = downloadDirectory
+            };
+
+            DownloadQueue.Add(newItem);
+            Data.Url = string.Empty; // Clear the URL box after adding to queue
+
+            System.Diagnostics.Debug.WriteLine($"Added to queue: {newItem.Url}, Status: {newItem.Status}");
+
+            if (!_isProcessingQueue) {
+                Task.Run(() => ProcessQueueAsync());
+            }
         }
-        public enum DownloadType { Normal, Video, Audio, Thumbnail, Subtitle }
-        private async void Download_Start_Native(DownloadType type = DownloadType.Normal, string target = "") {
+        public enum DownloadType { Normal, Video, Audio, Thumbnail, Subtitle } // This might be moved or become part of DownloadItem
+        private async void Download_Start_Native(DownloadType type = DownloadType.Normal, string target = "") { // This method will likely be refactored to process items from DownloadQueue
             Data.CanCancel = false;
             Data.IsAbouted = false;
             if (Data.IsDownload) {
@@ -758,6 +975,51 @@ namespace yt_dlp_gui.Views {
                 Data.Scale = 200;
             }
             ChangeScale(Data.Scale);
+        }
+
+        private void ToggleThemeButton_Click(object sender, RoutedEventArgs e) {
+            ThemeManager.ToggleTheme();
+        }
+
+        private void SaveSettingsButton_Click(object sender, RoutedEventArgs e) { // Renamed from SaveProxySettingsButton_Click
+            if (Config.Default == null) {
+                 System.Diagnostics.Debug.WriteLine("Config.Default is null in SaveSettingsButton_Click. Attempting to load.");
+                 Config.Load();
+                 if (Config.Default == null) { // Still null after load, create new
+                    System.Diagnostics.Debug.WriteLine("Config.Default is still null after Load. Creating new Config instance for Default.");
+                    Config.Default = new Config();
+                 }
+            }
+            // Proxy Settings
+            Config.Default.ProxyEnabled = ProxyEnableCheckBox.IsChecked ?? false;
+            Config.Default.ProxyUrl = ProxyUrlTextBox.Text;
+            Config.Default.ProxyPort = ProxyPortTextBox.Text;
+            Config.Default.ProxyUsername = ProxyUsernameTextBox.Text;
+            Config.Default.ProxyPassword = ProxyPasswordTextBox.Text;
+
+            // Save Video Format Setting
+            Config.Default.PreferredVideoFormat = VideoFormatTextBox.Text;
+            System.Diagnostics.Debug.WriteLine($"Saved PreferredVideoFormat: {Config.Default.PreferredVideoFormat}");
+
+            // Save Audio Options Settings
+            Config.Default.DownloadAudioOnly = AudioOnlyCheckBox.IsChecked ?? false;
+            if (AudioFormatComboBox.SelectedItem is ComboBoxItem selectedItem) {
+                Config.Default.PreferredAudioFormat = selectedItem.Content?.ToString() ?? "mp3";
+            } else if (!string.IsNullOrEmpty(AudioFormatComboBox.Text)) {
+                 Config.Default.PreferredAudioFormat = AudioFormatComboBox.Text; // Handles if user types a custom format
+            } else {
+                Config.Default.PreferredAudioFormat = "mp3"; // Default fallback if somehow empty
+            }
+            System.Diagnostics.Debug.WriteLine($"Saved DownloadAudioOnly: {Config.Default.DownloadAudioOnly}, PreferredAudioFormat: {Config.Default.PreferredAudioFormat}");
+
+            // Save Download Folder Path
+            Config.Default.DownloadFolderPath = DownloadPathTextBox.Text;
+            System.Diagnostics.Debug.WriteLine($"Saved DownloadFolderPath: {Config.Default.DownloadFolderPath}");
+
+            Config.Default.Save(App.Path(App.Folders.root, App.AppName + ".yaml"));
+
+            MessageBox.Show("Settings saved.", "Settings Saved", MessageBoxButton.OK, MessageBoxImage.Information); // TODO: Localize
+            System.Diagnostics.Debug.WriteLine("Settings saved from UI.");
         }
     }
     public class LanguageConverter :IValueConverter {

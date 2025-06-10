@@ -5,7 +5,9 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
-using yt_dlp_gui.Models;
+using System.Threading.Tasks;
+using yt_dlp_gui.App; // Required for YtdlpUpdater
+using yt_dlp_gui.Models; // Required for Config
 
 namespace yt_dlp_gui.Wrappers {
 
@@ -15,6 +17,7 @@ namespace yt_dlp_gui.Wrappers {
         }
         static public DLPType Type { get; set; } = DLPType.yd_dlp;
         static public string Path_DLP { get; set; } = string.Empty;
+        private static bool isYtdlpPathEnsured = false; // Added this line
         static public string Path_Aria2 { get; set; } = string.Empty;
         static public string Path_FFMPEG { get; set; } = string.Empty;
         public List<string> Files { get; set; } = new List<string>();
@@ -260,9 +263,136 @@ namespace yt_dlp_gui.Wrappers {
         }
         private static Regex ErrSign = new Regex(@"^(?=.*?ERROR)(?=.*?sign)(?=.*?confirm)", RegexOptions.IgnoreCase);
         private static Regex ErrUnsupported = new Regex(@"^(?=.*?ERROR)(?=.*?Unsupported)", RegexOptions.IgnoreCase);
-        public Process Exec(Action<string> stdall = null, Action<string> stdout = null, Action<string> stderr = null) {
+
+        // Ensure using yt_dlp_gui.Models; is at the top if not already present
+
+        public static async Task EnsureYtdlpPathAsync() {
+            if (isYtdlpPathEnsured && File.Exists(Path_DLP)) {
+                Debug.WriteLine("yt-dlp path already ensured and file exists.");
+                return;
+            }
+
+            try {
+                Debug.WriteLine("Ensuring yt-dlp path...");
+                string? newPath = await YtdlpUpdater.CheckAndUpdateYtdlpAsync();
+                if (!string.IsNullOrEmpty(newPath) && File.Exists(newPath)) {
+                    Path_DLP = newPath;
+                    isYtdlpPathEnsured = true;
+                    Debug.WriteLine($"yt-dlp path set to: {Path_DLP}");
+                } else {
+                    Debug.WriteLine("Failed to get a valid path from YtdlpUpdater or file does not exist.");
+                    // Optionally, clear Path_DLP or isYtdlpPathEnsured if update fails
+                    // isYtdlpPathEnsured = false;
+                }
+            } catch (Exception ex) {
+                Debug.WriteLine($"Error ensuring yt-dlp path: {ex.Message}");
+                // isYtdlpPathEnsured = false;
+            }
+        }
+
+        public Process Exec(DownloadItem? itemToUpdate,
+                                Action<DownloadItem?, string>? stdall = null,
+                                Action<DownloadItem?, string>? stdout = null,
+                                Action<DownloadItem?, string>? stderr = null) {
+            if (!isYtdlpPathEnsured || string.IsNullOrEmpty(Path_DLP) || !File.Exists(Path_DLP)) {
+                throw new InvalidOperationException("yt-dlp path is not configured or yt-dlp.exe is missing. EnsureYtdlpPathAsync must be called and complete successfully before execution.");
+            }
+
+            // Apply proxy settings from Config.Default
+            if (Config.Default == null) {
+                System.Diagnostics.Debug.WriteLine("DLP.Exec: Config.Default is null. Attempting to load.");
+                Config.Load(); // Ensure config is loaded
+                if (Config.Default == null) { // Still null after load, create new
+                    System.Diagnostics.Debug.WriteLine("DLP.Exec: Config.Default is still null after Load. Creating new Config instance for Default.");
+                    Config.Default = new Config();
+                }
+            }
+
+            // Apply Audio-Only Download settings from Config.Default
+            if (Config.Default != null) { // Ensure Config.Default is not null
+                if (Config.Default.DownloadAudioOnly) {
+                    Options["--extract-audio"] = ""; // Short form is -x
+                    if (!string.IsNullOrWhiteSpace(Config.Default.PreferredAudioFormat)) {
+                        Options["--audio-format"] = Config.Default.PreferredAudioFormat;
+                        System.Diagnostics.Debug.WriteLine($"DLP.Exec: Audio-Only enabled. Format: {Config.Default.PreferredAudioFormat}");
+                    } else {
+                        // If audio format is somehow empty but audio-only is checked, remove specific audio format option
+                        // yt-dlp will then use a default audio format for extraction.
+                        Options.Remove("--audio-format");
+                        System.Diagnostics.Debug.WriteLine("DLP.Exec: Audio-Only enabled. No specific audio format preferred, yt-dlp will use default.");
+                    }
+                } else {
+                    // Ensure audio-only options are removed if not enabled
+                    Options.Remove("--extract-audio"); // or -x
+                    Options.Remove("--audio-format");
+                }
+            }
+
+            // Apply Video Format setting from Config.Default
+            if (Config.Default != null && !string.IsNullOrWhiteSpace(Config.Default.PreferredVideoFormat)) {
+                Options["--format"] = Config.Default.PreferredVideoFormat; // yt-dlp format strings are typically not quoted with QS() unless they contain shell special chars, direct assignment is common.
+                System.Diagnostics.Debug.WriteLine($"DLP.Exec: Using video format: {Options["--format"]}");
+            } else {
+                // If no preferred format is set or it's empty, remove any lingering --format option
+                // This ensures yt-dlp uses its default behavior if the user clears the setting.
+                if (Options.ContainsKey("--format")) {
+                    Options.Remove("--format");
+                    System.Diagnostics.Debug.WriteLine("DLP.Exec: No preferred video format set or format is empty. Removed --format option.");
+                } else {
+                    System.Diagnostics.Debug.WriteLine("DLP.Exec: No preferred video format set. yt-dlp will use its default.");
+                }
+            }
+
+            if (Config.Default != null && Config.Default.ProxyEnabled && !string.IsNullOrWhiteSpace(Config.Default.ProxyUrl) && !string.IsNullOrWhiteSpace(Config.Default.ProxyPort)) {
+                string proxyUrl = Config.Default.ProxyUrl;
+                string proxyPort = Config.Default.ProxyPort;
+                string proxyUser = Config.Default.ProxyUsername;
+                string proxyPass = Config.Default.ProxyPassword;
+                string fullProxyString = proxyUrl; // Assume URL might contain scheme like http:// or socks5://
+
+                // Attempt to form a complete proxy string: scheme://[user:pass@]host:port
+                // Basic assembly, assuming ProxyUrl is like "scheme://host" or just "host"
+                string scheme = "";
+                string host = proxyUrl;
+
+                if (proxyUrl.Contains("://")) {
+                    scheme = proxyUrl.Substring(0, proxyUrl.IndexOf("://") + 3);
+                    host = proxyUrl.Substring(proxyUrl.IndexOf("://") + 3);
+                }
+
+                // Remove port from host if it's already there to avoid host:port:port
+                if (host.Contains(":")) {
+                    host = host.Substring(0, host.IndexOf(":"));
+                }
+
+                if (!string.IsNullOrWhiteSpace(proxyUser) && !string.IsNullOrWhiteSpace(proxyPass)) {
+                    fullProxyString = $"{scheme}{proxyUser}:{proxyPass}@{host}:{proxyPort}";
+                } else {
+                    fullProxyString = $"{scheme}{host}:{proxyPort}";
+                }
+
+                Options["--proxy"] = fullProxyString.QS(); // .QS() is an existing extension method
+                System.Diagnostics.Debug.WriteLine($"DLP.Exec: Using proxy: {Options["--proxy"]}");
+
+                // Handle Aria2c proxy args
+                if (Options.ContainsKey("--external-downloader") && Options["--external-downloader"].Contains("aria2c")) {
+                    Options["--external-downloader-args"] = $"'--all-proxy={fullProxyString}'";
+                    System.Diagnostics.Debug.WriteLine($"DLP.Exec: Using Aria2c proxy args: {Options["--external-downloader-args"]}");
+                }
+            } else {
+                // Proxy is not enabled or not fully configured, ensure it's removed from options
+                Options.Remove("--proxy");
+                if (Options.ContainsKey("--external-downloader-args") && Options["--external-downloader-args"].Contains("--all-proxy")) {
+                    Options.Remove("--external-downloader-args");
+                    System.Diagnostics.Debug.WriteLine($"DLP.Exec: Proxy disabled or misconfigured. Removed proxy options.");
+                }
+            }
+
             var fn = Path_DLP;
+            // It's already checked above, but keeping this as a safeguard, though technically redundant now.
             if (!File.Exists(fn)) {
+                // This specific return null might be unreachable if the exception is thrown first.
+                // Consider if this path is still needed or if the exception is the sole guard.
                 return null;
             }
             var info = new ProcessStartInfo() {
@@ -281,15 +411,15 @@ namespace yt_dlp_gui.Wrappers {
             process.OutputDataReceived += (s, e) => {
                 Debug.WriteLine(e.Data, "STD");
                 if (!string.IsNullOrWhiteSpace(e.Data)) {
-                    stdall?.Invoke(e.Data);
-                    stdout?.Invoke(e.Data);
+                    stdall?.Invoke(itemToUpdate, e.Data);
+                    stdout?.Invoke(itemToUpdate, e.Data);
                 }
             };
             process.ErrorDataReceived += (s, e) => {
                 Debug.WriteLine(e.Data, "ERR");
                 if (!string.IsNullOrWhiteSpace(e.Data)) {
-                    stdall?.Invoke(e.Data);
-                    stderr?.Invoke(e.Data);
+                    stdall?.Invoke(itemToUpdate, e.Data);
+                    stderr?.Invoke(itemToUpdate, e.Data);
                     if (ErrSign.IsMatch(e.Data)) {
                         StdErr.Add(DLPError.Sign);
                     }
