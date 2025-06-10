@@ -1,40 +1,143 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
-    <TargetFramework>net6.0-windows10.0.17763.0</TargetFramework>
+    <TargetFramework>net6.0-windows</TargetFramework>
     <RootNamespace>yt_dlp_gui</RootNamespace>
-    <Nullable>enable</Nullable>
     <UseWPF>true</UseWPF>
-    <IncludeAllContentForSelfExtract>true</IncludeAllContentForSelfExtract>
     <ApplicationIcon>Resources\logo.ico</ApplicationIcon>
-    <EnableCompressionInSingleFile>true</EnableCompressionInSingleFile>
-    <TrimMode>copyused</TrimMode>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
   </PropertyGroup>
 
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
-    <DebugType>none</DebugType>
-  </PropertyGroup>
-
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
-    <DebugType>none</DebugType>
+  <PropertyGroup>
+    <EnableDefaultApplicationDefinition>false</EnableDefaultApplicationDefinition>
+    <EnableDefaultPageItems>false</EnableDefaultPageItems>
+    <EnableDefaultCompileItems>false</EnableDefaultCompileItems>
   </PropertyGroup>
 
   <ItemGroup>
-    <TrimmerRootAssembly Include="System.Collections" />
-    <TrimmerRootAssembly Include="System.Runtime" />
-    <TrimmerRootAssembly Include="System.Runtime.Extensions" />
-    <TrimmerRootAssembly Include="System.Runtime.InteropServices" />
-    <TrimmerRootAssembly Include="System.Runtime.CompilerServices.VisualC" />
+    <ApplicationDefinition Include="App.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <XamlRuntime>Wpf</XamlRuntime>
+    </ApplicationDefinition>
   </ItemGroup>
-  
+
+  <ItemGroup>
+    <Compile Include="App.xaml.cs">
+      <DependentUpon>App.xaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="App/App.Path.cs">
+      <DependentUpon>App.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="App/App.Theme.cs">
+      <DependentUpon>App.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="App/YtdlpUpdater.cs">
+      <DependentUpon>App.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="AssemblyInfo.cs" />
+    <Compile Include="Controls/ActualSize.cs" />
+    <Compile Include="Controls/BrowserBehavior.cs" />
+    <Compile Include="Controls/Duration.cs" />
+    <Compile Include="Controls/Filesize.cs" />
+    <Compile Include="Controls/Icons.xaml.cs">
+      <DependentUpon>Icons.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls/Menu.xaml.cs">
+      <DependentUpon>Menu.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls/TextBoxNumber.cs" />
+    <Compile Include="Controls/TextEditor.xaml.cs">
+      <DependentUpon>TextEditor.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls/TextView.xaml.cs">
+      <DependentUpon>TextView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Converters/NullOrEmptyToVisibilityConverter.cs" />
+    <Compile Include="Libs/Util.Env.cs" />
+    <Compile Include="Libs/Util.PropertyCopy.cs" />
+    <Compile Include="Libs/Util.Resources.cs" />
+    <Compile Include="Libs/Util.Shell.cs" />
+    <Compile Include="Libs/Util.Tools.cs" />
+    <Compile Include="Libs/Util.UrlValid.cs" />
+    <Compile Include="Libs/Web.cs" />
+    <Compile Include="Libs/Yaml.cs" />
+    <Compile Include="Libs/YamlDescription.cs" />
+    <Compile Include="Models/Chapters.cs" />
+    <Compile Include="Models/Config.cs" />
+    <Compile Include="Models/Cookies.cs" />
+    <Compile Include="Models/DownloadItem.cs" />
+    <Compile Include="Models/Format.cs" />
+    <Compile Include="Models/Lang.cs" />
+    <Compile Include="Models/Subs.cs" />
+    <Compile Include="Models/Thumb.cs" />
+    <Compile Include="Models/Video.cs" />
+    <Compile Include="Models/VTask.cs" />
+    <Compile Include="Themes/CustomUI.xaml.cs">
+      <DependentUpon>CustomUI.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Themes/DarkTheme.xaml.cs">
+      <DependentUpon>DarkTheme.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="ViewModels/Main.cs" />
+    <Compile Include="Views/About.xaml.cs">
+      <DependentUpon>About.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views/Main.xaml.cs">
+      <DependentUpon>Main.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views/Release.xaml.cs">
+      <DependentUpon>Release.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Wrappers/DLP.cs" />
+    <Compile Include="Wrappers/FFMPEG.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Page Include="Controls/Icons.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls/Menu.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls/TextEditor.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls/TextView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Themes/CustomUI.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Themes/DarkTheme.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views/About.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views/Main.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views/Release.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+  </ItemGroup>
+
   <ItemGroup>
     <None Remove="Resources\logo.ico" />
     <None Remove="Resources\xshd\desc.xshd" />
     <None Remove="Resources\xshd\url.xshd" />
-  </ItemGroup>
-
-  <ItemGroup>
     <Resource Include="Resources\logo.ico" />
     <Resource Include="Resources\xshd\desc.xshd" />
     <Resource Include="Resources\xshd\url.xshd">
@@ -52,23 +155,13 @@
     <PackageReference Include="PropertyChanged.Fody" Version="4.1.0" />
     <PackageReference Include="SharpClipboard" Version="3.5.2" />
     <PackageReference Include="Swordfish.NET.CollectionsV3" Version="3.3.15" />
-    <PackageReference Include="System.Resources.ResourceManager" Version="4.3.0" />
     <PackageReference Include="YamlDotNet" Version="16.3.0" />
   </ItemGroup>
 
   <ItemGroup>
-    <Compile Update="App.xaml.cs">
-      <DependentUpon>App.xaml</DependentUpon>
-    </Compile>
-  </ItemGroup>
-
-  <ItemGroup>
-    <Compile Update="App/App.Path.cs">
-      <DependentUpon>App.xaml</DependentUpon>
-    </Compile>
-    <Compile Update="App/App.Theme.cs">
-      <DependentUpon>App.xaml</DependentUpon>
-    </Compile>
+    <None Update="FodyWeavers.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
 
 </Project>
