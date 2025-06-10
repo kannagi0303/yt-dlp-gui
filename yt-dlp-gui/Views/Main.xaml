@@ -76,6 +76,7 @@
                     <Style TargetType="ComboBox" BasedOn="{StaticResource {x:Type ComboBox}}">
                         <Setter Property="Margin" Value="0,2"/>
                     </Style>
+                    <!-- MonitorIconStyle should not be here -->
                 </Grid.Resources>
                 <Grid.RowDefinitions>
                     <!-- 0 -->
@@ -152,9 +153,7 @@
                                 </Style.Triggers>
                             </Style>
                         </ToggleButton.Resources>
-                        <ToggleButton.Content>
-                            <controls:Icons Size="14" Style="{StaticResource MonitorIconStyle}"/>
-                        </ToggleButton.Content>
+                        <controls:Icons Size="14" Style="{StaticResource MonitorIconStyle}"/>
                     </ToggleButton>
                     <Button Grid.Column="2" IsEnabled="{Binding Enable.Analyze}" Margin="2" Click="Button_Analyze">
                         <StackPanel Orientation="Horizontal" Margin="4,0">
