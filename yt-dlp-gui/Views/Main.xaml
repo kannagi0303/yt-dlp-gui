@@ -7,6 +7,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:controls="clr-namespace:yt_dlp_gui.Controls"
         xmlns:m="clr-namespace:yt_dlp_gui.Models" xmlns:local="clr-namespace:yt_dlp_gui.Views" xmlns:b="clr-namespace:yt_dlp_gui.Controls.Behaviors"
+        xmlns:converters="clr-namespace:yt_dlp_gui.Converters"
         mc:Ignorable="d" Style="{DynamicResource WindowStyle}" 
         Title="{Binding Source={x:Static app:App.Lang}, Path=AppName}" Width="600" Height="380"
         Background="{StaticResource BackgroundColour}"
@@ -16,6 +17,13 @@
         <CommandBinding Command="ApplicationCommands.SaveAs" CanExecute="CommandBinding_SaveAs_CanExecute" Executed="CommandBinding_SaveAs_Executed"/>
     </Window.CommandBindings>
     <Window.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <!-- Existing merged dictionaries for themes etc. -->
+            </ResourceDictionary.MergedDictionaries>
+            <converters:NullOrEmptyToVisibilityConverter x:Key="NullOrEmptyToVisibilityConverter"/>
+        </ResourceDictionary>
+        <!-- Moved WindowExtend into the main ResourceDictionary -->
         <ControlTemplate TargetType="ContentControl" x:Key="WindowExtend">
             <StackPanel Orientation="Horizontal">
                 <Button BorderBrush="Transparent" Background="Transparent"
@@ -54,16 +62,22 @@
             </StackPanel>
         </ControlTemplate>
         <local:LanguageConverter x:Key="languageConverter"/>
+        <!-- Removed duplicate Window.Resources, converter is now in the RD above -->
+    </ResourceDictionary> <!-- Closed the main RD -->
     </Window.Resources>
     <TabControl Grid.Row="3" TabStripPlacement="Top" Margin="6,4">
         <TabItem Header="{Binding Source={x:Static app:App.Lang}, Path=Main.Main}">
             <Grid Margin="4" Grid.IsSharedSizeScope="True">
+                <!-- Add Toggle Button Here -->
+                <Button Content="Toggle Theme" Click="ToggleThemeButton_Click" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="5,5,0,0" Padding="5,2"/>
                 <Grid.Resources>
                     <Style TargetType="ComboBox" BasedOn="{StaticResource {x:Type ComboBox}}">
                         <Setter Property="Margin" Value="0,2"/>
                     </Style>
                 </Grid.Resources>
                 <Grid.RowDefinitions>
+                    <!-- 0 -->
+                    <RowDefinition Height="Auto"/> <!-- Row for ToggleButton -->
                     <!-- 0 -->
                     <RowDefinition Height="Auto"/>
                     <!-- 1 -->
@@ -89,7 +103,7 @@
                     <ColumnDefinition Width="3*"/>
                 </Grid.ColumnDefinitions>
                 <!-- Url-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_ -->
-                <Grid Grid.Row="0" Grid.ColumnSpan="3">
+                <Grid Grid.Row="1" Grid.ColumnSpan="3"> <!-- Changed Grid.Row from 0 to 1 -->
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition/>
                         <ColumnDefinition Width="Auto"/>
@@ -147,7 +161,7 @@
                     </Button>
                 </Grid>
                 <!-- Thumbnail -_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_ -->
-                <Grid Grid.Row="1" Grid.Column="2" Grid.RowSpan="3">
+                <Grid Grid.Row="2" Grid.Column="2" Grid.RowSpan="3"> <!-- Changed Grid.Row from 1 to 2 -->
                     <Grid.RowDefinitions>
                         <RowDefinition Height="Auto"/>
                         <RowDefinition Height="*"/>
@@ -234,7 +248,7 @@
                     </ItemsControl>
                 </Grid>
                 <!-- Title-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_ -->
-                <controls:TextEditor Grid.Row="1" Helper="{Binding Source={x:Static app:App.Lang}, Path=Main.Title}" Text="{Binding Video.title}" 
+                <controls:TextEditor Grid.Row="2" Helper="{Binding Source={x:Static app:App.Lang}, Path=Main.Title}" Text="{Binding Video.title}" <!-- Changed Grid.Row from 1 to 2 -->
                              Margin="0,2" IsReadOnly="True" WordWrap="True"
                              EnableHyperlinks="False">
                     <controls:TextEditor.ContextMenu>
@@ -248,7 +262,7 @@
                     </controls:TextEditor.ContextMenu>
                 </controls:TextEditor>
                 <!-- Desc-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_ -->
-                <controls:TextEditor Grid.Row="2" Helper="{Binding Source={x:Static app:App.Lang}, Path=Main.Title}"
+                <controls:TextEditor Grid.Row="3" Helper="{Binding Source={x:Static app:App.Lang}, Path=Main.Title}" <!-- Changed Grid.Row from 2 to 3 -->
                              Margin="0,2" Syntax="desc"
                              Multiline="True" EnableHyperlinks="True" IsReadOnly="True"
                              Text="{Binding Video.description}">
@@ -263,7 +277,7 @@
                     </controls:TextEditor.ContextMenu>
                 </controls:TextEditor>
                 <!-- -_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_ -->
-                <Grid Grid.Row="3" VerticalAlignment="Top">
+                <Grid Grid.Row="4" VerticalAlignment="Top"> <!-- Changed Grid.Row from 3 to 4 -->
                     <Grid.RowDefinitions>
                         <RowDefinition Height="Auto"/>
                         <RowDefinition Height="Auto"/>
@@ -535,7 +549,7 @@
                     </Grid>
                 </Grid>
                 <!-- -_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_ -->
-                <Grid Grid.Row="4" Grid.ColumnSpan="3">
+                <Grid Grid.Row="5" Grid.ColumnSpan="3"> <!-- Changed Grid.Row from 4 to 5 -->
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition/>
                         <ColumnDefinition Width="Auto"/>
@@ -591,6 +605,60 @@
 
                 </Grid>
                 <!-- -_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_ -->
+            </Grid>
+        </TabItem>
+        <TabItem Header="Proxy"> <!-- TODO: Localize Header -->
+            <Grid Margin="10">
+                <StackPanel>
+                    <TextBlock Text="Proxy Settings" FontWeight="Bold" FontSize="16" Margin="0,0,0,10"/> <!-- TODO: Localize Text -->
+                    <CheckBox x:Name="ProxyEnableCheckBox" Content="Enable Proxy" Margin="0,5"/> <!-- TODO: Localize Content -->
+
+                    <TextBlock Text="Proxy URL (e.g., http://127.0.0.1 or socks5://127.0.0.1):" Margin="0,5,0,0"/> <!-- TODO: Localize Text -->
+                    <TextBox x:Name="ProxyUrlTextBox" Margin="0,0,0,5"/>
+
+                    <TextBlock Text="Port:" Margin="0,5,0,0"/> <!-- TODO: Localize Text -->
+                    <TextBox x:Name="ProxyPortTextBox" Margin="0,0,0,5"/>
+
+                    <TextBlock Text="Username (optional):" Margin="0,5,0,0"/> <!-- TODO: Localize Text -->
+                    <TextBox x:Name="ProxyUsernameTextBox" Margin="0,0,0,5"/>
+
+                    <TextBlock Text="Password (optional):" Margin="0,5,0,0"/> <!-- TODO: Localize Text -->
+                    <TextBox x:Name="ProxyPasswordTextBox" Margin="0,0,0,10"/>
+
+                    <Button x:Name="SaveAllSettingsButton" Content="Save All Settings" Click="SaveSettingsButton_Click" HorizontalAlignment="Left" Margin="0,10,0,0"/> <!-- TODO: Localize Content -->
+                </StackPanel>
+            </Grid>
+        </TabItem>
+        <TabItem Header="Download Options"> <!-- TODO: Localize Header -->
+            <Grid Margin="10">
+                <StackPanel>
+                    <TextBlock Text="Video Format Selection" FontWeight="Bold" FontSize="16" Margin="0,0,0,10"/> <!-- TODO: Localize Text -->
+                    <TextBlock Margin="0,5,0,0">
+                        <Run Text="Enter yt-dlp format string (e.g., best, bv*+ba/b, bestvideo[height&lt;=?1080]+bestaudio):"/> <!-- TODO: Localize Text -->
+                        <LineBreak/>
+                        <Run Text="See yt-dlp documentation for format selection options."/> <!-- TODO: Localize Text -->
+                    </TextBlock>
+                    <TextBox x:Name="VideoFormatTextBox" Margin="0,5,0,10" ToolTipService.ToolTip="Enter desired yt-dlp format string."/> <!-- TODO: Localize ToolTip -->
+
+                    <Separator Margin="0,10"/>
+                    <TextBlock Text="Audio Options" FontWeight="Bold" FontSize="16" Margin="0,10,0,10"/> <!-- TODO: Localize Text -->
+
+                    <CheckBox x:Name="AudioOnlyCheckBox" Content="Download audio only" Margin="0,5,0,5"/> <!-- TODO: Localize Content -->
+
+                    <TextBlock Text="Preferred audio format (if downloading audio only):" Margin="0,5,0,0"/> <!-- TODO: Localize Text -->
+                    <ComboBox x:Name="AudioFormatComboBox" Margin="0,5,0,10">
+                        <ComboBoxItem Content="mp3"/>
+                        <ComboBoxItem Content="m4a"/>
+                        <ComboBoxItem Content="opus"/>
+                        <ComboBoxItem Content="aac"/>
+                        <ComboBoxItem Content="flac"/>
+                        <ComboBoxItem Content="vorbis"/>
+                        <ComboBoxItem Content="wav"/>
+                    </ComboBox>
+
+                    <TextBlock Text="Default Download Folder:" Margin="0,10,0,0"/> <!-- TODO: Localize Text -->
+                    <TextBox x:Name="DownloadPathTextBox" Margin="0,5,0,10" ToolTipService.ToolTip="Folder where downloads will be saved."/> <!-- TODO: Localize ToolTip -->
+                </StackPanel>
             </Grid>
         </TabItem>
         <TabItem Header="{Binding Source={x:Static app:App.Lang}, Path=Main.Advance}">
@@ -686,6 +754,31 @@
                     <ComboBoxItem Content="{Binding Source={x:Static app:App.Lang}, Path=Main.ModifiedCreated}" Tag="{x:Static m:ModifiedType.Created}"/>
                     <ComboBoxItem Content="{Binding Source={x:Static app:App.Lang}, Path=Main.ModifiedUpload}" Tag="{x:Static m:ModifiedType.Upload}"/>
                 </ComboBox>
+            </Grid>
+        </TabItem>
+        <TabItem Header="Queue"> <!-- TODO: Localize Header -->
+            <Grid>
+                <DataGrid x:Name="DownloadQueueDataGrid"
+                          ItemsSource="{Binding DownloadQueue}"
+                          AutoGenerateColumns="False"
+                          CanUserAddRows="False"
+                          IsReadOnly="True"
+                          SelectionMode="Single">
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Header="File Name" Binding="{Binding FileName}" Width="*"/> <!-- TODO: Localize Header -->
+                        <DataGridTextColumn Header="URL" Binding="{Binding Url}" Width="2*"/> <!-- TODO: Localize Header -->
+                        <DataGridTextColumn Header="Status" Binding="{Binding Status}" Width="100"/> <!-- TODO: Localize Header -->
+                        <DataGridTemplateColumn Header="Progress" Width="120"> <!-- TODO: Localize Header -->
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <ProgressBar Value="{Binding Progress}" Maximum="100" Height="18"/>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+                        <DataGridTextColumn Header="Output Path" Binding="{Binding OutputPath}" Width="2*"/> <!-- TODO: Localize Header -->
+                        <DataGridTextColumn Header="Error" Binding="{Binding ErrorMessage}" Width="*" Visibility="{Binding ErrorMessage, Converter={StaticResource NullOrEmptyToVisibilityConverter}}"/> <!-- TODO: Localize Header -->
+                    </DataGrid.Columns>
+                </DataGrid>
             </Grid>
         </TabItem>
         <TabItem Header="{Binding Source={x:Static app:App.Lang}, Path=Main.Options}">

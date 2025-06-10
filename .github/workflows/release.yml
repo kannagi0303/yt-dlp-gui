@@ -1,0 +1,76 @@
+name: .NET Release Build for Windows
+
+on:
+  push:
+    tags:
+      - 'v*.*.*' # Trigger on tags like v1.0.0
+
+jobs:
+  build-and-release-windows:
+    name: Build and Release Windows Executable
+    runs-on: windows-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Setup .NET SDK
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: '6.0.x' # Based on project's target: net6.0-windows
+
+    - name: Restore dependencies
+      run: dotnet restore yt-dlp-gui/yt-dlp-gui.csproj
+
+    - name: Build application
+      run: dotnet build yt-dlp-gui/yt-dlp-gui.csproj --configuration Release --no-restore
+
+    - name: Publish application (single executable)
+      run: dotnet publish yt-dlp-gui/yt-dlp-gui.csproj --configuration Release --no-build --runtime win-x64 --self-contained true -p:PublishSingleFile=true -p:IncludeNativeLibrariesForSelfExtract=true -o ./publish_output
+      # -p:IncludeNativeLibrariesForSelfExtract=true is often helpful for WPF single-file executables
+
+    - name: Determine Release Version from Tag
+      id: get_version
+      run: echo "RELEASE_VERSION=${GITHUB_REF#refs/tags/}" >> $env:GITHUB_ENV
+      shell: bash
+
+    - name: Create GitHub Release
+      id: create_release
+      uses: actions/create-release@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        tag_name: ${{ env.RELEASE_VERSION }}
+        release_name: Release ${{ env.RELEASE_VERSION }}
+        body: |
+          Automated release for version ${{ env.RELEASE_VERSION }}.
+          Contains the Windows executable for yt-dlp-gui.
+        draft: false
+        prerelease: false
+
+    - name: Upload Release Asset (EXE)
+      id: upload-release-asset-exe
+      uses: actions/upload-release-asset@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        upload_url: ${{ steps.create_release.outputs.upload_url }}
+        asset_path: ./publish_output/yt-dlp-gui.exe # Assuming the output exe is named yt-dlp-gui.exe
+        asset_name: yt-dlp-gui-${{ env.RELEASE_VERSION }}.exe
+        asset_content_type: application/vnd.microsoft.portable-executable
+
+    # Optional: Zip the output and upload as another asset
+    # - name: Zip publish output
+    #   run: Compress-Archive -Path ./publish_output/* -DestinationPath ./publish_output/yt-dlp-gui-${{ env.RELEASE_VERSION }}.zip
+    #   shell: pwsh
+
+    # - name: Upload Release Asset (ZIP)
+    #   id: upload-release-asset-zip
+    #   uses: actions/upload-release-asset@v1
+    #   env:
+    #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    #   with:
+    #     upload_url: ${{ steps.create_release.outputs.upload_url }}
+    #     asset_path: ./publish_output/yt-dlp-gui-${{ env.RELEASE_VERSION }}.zip
+    #     asset_name: yt-dlp-gui-${{ env.RELEASE_VERSION }}.zip
+    #     asset_content_type: application/zip
