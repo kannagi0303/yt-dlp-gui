@@ -1,3 +1,4 @@
+using yt_dlp_gui.Wrappers;
 using System;
 using System.Collections.Generic;
 using System.Configuration;
