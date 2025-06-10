@@ -62,4 +62,13 @@
     </Compile>
   </ItemGroup>
 
+  <ItemGroup>
+    <Compile Update="App/App.Path.cs">
+      <DependentUpon>App.xaml</DependentUpon>
+    </Compile>
+    <Compile Update="App/App.Theme.cs">
+      <DependentUpon>App.xaml</DependentUpon>
+    </Compile>
+  </ItemGroup>
+
 </Project>
