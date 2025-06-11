@@ -8,7 +8,128 @@
     <ApplicationIcon>Resources\logo.ico</ApplicationIcon>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
+    <EnableDefaultItems>false</EnableDefaultItems>
   </PropertyGroup>
+
+  <ItemGroup>
+    <ApplicationDefinition Include="App.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </ApplicationDefinition>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Include="App.xaml.cs">
+      <DependentUpon>App.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="AssemblyInfo.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Include="App\ThemeManager.cs" />
+    <Compile Include="App\YtdlpUpdater.cs" />
+    <Compile Include="Controls\ActualSize.cs" />
+    <Compile Include="Controls\BrowserBehavior.cs" />
+    <Compile Include="Controls\Duration.cs" />
+    <Compile Include="Controls\Filesize.cs" />
+    <Compile Include="Controls\Icons.xaml.cs">
+      <DependentUpon>Icons.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\Menu.xaml.cs">
+      <DependentUpon>Menu.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\TextBoxNumber.cs" />
+    <Compile Include="Controls\TextEditor.xaml.cs">
+      <DependentUpon>TextEditor.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\TextView.xaml.cs">
+      <DependentUpon>TextView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Converters\NullOrEmptyToVisibilityConverter.cs" />
+    <Compile Include="Libs\Util.Env.cs" />
+    <Compile Include="Libs\Util.PropertyCopy.cs" />
+    <Compile Include="Libs\Util.Resources.cs" />
+    <Compile Include="Libs\Util.Shell.cs" />
+    <Compile Include="Libs\Util.Tools.cs" />
+    <Compile Include="Libs\Util.UrlValid.cs" />
+    <Compile Include="Libs\Web.cs" />
+    <Compile Include="Libs\Yaml.cs" />
+    <Compile Include="Libs\YamlDescription.cs" />
+    <Compile Include="Models\Chapters.cs" />
+    <Compile Include="Models\Config.cs" />
+    <Compile Include="Models\Cookies.cs" />
+    <Compile Include="Models\DownloadItem.cs" />
+    <Compile Include="Models\Format.cs" />
+    <Compile Include="Models\Lang.cs" />
+    <Compile Include="Models\Subs.cs" />
+    <Compile Include="Models\Theme.cs" />
+    <Compile Include="Models\Thumb.cs" />
+    <Compile Include="Models\ToastNotificationActivatedEventArgsCompat.cs" />
+    <Compile Include="Models\VTask.cs" />
+    <Compile Include="Models\Video.cs" />
+    <Compile Include="Models\ytDlp.cs" />
+    <Compile Include="Themes\CustomUI.xaml.cs">
+      <DependentUpon>CustomUI.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Themes\DarkTheme.xaml.cs">
+      <DependentUpon>DarkTheme.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="ViewModels\Main.cs" />
+    <Compile Include="Views\About.xaml.cs">
+      <DependentUpon>About.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Main.xaml.cs">
+      <DependentUpon>Main.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Release.xaml.cs">
+      <DependentUpon>Release.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Wrappers\DLP.cs" />
+    <Compile Include="Wrappers\FFMPEG.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Page Include="Controls\Icons.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\Menu.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\TextEditor.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\TextView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Themes\CustomUI.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Themes\DarkTheme.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\About.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Main.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Release.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="FodyWeavers.xml" />
+  </ItemGroup>
 
   <ItemGroup>
     <None Remove="Resources\logo.ico" />
@@ -37,9 +158,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Compile Update="App.xaml.cs">
-      <DependentUpon>App.xaml</DependentUpon>
-    </Compile>
     <Compile Update="Properties\Resources.Designer.cs">
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
