@@ -31,7 +31,7 @@ namespace yt_dlp_gui.Libs
             var pds = TypeDescriptor.GetProperties(value);
             emitter.Emit(new MappingStart(null, null, false, MappingStyle.Block));
 
-            foreach (PropertyDescriptor pd in pds)
+            foreach (System.ComponentModel.PropertyDescriptor pd in pds)
             {
                 // Original code had: pd.IsBrowsable && pd.Name != "Configs"
                 // Let's keep that logic. If "Configs" is a specific property to skip.

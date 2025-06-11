@@ -452,7 +452,8 @@ namespace yt_dlp_gui.Views {
                 if (s != null) {
                     if (regDLP.IsMatch(std)) {
                         // yt-dlp
-                        if (!Data.DNStatus_Infos.ContainsKey("Downloader")) Data.DNStatus_Infos["Downloader"] = App.Lang.Status.Native;
+                        // if (!Data.DNStatus_Infos.ContainsKey("Downloader")) Data.DNStatus_Infos["Downloader"] = App.Lang.Status.Native;
+if (!Data.DNStatus_Infos.ContainsKey("Downloader")) Data.DNStatus_Infos["Downloader"] = "Native"; // Temporary
                         var d = std.Split(',');
                         if (decimal.TryParse(d[4], out decimal d_total)) {
                             s.Total = d_total;
@@ -468,12 +469,14 @@ namespace yt_dlp_gui.Views {
 
                         UpdatePersent(s.Persent);
 
-                        if (Data.DNStatus_Infos.ContainsKey("Downloader") && Data.DNStatus_Infos["Downloader"] == App.Lang.Status.Native) {
+                        // if (Data.DNStatus_Infos.ContainsKey("Downloader") && Data.DNStatus_Infos["Downloader"] == App.Lang.Status.Native) {
+if (Data.DNStatus_Infos.ContainsKey("Downloader") && Data.DNStatus_Infos["Downloader"] == "Native") { // Temporary, assumes "Native" was the value from App.Lang.Status.Native
                             Data.DNStatus_Infos["Downloaded"] = Util.GetAutoUnit((long)Data.DNStatus_Video.Downloaded + (long)Data.DNStatus_Audio.Downloaded);
                             Data.DNStatus_Infos["Total"] = Util.GetAutoUnit((long)Data.DNStatus_Video.Total + (long)Data.DNStatus_Audio.Total);
                             Data.DNStatus_Infos["Speed"] = Util.GetAutoUnit((long)Data.DNStatus_Video.Speed + (long)Data.DNStatus_Audio.Speed);
                             Data.DNStatus_Infos["Elapsed"] = Util.SecToStr(Data.DNStatus_Video.Elapsed + Data.DNStatus_Audio.Elapsed);
-                            Data.DNStatus_Infos["Status"] = App.Lang.Status.Downloading;
+                            // Data.DNStatus_Infos["Status"] = App.Lang.Status.Downloading;
+Data.DNStatus_Infos["Status"] = "Downloading"; // Temporary
                         }
                     } else if (regAria.IsMatch(std)) {
                         // aria2
@@ -487,7 +490,8 @@ namespace yt_dlp_gui.Views {
                         Data.DNStatus_Infos["Speed"] = d["speed"];
                         Data.DNStatus_Infos["Elapsed"] = d.GetValueOrDefault("eta", "0s");
                         Data.DNStatus_Infos["Connections"] = d["cn"];
-                        Data.DNStatus_Infos["Status"] = App.Lang.Status.Downloading;
+                        // Data.DNStatus_Infos["Status"] = App.Lang.Status.Downloading;
+Data.DNStatus_Infos["Status"] = "Downloading"; // Temporary
                     } else if (regFF.IsMatch(std)) {
                         // ffmpeg
                         Data.DNStatus_Infos["Downloader"] = "FFMPEG";
