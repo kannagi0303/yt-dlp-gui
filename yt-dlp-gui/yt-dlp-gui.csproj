@@ -60,6 +60,12 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Compile Include="Models\Theme.cs" />
+    <Compile Include="Models\ToastNotificationActivatedEventArgsCompat.cs" />
+    <Compile Include="Models\ytDlp.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
     <None Update="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
