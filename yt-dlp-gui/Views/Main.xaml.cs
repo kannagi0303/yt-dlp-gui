@@ -377,8 +377,8 @@ Data.TargetPath = "."; // Temporary
         }
         public void InitConfiguration() {
             Data.Configs.Clear();
-            Data.Configs.Add(new Config() { name = "None" }); // Temporary: Was MyApplication.Lang.Main.ConfigurationNone
-            var cp = "configs"; // Temporary: Was MyApplication.Path(MyApplication.Folders.configs)
+            Data.Configs.Add(new Config() { name = "None" });
+            var cp = "configs";
             var fs = Directory.Exists(cp)
                 ? Directory.EnumerateFiles(cp).OrderBy(x => x)
                 : Enumerable.Empty<string>();
