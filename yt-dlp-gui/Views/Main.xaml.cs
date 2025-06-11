@@ -278,7 +278,7 @@ namespace yt_dlp_gui.Views {
                 if (index >= 0) {
                     path = path.Substring(index);
                 }
-                path = path.Replace('/', '\'); // Corrected backslash
+                path = path.Replace('/', '\\'); // Corrected backslash
                 while (path.Contains("\\\\")) { // Corrected double backslash
                     path = path.Replace("\\\\", "\\"); // Corrected double backslash
                 }
