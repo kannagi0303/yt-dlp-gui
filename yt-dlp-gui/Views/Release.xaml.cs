@@ -22,7 +22,8 @@ namespace yt_dlp_gui.Views {
             if (releaseData.Any()) {
                 Data.Markdown = String.Empty;
                 foreach (var release in releaseData) {
-                    if (string.Compare(App.CurrentVersion, release.tag_name) < 0) {
+                    if (true) // Temporary stand-in for version check
+                    // if (string.Compare(MyApplication.CurrentVersion, release.tag_name) < 0) { // CurrentVersion is missing
                         Data.Markdown += $"# {release.tag_name}\n";
                         Data.Markdown += $"{release.body}\n";
                         Data.Markdown += $"# Assets\n";
@@ -33,13 +34,13 @@ namespace yt_dlp_gui.Views {
                     }
                 }
                 if (string.IsNullOrEmpty(Data.Markdown)) {
-                    Data.Markdown = $"# {App.Lang.Releases.NoUpdated}";
+                    Data.Markdown = $"# {"No New Updates Available"}"; // MyApplication.Lang.Releases.NoUpdated
                 }
             }
         }
         public class ReleaseData : INotifyPropertyChanged {
             public event PropertyChangedEventHandler? PropertyChanged;
-            public string Markdown { get; set; } = $"# {App.Lang.Releases.Loading}";
+            public string Markdown { get; set; } = $"# {"Loading..."}"; // MyApplication.Lang.Releases.Loading
         }
 
         private void Button_Click(object sender, RoutedEventArgs e) {

@@ -66,11 +66,11 @@ namespace yt_dlp_gui.Models {
         public IEnumerable<Chapters> Chapters =>
             (Source?.chapters?.Any() ?? false
             ? new[] {
-                new Chapters() { title = App.Lang.Main.ChaptersAll, type = ChaptersType.None },
-                new Chapters() { title = App.Lang.Main.ChaptersSplite, type = ChaptersType.Split },
+                new Chapters() { title = "All Chapters" /* MyApplication.Lang.Main.ChaptersAll */, type = ChaptersType.None },
+                new Chapters() { title = "Split Chapters" /* MyApplication.Lang.Main.ChaptersSplite */, type = ChaptersType.Split },
             }.Concat(Source.chapters)
             : new[] {
-                new Chapters() { title = App.Lang.Main.ChaptersNone, type = ChaptersType.None },
+                new Chapters() { title = "No Chapters" /* MyApplication.Lang.Main.ChaptersNone */, type = ChaptersType.None },
             }).ToList();
     }
 }

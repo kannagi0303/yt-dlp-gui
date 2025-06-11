@@ -8,6 +8,8 @@ using System.Text;
 using System.Windows.Forms;
 using YamlDotNet.Core;
 using YamlDotNet.Serialization;
+using YamlDotNet.Serialization.TypeInspectors;
+using YamlDotNet.Serialization.ObjectGraphVisitors;
 
 namespace Libs.Yaml {
     public static class Yaml {

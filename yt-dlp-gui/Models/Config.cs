@@ -64,13 +64,14 @@ namespace yt_dlp_gui.Models {
         public Config() {
             PropertyChanged += (s, e) => {
                 if (AutoSaveConfig && Default == this) { // Only save if it's the Default instance
-                    Save(App.Path(App.Folders.root, App.AppName + ".yaml"));
+                    // Save(MyApplication.Path(MyApplication.Folders.root, MyApplication.AppName + ".yaml")); // AppName, Path, Folders are missing
                 }
             };
         }
 
         public static void Load() {
-            var loadedConfig = Yaml.Open<Config>(App.Path(App.Folders.root, App.AppName + ".yaml"));
+            // var loadedConfig = Yaml.Open<Config>(MyApplication.Path(MyApplication.Folders.root, MyApplication.AppName + ".yaml")); // AppName, Path, Folders are missing
+            var loadedConfig = (Config)null; // Temporary to ensure Default gets created if path is missing
             if (loadedConfig != null) {
                 Default = loadedConfig;
             } else {
