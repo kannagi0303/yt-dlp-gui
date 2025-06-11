@@ -8,6 +8,7 @@
     <ApplicationIcon>Resources\logo.ico</ApplicationIcon>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
+    <EnableDefaultApplicationDefinitionItems>false</EnableDefaultApplicationDefinitionItems>
   </PropertyGroup>
 
   <ItemGroup>
