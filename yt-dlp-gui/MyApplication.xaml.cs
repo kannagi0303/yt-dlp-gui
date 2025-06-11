@@ -2,7 +2,7 @@ using System.Windows;
 
 namespace yt_dlp_gui
 {
-    public partial class App : Application
+    public partial class MyApplication : Application // Changed class name here
     {
         protected override void OnStartup(StartupEventArgs e)
         {

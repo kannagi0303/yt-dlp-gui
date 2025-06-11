@@ -12,15 +12,15 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ApplicationDefinition Include="App.xaml">
+    <ApplicationDefinition Include="MyApplication.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
   </ItemGroup>
 
   <ItemGroup>
-    <Compile Include="App.xaml.cs">
-      <DependentUpon>App.xaml</DependentUpon>
+    <Compile Include="MyApplication.xaml.cs">
+      <DependentUpon>MyApplication.xaml</DependentUpon>
     </Compile>
     <Compile Include="AssemblyInfo.cs" />
   </ItemGroup>
