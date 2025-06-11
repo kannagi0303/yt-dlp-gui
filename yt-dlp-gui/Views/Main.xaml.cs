@@ -519,7 +519,7 @@ namespace yt_dlp_gui.Views {
                     GetInfo();
                 } else if (Data.UseCookie == UseCookie.Ask) {
                     var mb = System.Windows.Forms.MessageBox.Show(
-                        $"{"Cookie Required. Use cookies?"} \n" /* MyApplication.Lang.Dialog.CookieRequired */,
+                        $"Cookie Required. Use cookies? \n" /* MyApplication.Lang.Dialog.CookieRequired */,
                         "yt-dlp-gui" /* MyApplication.AppName */,
                         MessageBoxButtons.YesNo);
 
