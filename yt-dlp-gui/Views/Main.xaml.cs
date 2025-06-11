@@ -1,6 +1,7 @@
 using Libs;
 using Libs.Yaml;
 using Microsoft.Toolkit.Uwp.Notifications;
+using Windows.UI.Notifications;
 using Newtonsoft.Json;
 using Swordfish.NET.Collections.Auxiliary;
 using System;
@@ -85,7 +86,7 @@ namespace yt_dlp_gui.Views {
                                     try {
                                         string potentialFilename = output.Substring(output.IndexOf("[info] MAPPING: ") + "[info] MAPPING: ".Length).Trim();
                                         if (!string.IsNullOrWhiteSpace(potentialFilename)) {
-                                            Application.Current.Dispatcher.Invoke(() => {
+                                            System.Windows.Application.Current.Dispatcher.Invoke(() => {
                                                 item.FileName = Path.GetFileName(potentialFilename);
                                             });
                                         }
@@ -98,7 +99,7 @@ namespace yt_dlp_gui.Views {
                                     if (parts.Length > 1) {
                                         var percentStr = parts[1].Replace("%", "").Trim();
                                         if (double.TryParse(percentStr, NumberStyles.Any, CultureInfo.InvariantCulture, out double progressValue)) {
-                                            Application.Current.Dispatcher.Invoke(() => {
+                                            System.Windows.Application.Current.Dispatcher.Invoke(() => {
                                                 item.Progress = progressValue;
                                             });
                                         }
@@ -117,11 +118,11 @@ namespace yt_dlp_gui.Views {
                         if (process != null && process.ExitCode == 0 && dlp.StdErr.Count == 0) {
                             if (currentItem != null) {
                                 if (currentItem.FileName == "Fetching title..." && dlp.Files.Any()) {
-                                    Application.Current.Dispatcher.Invoke(() => {
+                                    System.Windows.Application.Current.Dispatcher.Invoke(() => {
                                        currentItem.FileName = Path.GetFileName(dlp.Files.First());
                                     });
                                 } else if (currentItem.FileName == "Fetching title...") {
-                                     Application.Current.Dispatcher.Invoke(() => {
+                                     System.Windows.Application.Current.Dispatcher.Invoke(() => {
                                        currentItem.FileName = "Unknown Title";
                                     });
                                 }
@@ -591,7 +592,7 @@ namespace yt_dlp_gui.Views {
         private void Button_Download(object sender, RoutedEventArgs e) {
             string url = Data.Url;
             if (string.IsNullOrWhiteSpace(url)) {
-                MessageBox.Show("Please enter a valid URL.", "Input Error", MessageBoxButton.OK, MessageBoxImage.Warning);
+                System.Windows.MessageBox.Show("Please enter a valid URL.", "Input Error", MessageBoxButton.OK, MessageBoxImage.Warning);
                 return;
             }
             if (Config.Default == null) Config.Load();
@@ -599,7 +600,7 @@ namespace yt_dlp_gui.Views {
             try {
                 Directory.CreateDirectory(downloadDirectory);
             } catch (Exception ex) {
-                MessageBox.Show($"Error creating download directory '{downloadDirectory}': {ex.Message}", "Directory Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                System.Windows.MessageBox.Show($"Error creating download directory '{downloadDirectory}': {ex.Message}", "Directory Error", MessageBoxButton.OK, MessageBoxImage.Error);
                 return;
             }
             var newItem = new DownloadItem(url) {
@@ -752,7 +753,7 @@ namespace yt_dlp_gui.Views {
                                     .AddArgument("action", "none")
                                     .SetBackgroundActivation()
                                 );
-                                toast.Show();
+                                ToastNotificationManagerCompat.CreateToastNotifier().Show(new Windows.UI.Notifications.ToastNotification(toast.Content.GetXml()));
                             }
                         } catch (Exception) { }
                     }
@@ -932,7 +933,7 @@ namespace yt_dlp_gui.Views {
         private void ToggleThemeButton_Click(object sender, RoutedEventArgs e) {
             // ThemeManager.ToggleTheme(); // Assuming ThemeManager is a static class or accessible
             // Since ThemeManager might come from yt_dlp_gui.App, and that's commented, this needs a placeholder or direct implementation if simple enough.
-             MessageBox.Show("Theme toggling is temporarily disabled.", "Info");
+             System.Windows.MessageBox.Show("Theme toggling is temporarily disabled.", "Info");
         }
 
         private void SaveSettingsButton_Click(object sender, RoutedEventArgs e) {
@@ -972,7 +973,7 @@ namespace yt_dlp_gui.Views {
                 }
             }
 
-            MessageBox.Show("Settings saved.", "Settings Saved", MessageBoxButton.OK, MessageBoxImage.Information);
+            System.Windows.MessageBox.Show("Settings saved.", "Settings Saved", MessageBoxButton.OK, MessageBoxImage.Information);
             System.Diagnostics.Debug.WriteLine("Settings saved from UI.");
         }
     }
