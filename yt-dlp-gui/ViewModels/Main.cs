@@ -338,10 +338,10 @@ namespace yt_dlp_gui.Views {
                 }
                 if (Video.is_live == true) {
                     //ExecText = IsDownload ? "Stop" : "Record";
-                    ExecText = IsDownload ? App.Lang.Main.Stop : App.Lang.Main.Record;
+                    ExecText = IsDownload ? MyApplication.Lang.Main.Stop : MyApplication.Lang.Main.Record;
                 } else {
                     //ExecText = IsDownload ? "Cancel" : "Download";
-                    ExecText = IsDownload ? App.Lang.Main.Cancel : App.Lang.Main.Download;
+                    ExecText = IsDownload ? MyApplication.Lang.Main.Cancel : MyApplication.Lang.Main.Download;
                 }
             }
         }
