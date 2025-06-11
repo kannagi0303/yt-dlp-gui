@@ -42,9 +42,7 @@ namespace Libs.Yaml {
         }
         public static string Serialize(object obj) {
             var s = new SerializerBuilder()
-                .WithTypeInspector(inner => new CommentGatheringTypeInspector(inner))
-                .WithEmissionPhaseObjectGraphVisitor(args => new SkipEmptyObjectGraphVisitor(args.InnerVisitor))
-                .WithEmissionPhaseObjectGraphVisitor(args => new CommentsObjectGraphVisitor(args.InnerVisitor))
+                .WithDefaultValuesHandling(DefaultValuesHandling.OmitNull | DefaultValuesHandling.OmitEmptyCollections)
                 .Build();
             return s.Serialize(obj);
         }
@@ -57,10 +55,8 @@ namespace Libs.Yaml {
                 }
                 using (var yaml = new StreamWriter(info.FullName, false, Encoding.UTF8)) {
                     var s = new SerializerBuilder()
-                    .WithTypeInspector(inner => new CommentGatheringTypeInspector(inner))
                     //.WithTypeInspector(inner => new SortedTypeInspector(inner))
-                    .WithEmissionPhaseObjectGraphVisitor(args => new SkipEmptyObjectGraphVisitor(args.InnerVisitor))
-                    .WithEmissionPhaseObjectGraphVisitor(args => new CommentsObjectGraphVisitor(args.InnerVisitor))
+                    .WithDefaultValuesHandling(DefaultValuesHandling.OmitNull | DefaultValuesHandling.OmitEmptyCollections)
                     .Build();
                     s.Serialize(yaml, graph);
                 }

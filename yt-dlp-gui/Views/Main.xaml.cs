@@ -706,9 +706,12 @@ namespace yt_dlp_gui.Views {
                             DownloadType.Audio => 2,
                             _ => 0
                         };
-                        dlp.Exec(null, (item, outputString) => {
-                            repoter.GetStatus(outputString);
-                        });
+                        dlp.Exec(
+                            itemToUpdate: null,
+                            stdall: (item, outputString) => {
+                                repoter.GetStatus(outputString);
+                            }
+                        );
                     }));
                     Data.CanCancel = true;
                     Task.WaitAll(tasks.ToArray());
