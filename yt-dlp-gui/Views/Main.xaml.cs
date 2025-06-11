@@ -239,10 +239,12 @@ namespace yt_dlp_gui.Views {
 
         private void ToastNotificationManagerCompat_OnActivated(ToastNotificationActivatedEventArgsCompat e) {
             var args = ToastArguments.Parse(e.Argument);
-            if (args.Contains("action")) {
-                switch (args["action"]) {
+            if (args.TryGetValue("action", out string? actionValue)) {
+                switch (actionValue) {
                     case "browse":
-                        if (File.Exists(args["file"])) _ = Util.Explorer(args["file"]);
+                        if (args.TryGetValue("file", out string? filePath) && !string.IsNullOrEmpty(filePath) && File.Exists(filePath)) {
+                            _ = Util.Explorer(filePath);
+                        }
                         break;
                 }
             }
@@ -343,7 +345,7 @@ namespace yt_dlp_gui.Views {
         public void InitGUIConfig() {
             // Data.GUIConfig.Load(MyApplication.Path(MyApplication.Folders.root, MyApplication.AppName + ".yaml")); // Path, Folders, AppName are missing
             // Assuming GUIConfig might be loaded by other means or defaults are used.
-            Data.GUIConfig = Data.GUIConfig ?? new ViewData.GUIConfig();
+            Data.GUIConfig = Data.GUIConfig ?? new GUIConfig();
             Util.PropertyCopy(Data.GUIConfig, Data);
             Data.AutoSaveConfig = true;
         }
@@ -704,8 +706,8 @@ namespace yt_dlp_gui.Views {
                             DownloadType.Audio => 2,
                             _ => 0
                         };
-                        dlp.Exec(std => {
-                            repoter.GetStatus(std);
+                        dlp.Exec(null, (item, outputString) => {
+                            repoter.GetStatus(outputString);
                         });
                     }));
                     Data.CanCancel = true;
@@ -725,10 +727,10 @@ namespace yt_dlp_gui.Views {
                             }
                         }
                         try {
-                            if (Data.UseNotifications && Data.Video != null) { // Null check
+                            if (Data.UseNotifications && Data.Video != null) { // Null check for Data.Video
                                 Util.NotifySound(Data.PathNotify);
                                 var toast = new ToastContentBuilder()
-                                    .AddText(Data.Video.title)
+                                    .AddText(Data.Video?.title ?? "Download") // Use null-conditional access for title
                                     .AddText("Download Completed") // Temporary
                                     .AddAudio(new ToastAudio() {
                                         Silent = true,
@@ -787,7 +789,7 @@ namespace yt_dlp_gui.Views {
             var regexSearch = new string(Path.GetInvalidFileNameChars());
             return Regex.Replace(filename, string.Format("[{0}]", Regex.Escape(regexSearch)), "_");
         }
-        private async void CommandBinding_SaveAs_Executed(object sender, System.Windows.Input.ExecutedRoutedEventArgs e) {
+        private async void CommandBinding_SaveAs_Executed(object sender, System.Windows.Input.ExecutedRoutedEventArgs e) { // Stays async void
             var dialog = new SaveFileDialog();
              if(!string.IsNullOrEmpty(Data.TargetFile)) dialog.InitialDirectory = Path.GetDirectoryName(Data.TargetFile); // Null check
             var OrigExt = Path.GetExtension(Data.Thumbnail);
@@ -796,21 +798,28 @@ namespace yt_dlp_gui.Views {
             dialog.Filter = $"{"Image" /* MyApplication.Lang.Files.image */}|*.jpg;*.webp";
             dialog.FileName = Path.ChangeExtension(OrigFileName, ".jpg");
             if (dialog.ShowDialog() == System.Windows.Forms.DialogResult.OK) {
-                DownloadThumbnail(dialog.FileName);
+                await DownloadThumbnailAsync(dialog.FileName); // Await the async version
             }
         }
-        private void DownloadThumbnail(string toFile) {
-            if (string.IsNullOrEmpty(Data.Thumbnail) || string.IsNullOrEmpty(Data.TargetFile)) return; // Null checks
-            var origExt = Path.GetExtension(Data.Thumbnail);
+        private async Task DownloadThumbnailAsync(string toFile) { // Changed to async Task
+            if (string.IsNullOrEmpty(Data.Thumbnail) || string.IsNullOrEmpty(Data.TargetFile)) return; // Null checks for TargetFile
+
+            var currentThumbnailUrl = Data.Thumbnail; // Capture to a local variable for thread safety / consistency
+            if (string.IsNullOrEmpty(currentThumbnailUrl)) return; // Explicit null/empty check for thumbnail URL
+
+            var origExt = Path.GetExtension(currentThumbnailUrl);
             var origin = Path.ChangeExtension(Data.TargetFile, origExt);
             var target = toFile;
             var progress = new Progress<double>(percentage => {
                 Debug.Write($"Downloading... {percentage:0.00}%");
             });
-            Web.Download(Data.Thumbnail, origin, progress, Data.ProxyEnabled ? Data.ProxyUrl : null).Wait();
+            // Web.Download now expects string? for downloadUrl.
+            await Web.Download(currentThumbnailUrl, origin, progress, Data.ProxyEnabled ? Data.ProxyUrl : null); // Changed .Wait() to await
             if (Path.GetExtension(origin).ToLower() != Path.GetExtension(target)) {
+                // Assuming FFMPEG.DownloadUrl is synchronous. If it's async, it should be awaited too.
+                // For now, keeping it as is based on provided code.
                 FFMPEG.DownloadUrl(origin, target);
-                File.Delete(origin);
+                File.Delete(origin); // This is synchronous IO, consider Task.Run for it if it blocks UI.
             }
         }
 

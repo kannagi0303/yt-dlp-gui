@@ -30,7 +30,9 @@ namespace yt_dlp_gui.Controls.Behaviors {
         }
         private static void onNumberChanged(DependencyObject dpo, DependencyPropertyChangedEventArgs e) {
             var t = (dpo as TextBoxNumber);
-            t.NumberToText();
+            if (t != null) {
+                t.NumberToText();
+            }
         }
         private void NumberToText() {
             if (Number == 0 && !AssociatedObject.IsFocused) {
