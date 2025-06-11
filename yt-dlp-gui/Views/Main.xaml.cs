@@ -30,7 +30,7 @@ namespace yt_dlp_gui.Views
     {
         // Note: This is a placeholder for the original 'Data' object logic.
         // You may need to replace this with the actual implementation if it was more complex.
-        private readonly Config Data = App.AppConfig; 
+        private readonly Config Data = MyApplication.AppConfig;
 
         private List<DLP> RunningDLP = new();
         public ObservableCollection<DownloadItem> DownloadQueue { get; set; }
