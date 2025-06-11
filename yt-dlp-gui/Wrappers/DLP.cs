@@ -91,7 +91,8 @@ namespace yt_dlp_gui.Wrappers {
             }
             return this;
         }
-        public DLP SplitChapters(Chapters chapters, string path = "") {
+        public DLP SplitChapters(Chapters? chapters, string path = "") {
+            if (chapters == null) return this; // Added null check
             switch (chapters.type) {
                 case ChaptersType.Split:
                     Options["--split-chapters"] = "";
@@ -125,7 +126,7 @@ namespace yt_dlp_gui.Wrappers {
             }
             return this;
         }
-        public DLP Subtitle(string lang, string targetpath, bool embed) {
+        public DLP Subtitle(string? lang, string targetpath, bool embed) { // lang is now string?
             if (string.IsNullOrWhiteSpace(lang)) return this;
             Options["--sub-langs"] = lang;
             if (embed) {
@@ -225,9 +226,11 @@ namespace yt_dlp_gui.Wrappers {
             Files.Add(targetpath);
             return this;
         }
-        public DLP DownloadVideo(string format_id, string source_ext, string targetpath) {
+        public DLP DownloadVideo(string format_id, string? source_ext, string targetpath) { // source_ext is now string?
             Debug.WriteLine($"id:{format_id} source:{source_ext} path:{targetpath}", "DownloadVideo");
             Options["--format"] = format_id;
+            // If source_ext is null, it won't match targetpath.getExt() unless targetpath.getExt() is also null (unlikely for getExt)
+            // This logic seems okay even with source_ext being null.
             if (source_ext == targetpath.getExt()) {
                 Options["--output"] = targetpath.QP();
             } else {
@@ -245,8 +248,9 @@ namespace yt_dlp_gui.Wrappers {
             Options["--output"] = target.RemoveExt().QP();
             return this;
         }
-        public DLP DownloadSubtitle(string lang, string targetpath) {
+        public DLP DownloadSubtitle(string? lang, string targetpath) { // lang is now string?
             //Default
+            if (string.IsNullOrWhiteSpace(lang)) return this; // Ensure lang is not null or whitespace for --sub-langs
             if (!Path.HasExtension(targetpath)) Path.ChangeExtension(targetpath, ".srt");
             var exts = Path.GetExtension(targetpath).Trim('.').ToLower();
             Options["--write-subs"] = "";

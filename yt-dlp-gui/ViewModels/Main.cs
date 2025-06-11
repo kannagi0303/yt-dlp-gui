@@ -182,9 +182,9 @@ namespace yt_dlp_gui.Views {
             public bool hasChapter { get; set; } = false;
             public bool hasSubtitle { get; set; } = false;
             public Chapters? selectedChapter { get; set; } = null;
-            public Format selectedVideo { get; set; } = new();
-            public Format selectedAudio { get; set; } = new();
-            public Subs selectedSub { get; set; } = new();
+            public Format? selectedVideo { get; set; } = null; // Made nullable and init to null
+            public Format? selectedAudio { get; set; } = null; // Made nullable and init to null
+            public Subs? selectedSub { get; set; } = null;   // Made nullable and init to null
             public bool IsAnalyze { get; set; } = false;
             public bool IsDownload { get; set; } = false;
             public bool IsAbouted { get; set; } = false;
@@ -440,11 +440,12 @@ namespace yt_dlp_gui.Views {
             public void GetStatus(string std) {
                 if (regPart.IsMatch(std)) {
                     var r = Util.GetGroup(regPart, std);
-                    if (r.GetValueOrDefault("fid", "0") == Data.selectedVideo.format_id) {
+                    // Null check for selectedVideo and selectedAudio before accessing format_id
+                    if (Data.selectedVideo != null && r.GetValueOrDefault("fid", "0") == Data.selectedVideo.format_id) {
                         type = 1;
                         s = Data.DNStatus_Video;
                     }
-                    if (r.GetValueOrDefault("fid", "0") == Data.selectedAudio.format_id) {
+                    if (Data.selectedAudio != null && r.GetValueOrDefault("fid", "0") == Data.selectedAudio.format_id) {
                         type = 2;
                         s = Data.DNStatus_Audio; ;
                     }

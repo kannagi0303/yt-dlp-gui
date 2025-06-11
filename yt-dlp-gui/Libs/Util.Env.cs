@@ -40,7 +40,7 @@ namespace Libs {
             }
             return path;
         }
-        public static string GetDisplayName(string path) {
+        public static string? GetDisplayName(string path) { // Changed to string?
             SHFILEINFO shfi = new SHFILEINFO();
             if (0 != (int)SHGetFileInfo(path, FILE_ATTRIBUTE_NORMAL, out shfi, (uint)Marshal.SizeOf(typeof(SHFILEINFO)), SHGFI_DISPLAYNAME)) {
                 return shfi.szDisplayName;

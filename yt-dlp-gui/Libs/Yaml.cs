@@ -13,7 +13,7 @@ using YamlDotNet.Serialization.ObjectGraphVisitors;
 
 namespace Libs.Yaml {
     public static class Yaml {
-        public static T Open<T>(string path) where T : new() {
+        public static T? Open<T>(string path) where T : new() {
             if (File.Exists(path)) {
                 try {
                     using (var yaml = File.OpenText(path)) {
@@ -26,10 +26,10 @@ namespace Libs.Yaml {
                     Debug.WriteLine(e.Message);
                 }
             }
-            return new T();
+            return default(T); // Or new T() if T must be non-null on this path, but default(T) is safer for T?
         }
-        public static T OpenFromResouce<T>(string path) where T : new() {
-            if (!Util.ResourceExists(path)) return new T();
+        public static T? OpenFromResouce<T>(string path) where T : new() {
+            if (!Util.ResourceExists(path)) return default(T); // Or new T()
             using (Stream s = System.Windows.Application.GetResourceStream(new Uri(path, UriKind.Relative)).Stream) {
                 using (TextReader reader = new StreamReader(s)) {
                     var deserializer = new DeserializerBuilder()
@@ -38,7 +38,7 @@ namespace Libs.Yaml {
                     return deserializer.Deserialize<T>(reader);
                 }
             }
-            return new T();
+            return default(T); // Or new T()
         }
         public static string Serialize(object obj) {
             var s = new SerializerBuilder()
@@ -51,7 +51,10 @@ namespace Libs.Yaml {
         public static void Save(string path, object graph) {
             FileInfo info = new FileInfo(path);
             try {
-                Directory.CreateDirectory(info.DirectoryName);
+                var directory = info.DirectoryName;
+                if (!string.IsNullOrEmpty(directory)) {
+                    Directory.CreateDirectory(directory);
+                }
                 using (var yaml = new StreamWriter(info.FullName, false, Encoding.UTF8)) {
                     var s = new SerializerBuilder()
                     .WithTypeInspector(inner => new CommentGatheringTypeInspector(inner))
@@ -82,5 +85,8 @@ namespace Libs.Yaml {
     }
     public class IYamlConfig {
         [YamlIgnore] public string _YAMLPATH { get; set; }
+        public IYamlConfig() {
+            _YAMLPATH = string.Empty;
+        }
     }
 }
