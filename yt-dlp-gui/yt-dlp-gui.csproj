@@ -65,7 +65,6 @@
     <Compile Include="Models\Subs.cs" />
     <Compile Include="Models\Theme.cs" />
     <Compile Include="Models\Thumb.cs" />
-    <Compile Include="Models\ToastNotificationActivatedEventArgsCompat.cs" />
     <Compile Include="Models\VTask.cs" />
     <Compile Include="Models\Video.cs" />
     <Compile Include="Models\ytDlp.cs" />
