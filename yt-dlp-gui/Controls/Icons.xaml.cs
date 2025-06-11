@@ -6,7 +6,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Media;
-using static yt_dlp_gui.App;
+using static yt_dlp_gui.MyApplication;
 
 namespace yt_dlp_gui.Controls {
     /// <summary>

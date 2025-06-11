@@ -1,4 +1,4 @@
-﻿using Libs;
+using Libs;
 using System;
 using System.ComponentModel;
 using System.Linq;
@@ -22,24 +22,27 @@ namespace yt_dlp_gui.Views {
             if (releaseData.Any()) {
                 Data.Markdown = String.Empty;
                 foreach (var release in releaseData) {
-                    if (string.Compare(App.CurrentVersion, release.tag_name) < 0) {
-                        Data.Markdown += $"# {release.tag_name}\n";
-                        Data.Markdown += $"{release.body}\n";
-                        Data.Markdown += $"# Assets\n";
+                    if (true) { // Temporary stand-in for version check
+                    // if (string.Compare(MyApplication.CurrentVersion, release.tag_name) < 0) { // CurrentVersion is missing
+                        Data.Markdown += $"# {release.tag_name}\n"; // Escaped newline
+                        Data.Markdown += $"{release.body}\n"; // Escaped newline
+                        Data.Markdown += $"# Assets\n"; // Escaped newline
                         foreach (var asset in release.assets) {
-                            Data.Markdown += $"* [{asset.name}]({asset.browser_download_url})\n";
+                            Data.Markdown += $"* [{asset.name}]({asset.browser_download_url})\n"; // Escaped newline
                         }
-                        Data.Markdown += $"---\n";
+                        Data.Markdown += $"---\n"; // Escaped newline
                     }
                 }
                 if (string.IsNullOrEmpty(Data.Markdown)) {
-                    Data.Markdown = $"# {App.Lang.Releases.NoUpdated}";
+                    // Data.Markdown = $"# {MyApplication.Lang.Releases.NoUpdated}"; // Lang is missing
+                    Data.Markdown = $"# {"No New Updates Available"}"; // Temporary
                 }
             }
         }
         public class ReleaseData : INotifyPropertyChanged {
             public event PropertyChangedEventHandler? PropertyChanged;
-            public string Markdown { get; set; } = $"# {App.Lang.Releases.Loading}";
+            // public string Markdown { get; set; } = $"# {MyApplication.Lang.Releases.Loading}"; // Lang is missing
+            public string Markdown { get; set; } = $"# {"Loading..."}"; // Temporary
         }
 
         private void Button_Click(object sender, RoutedEventArgs e) {

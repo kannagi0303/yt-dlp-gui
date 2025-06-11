@@ -33,6 +33,11 @@
     <SolidColorBrush x:Key="ControlSelectedMouseOverBorderBrush" Color="#FF424242"/>
     <SolidColorBrush x:Key="ControlGlythColour"                  Color="#FFEBEBEB" />
     <SolidColorBrush x:Key="ControlMouseOverGlythColour"         Color="#FFD7D7D7" />
+
+    <!-- Border Style -->
+    <Style TargetType="Border">
+        <Setter Property="BorderBrush" Value="{StaticResource ControlDefaultBorderBrush}"/>
+    </Style>
     <SolidColorBrush x:Key="ControlSelectedGlythColour"          Color="#FFC8C8C8" />
     <SolidColorBrush x:Key="ControlDisabledGlythColour"          Color="#FFA0A0A0" />
 

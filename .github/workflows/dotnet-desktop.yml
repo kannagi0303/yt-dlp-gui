@@ -1,44 +1,40 @@
-name: yt-dlp GUI CI Builder
+name: yt-dlp GUI CI Builder (Debug)
 
 on:
   push:
-    branches: [ "master" ]
+    branches: [ "master" ] # Or your main development branch
 
 jobs:
-
-  build:
-
+  build-debug: # Renamed job for clarity
     strategy:
       matrix:
-        configuration: [Debug]
+        configuration: [Debug] # This workflow is specifically for Debug configuration
 
     runs-on: windows-latest
     
-    env:
-      Solution_Name: yt-dlp-gui.sln
-      
     steps:
-    - name: Checkout
-      uses: actions/checkout@v3
+    - name: Checkout code
+      uses: actions/checkout@v4 # Updated to v4
+
+    - name: Setup .NET SDK
+      uses: actions/setup-dotnet@v4 # Updated to v4
       with:
-        fetch-depth: 0
+        dotnet-version: '6.0.x' # Consistent with release.yml
 
-    - name: Install .NET Core
-      uses: actions/setup-dotnet@v2
-      with:
-        dotnet-version: 6.0.400
+    - name: Restore dependencies
+      run: dotnet restore yt-dlp-gui/yt-dlp-gui.csproj # Target project file
 
-    - name: Setup MSBuild.exe
-      uses: microsoft/setup-msbuild@v1.0.2
-
-    - name: Restore the application
-      run: dotnet restore $env:Solution_Name
+    - name: Build application
+      run: dotnet build yt-dlp-gui/yt-dlp-gui.csproj --configuration ${{ matrix.configuration }} --no-restore
     
-    - name: Build
-      run: dotnet publish -c ${{ matrix.configuration }} -r win-x64 --self-contained true -p:PublishReadyToRun=true -p:PublishSingleFile=true 
-    
-    - name: Upload a Build Artifact
-      uses: actions/upload-artifact@v3.1.0
+    - name: Publish application (Debug)
+      run: dotnet publish yt-dlp-gui/yt-dlp-gui.csproj --configuration ${{ matrix.configuration }} --runtime win-x64 --self-contained true -p:PublishSingleFile=true -p:IncludeNativeLibrariesForSelfExtract=true -o ./publish_output_debug
+      # Added IncludeNativeLibrariesForSelfExtract for consistency if needed, can be removed if debug builds don't require it strictly
+      # Output to a specific relative folder ./publish_output_debug
+
+    - name: Upload Debug Build Artifact
+      uses: actions/upload-artifact@v4 # Updated to v4
       with:
-        name: yt-dlp-gui-${{ github.sha }}-${{ matrix.configuration }}
-        path: "D:\\a\\yt-dlp-gui\\yt-dlp-gui\\yt-dlp-gui\\bin\\Debug\\net6.0-windows10.0.17763.0\\win-x64\\publish"
+        name: yt-dlp-gui-debug-${{ github.sha }} # Artifact name includes 'debug'
+        path: ./publish_output_debug/ # Use relative path from publish step
+        retention-days: 7 # Optional: Keep debug artifacts for a week
