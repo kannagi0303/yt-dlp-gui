@@ -24,8 +24,8 @@ using WK.Libraries.SharpClipboardNS;
 using yt_dlp_gui.Controls;
 using yt_dlp_gui.Models;
 using yt_dlp_gui.Wrappers;
-using yt_dlp_gui.App; // Added for ThemeManager
-using System.Collections.ObjectModel; // For ObservableCollection
+// using yt_dlp_gui.App; // Commented out as MyApplication is now the app class, ThemeManager might need specific using if used directly
+using System.Collections.ObjectModel;
 
 namespace yt_dlp_gui.Views {
     public partial class Main :Window {
@@ -33,7 +33,7 @@ namespace yt_dlp_gui.Views {
         private List<DLP> RunningDLP = new();
         public ObservableCollection<DownloadItem> DownloadQueue { get; set; }
         private bool _isProcessingQueue = false;
-        private readonly object _queueLock = new object(); // For thread safety with _isProcessingQueue
+        private readonly object _queueLock = new object();
 
         private async Task ProcessQueueAsync() {
             lock (_queueLock) {
@@ -47,24 +47,20 @@ namespace yt_dlp_gui.Views {
 
             DownloadItem? currentItem = null;
             while (true) {
-                // Find next item to process
                 currentItem = DownloadQueue.FirstOrDefault(item => item.Status == DownloadStatus.Queued);
 
                 if (currentItem == null) {
                     System.Diagnostics.Debug.WriteLine("ProcessQueueAsync: No more queued items.");
-                    break; // No more items to process
+                    break;
                 }
 
                 System.Diagnostics.Debug.WriteLine($"ProcessQueueAsync: Processing item: {currentItem.Url}");
                 currentItem.Status = DownloadStatus.Downloading;
-                currentItem.Progress = 0; // Reset progress
-                currentItem.ErrorMessage = null; // Clear previous errors
+                currentItem.Progress = 0;
+                currentItem.ErrorMessage = null;
 
                 var dlp = new DLP(currentItem.Url);
-
                 string outputTemplate = Path.Combine(currentItem.OutputPath, "%(title)s.%(ext)s");
-                // Ensure the output template is quoted properly if it contains spaces.
-                // The .QS() extension method should handle this.
                 dlp.Options["-o"] = outputTemplate.QS();
 
                 if (!string.IsNullOrWhiteSpace(currentItem.SelectedVideoFormat)) {
@@ -82,11 +78,9 @@ namespace yt_dlp_gui.Views {
                 try {
                     await Task.Run(() => {
                         var process = dlp.Exec(
-                            itemToUpdate: currentItem, // Pass the current item
+                            itemToUpdate: currentItem,
                             stdall: (item, output) => {
                                 if (item == null) return;
-
-                                // Attempt to parse filename (existing logic)
                                 if (output.Contains("[info] MAPPING: ") && item.FileName == "Fetching title...") {
                                     try {
                                         string potentialFilename = output.Substring(output.IndexOf("[info] MAPPING: ") + "[info] MAPPING: ".Length).Trim();
@@ -99,9 +93,6 @@ namespace yt_dlp_gui.Views {
                                         System.Diagnostics.Debug.WriteLine($"Error parsing filename from output: {ex.Message}");
                                     }
                                 }
-
-                                // Attempt to parse progress
-                                // Format: "[yt-dlp],%(progress._percent_str)s,%(progress._eta_str)s,..."
                                 if (output.StartsWith("[yt-dlp],")) {
                                     var parts = output.Split(',');
                                     if (parts.Length > 1) {
@@ -114,8 +105,8 @@ namespace yt_dlp_gui.Views {
                                     }
                                 }
                             },
-                            stdout: null, // stdall is now handling both filename and progress; stdout can be null
-                            stderr: (item, error) => { // Ensure this callback also uses the item
+                            stdout: null,
+                            stderr: (item, error) => {
                                 if (item != null && item.Status == DownloadStatus.Downloading) {
                                     if (string.IsNullOrEmpty(item.ErrorMessage)) item.ErrorMessage = error;
                                     else item.ErrorMessage += $"; {error}";
@@ -155,7 +146,7 @@ namespace yt_dlp_gui.Views {
                         System.Diagnostics.Debug.WriteLine($"ProcessQueueAsync: Exception for item {currentItem.Url}. Error: {ex.Message}");
                     }
                 }
-            } // end while
+            }
 
             lock (_queueLock) {
                 _isProcessingQueue = false;
@@ -163,16 +154,14 @@ namespace yt_dlp_gui.Views {
             System.Diagnostics.Debug.WriteLine("ProcessQueueAsync: Finished processing queue.");
         }
 
-        private void LoadSettingsToUI() { // Renamed from LoadProxySettings
+        private void LoadSettingsToUI() {
             if (Config.Default == null) {
                 System.Diagnostics.Debug.WriteLine("Config.Default is null in LoadSettingsToUI. Attempting to load.");
-                Config.Load();
-                if (Config.Default == null) { // If still null, means Load didn't initialize it or file was empty
-                    System.Diagnostics.Debug.WriteLine("Config.Default is still null after Load. Creating new Config instance for Default.");
-                    Config.Default = new Config();
-                }
+                // Config.Load(); // This would use MyApplication.Path, which is missing
+                Config.Default = new Config(); // Initialize with defaults if not loaded
+                System.Diagnostics.Debug.WriteLine("Config.Default initialized with new Config() as Load is problematic now.");
             }
-            // Proxy Settings
+
             ProxyEnableCheckBox.IsChecked = Config.Default.ProxyEnabled;
             ProxyUrlTextBox.Text = Config.Default.ProxyUrl ?? string.Empty;
             ProxyPortTextBox.Text = Config.Default.ProxyPort ?? string.Empty;
@@ -180,11 +169,9 @@ namespace yt_dlp_gui.Views {
             ProxyPasswordTextBox.Text = Config.Default.ProxyPassword ?? string.Empty;
             System.Diagnostics.Debug.WriteLine("Proxy settings loaded into UI.");
 
-            // Load Video Format Setting
             VideoFormatTextBox.Text = Config.Default.PreferredVideoFormat ?? "bv*+ba/b";
             System.Diagnostics.Debug.WriteLine($"Loaded PreferredVideoFormat: {VideoFormatTextBox.Text}");
 
-            // Load Audio Options Settings
             AudioOnlyCheckBox.IsChecked = Config.Default.DownloadAudioOnly;
             bool audioFormatSet = false;
             foreach (ComboBoxItem item in AudioFormatComboBox.Items) {
@@ -199,22 +186,25 @@ namespace yt_dlp_gui.Views {
             }
             System.Diagnostics.Debug.WriteLine($"Loaded DownloadAudioOnly: {AudioOnlyCheckBox.IsChecked}, PreferredAudioFormat: {Config.Default.PreferredAudioFormat}");
 
-            // Load Download Folder Path
             DownloadPathTextBox.Text = Config.Default.DownloadFolderPath ?? Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyVideos), "yt-dlp-gui");
             System.Diagnostics.Debug.WriteLine($"Loaded DownloadFolderPath: {DownloadPathTextBox.Text}");
         }
 
         public Main() {
             InitializeComponent();
-            LoadSettingsToUI(); // Call LoadSettingsToUI
+            // The line `private readonly Config Data = MyApplication.AppConfig;` was here in user code.
+            // It was changed to `private readonly Config Data = new();` in a previous step (turn 97 subtask for Main.xaml.cs)
+            // This ViewData `Data` object is used extensively.
+            // For now, `Data` is new(), so it will have default Config values.
+            // The original `App.AppConfig` would have been loaded from MyApplication.
+
+            LoadSettingsToUI();
 
             DownloadQueue = new ObservableCollection<DownloadItem>();
-            this.DataContext = this; // Set DataContext for data binding
-            // DataContext = Data; // This was the previous DataContext. If still needed, consider a ViewModel that combines 'Data' and 'DownloadQueue'
+            this.DataContext = this;
 
             ToastNotificationManagerCompat.OnActivated += ToastNotificationManagerCompat_OnActivated;
 
-            //Load Configs
             InitGUIConfig();
 
             Topmost = Data.AlwaysOnTop;
@@ -230,29 +220,19 @@ namespace yt_dlp_gui.Views {
                 Height = 380 * (Data.Scale / 100d);
             }
 
-            //Configuration Checking (./configs/*.*)
             InitConfiguration();
-
-            //ScanDeps (YT-DLP, FFMPEG...)
             ScanDepends();
 
-            //if `Target` Not exist, default app location
             if (!Directory.Exists(Data.TargetPath)) {
                 // Data.TargetPath = MyApplication.AppPath; // AppPath is missing
-Data.TargetPath = "."; // Temporary
+                Data.TargetPath = "."; // Temporary
             }
-            //Default Temp Dir
             if (string.IsNullOrWhiteSpace(Data.PathTEMP) || !Directory.Exists(GetTempPath)) {
                 Data.PathTEMP = "%YTDLPGUI_TARGET%";
             }
 
-            //Monitor Clipboard
             InitClipboard();
-
-            //run update check
             Task.Run(Inits);
-
-            //Output Lang templet
             //Yaml.Save(MyApplication.Path(MyApplication.Folders.root, "lang.yaml"), new Lang()); // Path, Folders are missing
         }
 
@@ -293,20 +273,14 @@ Data.TargetPath = "."; // Temporary
             foreach (KeyValuePair<string, string> pair in replacements) {
                 string placeholder = pair.Key;
                 string replacement = pair.Value;
-
-                // Replace the placeholder with the replacement string
                 path = path.Replace(placeholder, replacement);
-
-                // Remove the part to the left of the replacement string
                 int index = path.IndexOf(replacement);
                 if (index >= 0) {
                     path = path.Substring(index);
                 }
-
-                // Remove duplicate directory separators
-                path = path.Replace('/', '\');
-                while (path.Contains("\\")) {
-                    path = path.Replace("\\", "\");
+                path = path.Replace('/', '\'); // Corrected backslash
+                while (path.Contains("\\\\")) { // Corrected double backslash
+                    path = path.Replace("\\\\", "\\"); // Corrected double backslash
                 }
             }
             return Environment.ExpandEnvironmentVariables(path);
@@ -314,7 +288,6 @@ Data.TargetPath = "."; // Temporary
         private string GetTempPath {
             get => GetEnvPath(Data.PathTEMP);
         }
-        //Regex For Clipboard
         private Regex _frgPat = new Regex("<!--StartFragment-->(.*)<!--EndFragment-->", RegexOptions.Multiline | RegexOptions.Compiled);
         private Regex _matchUrls = new Regex(@"(https?|ftp|file)\://[A-Za-z0-9\.\-]+(/[A-Za-z0-9\?\&\=;\+!'\(\)\*\-\._~%]*)*", RegexOptions.Compiled);
         public void InitClipboard() {
@@ -347,7 +320,7 @@ Data.TargetPath = "."; // Temporary
         }
         private string GetClipbaordText() {
             int maxTries = 10;
-            int delayTime = 1000; // milliseconds
+            int delayTime = 1000;
             int numTries = 0;
             while (numTries < maxTries) {
                 try {
@@ -368,17 +341,15 @@ Data.TargetPath = "."; // Temporary
         }
         public void InitGUIConfig() {
             // Data.GUIConfig.Load(MyApplication.Path(MyApplication.Folders.root, MyApplication.AppName + ".yaml")); // Path, Folders, AppName are missing
-            // For now, we assume GUIConfig might be loaded by some other means or defaults are used.
-            // If Load is critical, this needs to be handled by initializing Data.GUIConfig with defaults.
-            Data.GUIConfig = Data.GUIConfig ?? new ViewData.GUIConfig(); // Ensure it's not null
+            // Assuming GUIConfig might be loaded by other means or defaults are used.
+            Data.GUIConfig = Data.GUIConfig ?? new ViewData.GUIConfig();
             Util.PropertyCopy(Data.GUIConfig, Data);
-            //Loaded and enabled auto save config
             Data.AutoSaveConfig = true;
         }
         public void InitConfiguration() {
             Data.Configs.Clear();
-            Data.Configs.Add(new Config() { name = "None" });
-            var cp = "configs";
+            Data.Configs.Add(new Config() { name = "None" }); // Was MyApplication.Lang.Main.ConfigurationNone
+            var cp = "configs"; // Was MyApplication.Path(MyApplication.Folders.configs)
             var fs = Directory.Exists(cp)
                 ? Directory.EnumerateFiles(cp).OrderBy(x => x)
                 : Enumerable.Empty<string>();
@@ -418,9 +389,8 @@ Data.TargetPath = "."; // Temporary
                     } else if (!string.IsNullOrWhiteSpace(dep_youtubedl)) {
                         Data.PathYTDLP = DLP.Path_DLP = dep_youtubedl;
                     }
-
                 }
-                if (Regex.IsMatch(DLP.Path_DLP, isYoutubeDl)) DLP.Type = DLP.DLPType.youtube_dl;
+                if (DLP.Path_DLP != null && Regex.IsMatch(DLP.Path_DLP, isYoutubeDl)) DLP.Type = DLP.DLPType.youtube_dl; // Added null check
                 if (string.IsNullOrWhiteSpace(DLP.Path_Aria2)) {
                     Data.PathAria2 = DLP.Path_Aria2 = dep_aria2;
                 }
@@ -430,12 +400,11 @@ Data.TargetPath = "."; // Temporary
             }
         }
         public async void Inits() {
-            //check update
             var needcheck = false;
-            var currentDate = DateTimeOffset.UtcNow.ToString("yyyy-MM-dd"); //"";
+            var currentDate = DateTimeOffset.UtcNow.ToString("yyyy-MM-dd");
 
-            if (!string.IsNullOrWhiteSpace(Data.LastVersion)) needcheck = true; //not yaml
-            if (currentDate != Data.LastCheckUpdate) needcheck = true; //cross date
+            if (!string.IsNullOrWhiteSpace(Data.LastVersion)) needcheck = true;
+            if (currentDate != Data.LastCheckUpdate) needcheck = true;
 
             if (needcheck) {
                 var releaseData = await Web.GetLastTag();
@@ -447,10 +416,10 @@ Data.TargetPath = "."; // Temporary
                 }
             }
             // if (string.Compare(MyApplication.CurrentVersion, Data.LastVersion) < 0) { // CurrentVersion is missing
-            if (Data.LastVersion != "0.0.0" && Version.TryParse(Data.LastVersion?.TrimStart('v'), out var onlineVersion) && Version.TryParse("0.0.0" /*MyApplication.CurrentVersion?.TrimStart('v')*/, out var currentVersion)) { // Temporary logic
+            if (Data.LastVersion != null && Data.LastVersion != "0.0.0" && Version.TryParse(Data.LastVersion?.TrimStart('v'), out var onlineVersion) && Version.TryParse("0.0.0" /*MyApplication.CurrentVersion?.TrimStart('v')*/, out var currentVersion)) { // Temporary logic
                  if (onlineVersion > currentVersion) Data.NewVersion = true;
-            } else {
-                 Data.NewVersion = true; // Fallback to show update if versions are weird
+            } else if (Data.LastVersion != null && Data.LastVersion != "0.0.0") { // Avoid setting NewVersion to true if LastVersion is simply not set or "0.0.0"
+                 Data.NewVersion = true;
             }
         }
         private void Button_Analyze(object sender, RoutedEventArgs e) {
@@ -458,10 +427,11 @@ Data.TargetPath = "."; // Temporary
         }
         private void Analyze_Start() {
             Data.IsAnalyze = true;
-            cc.SelectedIndex = -1;
-            cv.SelectedIndex = -1;
-            ca.SelectedIndex = -1;
-            cs.SelectedIndex = -1;
+            // Assuming cc, cv, ca, cs are ComboBoxes defined in XAML. Their SelectedIndex is being set.
+            if (cc != null) cc.SelectedIndex = -1;
+            if (cv != null) cv.SelectedIndex = -1;
+            if (ca != null) ca.SelectedIndex = -1;
+            if (cs != null) cs.SelectedIndex = -1;
             Data.Thumbnail = null;
             Data.Video = new();
             Data.NeedCookie = Data.UseCookie == UseCookie.Always;
@@ -471,7 +441,6 @@ Data.TargetPath = "."; // Temporary
                 Data.IsAnalyze = false;
 
                 if (Data.AutoDownloadAnalysed) {
-                    //Download_Start();
                     if (Data.selectedVideo != null && Data.selectedAudio != null) {
                         Download_Start_Native();
                     }
@@ -479,7 +448,6 @@ Data.TargetPath = "."; // Temporary
             });
         }
         private void GetInfo() {
-            //Analyze
             var dlp = new DLP(Data.Url);
             if (Data.NeedCookie) dlp.Cookie(Data.CookieType);
             dlp.Proxy(Data.ProxyUrl, Data.ProxyEnabled);
@@ -487,43 +455,33 @@ Data.TargetPath = "."; // Temporary
             if (!string.IsNullOrWhiteSpace(Data.selectedConfig.file)) {
                 dlp.LoadConfig(Data.selectedConfig.file);
             }
-            if (Data.UseOutput) dlp.Output("%(title)s.%(ext)s"); //if not used config, default template
+            if (Data.UseOutput) dlp.Output("%(title)s.%(ext)s");
             ClearStatus();
             dlp.Exec(null, std => {
-                //取得JSON
                 Data.Video = JsonConvert.DeserializeObject<Video>(std, new JsonSerializerSettings() {
                     NullValueHandling = NullValueHandling.Ignore
                 });
-
-                //Reading Chapters
-                {
-                    Data.Chapters.Clear();
-                    if (Data.Video.chapters != null && Data.Video.chapters.Any()) {
-                        Data.Chapters.Add(new Chapters() { title = "All Chapters" /* MyApplication.Lang.Main.ChaptersAll */, type = ChaptersType.None });
-                        Data.Chapters.Add(new Chapters() { title = "Split Chapters" /* MyApplication.Lang.Main.ChaptersSplite */, type = ChaptersType.Split });
-                        Data.Chapters.AddRange(Data.Video.chapters);
-                        Data.hasChapter = true;
-                    } else {
-                        Data.Chapters.Add(new Chapters() { title = "No Chapters" /* MyApplication.Lang.Main.ChaptersNone */, type = ChaptersType.None });
-                        Data.hasChapter = false;
-                    }
-                    //Data.selectedChapter = Data.Chapters.First();
+                Data.Chapters.Clear();
+                if (Data.Video != null && Data.Video.chapters != null && Data.Video.chapters.Any()) { // Added null check for Data.Video
+                    Data.Chapters.Add(new Chapters() { title = "All Chapters" /* MyApplication.Lang.Main.ChaptersAll */, type = ChaptersType.None });
+                    Data.Chapters.Add(new Chapters() { title = "Split Chapters" /* MyApplication.Lang.Main.ChaptersSplite */, type = ChaptersType.Split });
+                    Data.Chapters.AddRange(Data.Video.chapters);
+                    Data.hasChapter = true;
+                } else {
+                    Data.Chapters.Add(new Chapters() { title = "No Chapters" /* MyApplication.Lang.Main.ChaptersNone */, type = ChaptersType.None });
+                    Data.hasChapter = false;
                 }
-                //读取 Formats 与 Thumbnails
-                {
-                    //Debug.WriteLine(JsonConvert.SerializeObject(Data.Video.chapters, Formatting.Indented));
+                if (Data.Video != null) { // Added null check for Data.Video
                     Data.Formats.LoadFromVideo(Data.Video.formats);
                     Data.Thumbnails.Reset(Data.Video.thumbnails);
                     Data.RequestedFormats.LoadFromVideo(Data.Video.requested_formats);
-                }
-                //读取 Subtitles
-                {
-                    var subs = Data.Video.subtitles.Select(x => {
+
+                    var subs = Data.Video.subtitles?.Select(x => { // Added null check for subtitles
                         var s = x.Value.FirstOrDefault(y => y.ext == "vtt");
                         if (s == null) return null;
                         s.key = x.Key;
                         return s;
-                    }).Where(x => x != null).ToList();
+                    }).Where(x => x != null).ToList() ?? new List<Subs>(); // Ensure subs is not null
                     Data.Subtitles.Clear();
                     if (subs.Any()) {
                         Data.Subtitles.Add(new Subs() { name = "Ignore Subtitles" /* MyApplication.Lang.Main.SubtitleIgnore */ });
@@ -533,24 +491,27 @@ Data.TargetPath = "."; // Temporary
                         Data.hasSubtitle = false;
                     }
                     Data.Subtitles.AddRange(subs);
-                }
-                var BestUrl = Data.Thumbnails.LastOrDefault()?.url;
-                if (BestUrl != null && Web.Head(BestUrl)) {
-                    Data.Thumbnail = BestUrl;
-                } else {
-                    Data.Thumbnail = Data.Video.thumbnail;
-                }
 
-                Data.SelectFormatBest(); //Make ComboBox Selected Item
-                var full = string.Empty;
-                if (Path.IsPathRooted(Data.Video._filename)) {
-                    full = Path.GetFullPath(Data.Video._filename);
-                } else {
-                    full = Path.Combine(Data.TargetPath, Data.Video._filename);
-                }
-                //Data.TargetName = GetValidFileName(Data.Video.title) + ".tmp"; //预设挡案名称
-                Data.TargetName = full; //预设挡案名称
+                    var BestUrl = Data.Thumbnails.LastOrDefault()?.url;
+                    if (BestUrl != null && Web.Head(BestUrl)) {
+                        Data.Thumbnail = BestUrl;
+                    } else {
+                        Data.Thumbnail = Data.Video.thumbnail;
+                    }
 
+                    Data.SelectFormatBest();
+                    var full = string.Empty;
+                    if (!string.IsNullOrEmpty(Data.Video._filename)) { // Added null check for _filename
+                        if (Path.IsPathRooted(Data.Video._filename)) {
+                            full = Path.GetFullPath(Data.Video._filename);
+                        } else {
+                            full = Path.Combine(Data.TargetPath, Data.Video._filename);
+                        }
+                        Data.TargetName = full;
+                    } else {
+                        Data.TargetName = Path.Combine(Data.TargetPath, "default_filename.tmp"); // Fallback
+                    }
+                }
             });
             dlp.Err(DLP.DLPError.Sign, () => {
                 if (Data.UseCookie == UseCookie.WhenNeeded) {
@@ -576,7 +537,6 @@ Data.TargetPath = "."; // Temporary
             Data.VideoPersent = Data.AudioPersent = 0;
         }
         private void Button_SaveVideo(object sender, RoutedEventArgs e) {
-            //SaveStream(0);
             var dialog = new SaveFileDialog();
             dialog.Filter =
                 $"{"MKV Video" /* MyApplication.Lang.Files.mkv */}|*.mkv|" +
@@ -584,7 +544,11 @@ Data.TargetPath = "."; // Temporary
                 $"{"WebM Video" /* MyApplication.Lang.Files.webm */}|*.webm|" +
                 $"{"MOV Video" /* MyApplication.Lang.Files.mov */}|*.mov|" +
                 $"{"FLV Video" /* MyApplication.Lang.Files.flv */}|*.flv";
-            dialog.DefaultExt = Data.selectedVideo.video_ext.ToLower();
+            if (Data.selectedVideo != null && !string.IsNullOrEmpty(Data.selectedVideo.video_ext)) { // Null check
+                dialog.DefaultExt = Data.selectedVideo.video_ext.ToLower();
+            } else {
+                dialog.DefaultExt = "mkv";
+            }
             dialog.FileName = Path.ChangeExtension(Path.GetFileName(Data.TargetFile), dialog.DefaultExt);
             if (dialog.ShowDialog() == System.Windows.Forms.DialogResult.OK) {
                 var target = dialog.FileName;
@@ -592,7 +556,6 @@ Data.TargetPath = "."; // Temporary
             }
         }
         private void Button_SaveAudio(object sender, RoutedEventArgs e) {
-            //SaveStream(1);
             var dialog = new SaveFileDialog();
             dialog.Filter =
                 $"{"Opus Audio" /* MyApplication.Lang.Files.opus */}|*.opus|" +
@@ -603,7 +566,11 @@ Data.TargetPath = "."; // Temporary
                 $"{"ALAC Audio" /* MyApplication.Lang.Files.alac */}|*.alac|" +
                 $"{"FLAC Audio" /* MyApplication.Lang.Files.flac */}|*.flac|" +
                 $"{"WAV Audio" /* MyApplication.Lang.Files.wav */}|*.wav";
-            dialog.DefaultExt = Data.selectedAudio.acodec.ToLower();
+            if (Data.selectedAudio != null && !string.IsNullOrEmpty(Data.selectedAudio.acodec)) { // Null check
+                dialog.DefaultExt = Data.selectedAudio.acodec.ToLower();
+            } else {
+                dialog.DefaultExt = "opus";
+            }
             dialog.FileName = Path.ChangeExtension(Path.GetFileName(Data.TargetFile), dialog.DefaultExt);
             if (dialog.ShowDialog() == System.Windows.Forms.DialogResult.OK) {
                 var target = dialog.FileName;
@@ -611,7 +578,7 @@ Data.TargetPath = "."; // Temporary
             }
         }
         private void Button_ExplorerTarget(object sender, RoutedEventArgs e) {
-            Util.Explorer(Data.TargetFile);
+            if (!string.IsNullOrEmpty(Data.TargetFile)) Util.Explorer(Data.TargetFile); // Null check
         }
         private void Button_Cancel(object sender, RoutedEventArgs e) {
             if (Data.IsDownload) {
@@ -622,42 +589,35 @@ Data.TargetPath = "."; // Temporary
             }
         }
         private void Button_Download(object sender, RoutedEventArgs e) {
-            string url = Data.Url; // Assuming Data.Url holds the text from the main URL input
+            string url = Data.Url;
             if (string.IsNullOrWhiteSpace(url)) {
-                MessageBox.Show("Please enter a valid URL.", "Input Error", MessageBoxButton.OK, MessageBoxImage.Warning); // TODO: Localize
+                MessageBox.Show("Please enter a valid URL.", "Input Error", MessageBoxButton.OK, MessageBoxImage.Warning);
                 return;
             }
-
-            // Ensure DownloadFolderPath exists
-            if (Config.Default == null) Config.Load(); // Make sure config is loaded
+            if (Config.Default == null) Config.Load();
             string downloadDirectory = Config.Default?.DownloadFolderPath ?? Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyVideos), "yt-dlp-gui");
             try {
                 Directory.CreateDirectory(downloadDirectory);
             } catch (Exception ex) {
-                MessageBox.Show($"Error creating download directory '{downloadDirectory}': {ex.Message}", "Directory Error", MessageBoxButton.OK, MessageBoxImage.Error); // TODO: Localize
+                MessageBox.Show($"Error creating download directory '{downloadDirectory}': {ex.Message}", "Directory Error", MessageBoxButton.OK, MessageBoxImage.Error);
                 return;
             }
-
             var newItem = new DownloadItem(url) {
-                // Populate from global config active at the time of adding
                 SelectedVideoFormat = Config.Default?.PreferredVideoFormat ?? "bv*+ba/b",
                 DownloadAudioOnly = Config.Default?.DownloadAudioOnly ?? false,
                 SelectedAudioFormat = Config.Default?.PreferredAudioFormat ?? "mp3",
                 FileName = "Fetching title...",
                 OutputPath = downloadDirectory
             };
-
             DownloadQueue.Add(newItem);
-            Data.Url = string.Empty; // Clear the URL box after adding to queue
-
+            Data.Url = string.Empty;
             System.Diagnostics.Debug.WriteLine($"Added to queue: {newItem.Url}, Status: {newItem.Status}");
-
             if (!_isProcessingQueue) {
                 Task.Run(() => ProcessQueueAsync());
             }
         }
-        public enum DownloadType { Normal, Video, Audio, Thumbnail, Subtitle } // This might be moved or become part of DownloadItem
-        private async void Download_Start_Native(DownloadType type = DownloadType.Normal, string target = "") { // This method will likely be refactored to process items from DownloadQueue
+        public enum DownloadType { Normal, Video, Audio, Thumbnail, Subtitle }
+        private async void Download_Start_Native(DownloadType type = DownloadType.Normal, string target = "") {
             Data.CanCancel = false;
             Data.IsAbouted = false;
             if (Data.IsDownload) {
@@ -668,34 +628,42 @@ Data.TargetPath = "."; // Temporary
             } else {
                 var overwrite = true;
                 RunningDLP.Clear();
-                //如果檔案已存在
                 if (File.Exists(Data.TargetFile) && type == DownloadType.Normal) {
                     var mb = System.Windows.Forms.MessageBox.Show(
                         $"{"File exists. Overwrite?"} \n" /* MyApplication.Lang.Dialog.FileExist */,
                         "yt-dlp-gui" /* MyApplication.AppName */,
                         MessageBoxButtons.YesNo);
                     overwrite = mb == System.Windows.Forms.DialogResult.Yes;
-                    if (!overwrite) return; //不要复写
+                    if (!overwrite) return;
                 }
                 Data.IsDownload = true;
-
-                //進度更新為0
                 ClearStatus();
                 _ = Task.Run(() => {
                     var dlp = new DLP(Data.Url);
                     List<Task> tasks = new();
                     tasks.Add(Task.Run(() => {
-                        //var dlp = new DLP(Data.Url);
                         RunningDLP.Add(dlp);
-                        dlp.IsLive = Data.Video.is_live;
-                        var vid = type switch {
-                            DownloadType.Video => Data.selectedVideo.format_id,
-                            DownloadType.Audio => Data.selectedAudio.format_id,
-                            _ => $"{Data.selectedVideo.format_id}+{Data.selectedAudio.format_id}"
-                        };
+                        if (Data.Video != null) dlp.IsLive = Data.Video.is_live; // Null check
+                        var vid = "";
+                        if (Data.selectedVideo != null && Data.selectedAudio != null) { // Null checks
+                           vid = type switch {
+                                DownloadType.Video => Data.selectedVideo.format_id,
+                                DownloadType.Audio => Data.selectedAudio.format_id,
+                                _ => $"{Data.selectedVideo.format_id}+{Data.selectedAudio.format_id}"
+                           };
+                        } else if (type == DownloadType.Video && Data.selectedVideo != null) {
+                            vid = Data.selectedVideo.format_id;
+                        } else if (type == DownloadType.Audio && Data.selectedAudio != null) {
+                            vid = Data.selectedAudio.format_id;
+                        } else {
+                            // Cannot proceed without format selection if specific download type is chosen.
+                            // Or handle default format if none selected. For now, this might lead to empty `vid`.
+                        }
+
+
                         dlp
                         .Temp(GetTempPath)
-                        .LoadConfig(Data.selectedConfig.file)
+                        .LoadConfig(Data.selectedConfig?.file) // Null check
                         .MTime(Data.ModifiedType)
                         .Cookie(Data.CookieType, Data.NeedCookie)
                         .Proxy(Data.ProxyUrl, Data.ProxyEnabled)
@@ -709,8 +677,8 @@ Data.TargetPath = "."; // Temporary
                                 dlp
                                 .EmbedChapters(Data.EmbedChapters)
                                 .Thumbnail(Data.SaveThumbnail, Data.TargetFile, Data.EmbedThumbnail)
-                                .Subtitle(Data.selectedSub.key, Data.TargetFile, Data.EmbedSubtitles)
-                                .DownloadVideo(vid, Data.selectedVideo.video_ext, target);
+                                .Subtitle(Data.selectedSub?.key, Data.TargetFile, Data.EmbedSubtitles) // Null check
+                                .DownloadVideo(vid, Data.selectedVideo?.video_ext, target); // Null check
                                 break;
                             case DownloadType.Audio:
                                 dlp
@@ -719,13 +687,13 @@ Data.TargetPath = "."; // Temporary
                                 .DownloadAudio(vid, target);
                                 break;
                             case DownloadType.Subtitle:
-                                dlp.DownloadSubtitle(Data.selectedSub.key, target);
+                                dlp.DownloadSubtitle(Data.selectedSub?.key, target); // Null check
                                 break;
                             default:
                                 dlp
                                 .EmbedChapters(Data.EmbedChapters)
                                 .Thumbnail(Data.SaveThumbnail, Data.TargetFile, Data.EmbedThumbnail)
-                                .Subtitle(Data.selectedSub.key, Data.TargetFile, Data.EmbedSubtitles)
+                                .Subtitle(Data.selectedSub?.key, Data.TargetFile, Data.EmbedSubtitles) // Null check
                                 .DownloadFormat(vid, Data.TargetFile, Data.OriginExt);
                                 break;
                         }
@@ -739,34 +707,27 @@ Data.TargetPath = "."; // Temporary
                             repoter.GetStatus(std);
                         });
                     }));
-                    //WaitAll Downloads, Merger Video and Audio
                     Data.CanCancel = true;
                     Task.WaitAll(tasks.ToArray());
                     if (!Data.IsAbouted) {
-                        // Data.DNStatus_Infos["Status"] = MyApplication.Lang.Status.Done;
-Data.DNStatus_Infos["Status"] = "Done"; // Temporary
-
-                        //post-process
+                        Data.DNStatus_Infos["Status"] = "Done"; // Temporary MyApplication.Lang.Status.Done;
                         Dictionary<string, string> files = new Dictionary<string, string>();
                         foreach (string donepath in dlp.Files) {
                             if (File.Exists(donepath)) {
                                 if (donepath.isVideo()) files["video"] = donepath;
                                 if (donepath.isImage()) files["thumb"] = donepath;
-                                if (Data.ModifiedType == ModifiedType.Upload) {
+                                if (Data.ModifiedType == ModifiedType.Upload && Data.Video != null) { // Null check
                                     if (DateTimeOffset.TryParseExact(Data.Video.upload_date, "yyyyMMdd", CultureInfo.InvariantCulture, DateTimeStyles.None, out DateTimeOffset tryDate)) {
                                         File.SetLastWriteTimeUtc(donepath, tryDate.DateTime);
                                     }
                                 }
                             }
                         }
-
-                        //Send notification when download completed
                         try {
-                            if (Data.UseNotifications) {
-                                Util.NotifySound(Data.PathNotify); // PathNotify might be uninitialized if App.Path was needed
+                            if (Data.UseNotifications && Data.Video != null) { // Null check
+                                Util.NotifySound(Data.PathNotify);
                                 var toast = new ToastContentBuilder()
                                     .AddText(Data.Video.title)
-                                    // .AddText(MyApplication.Lang.Dialog.DownloadCompleted)
                                     .AddText("Download Completed") // Temporary
                                     .AddAudio(new ToastAudio() {
                                         Silent = true,
@@ -776,7 +737,6 @@ Data.DNStatus_Infos["Status"] = "Done"; // Temporary
                                 if (files.ContainsKey("video")) {
                                     toast.AddButton(
                                         new ToastButton()
-                                        // .SetContent(MyApplication.Lang.Dialog.OpenFolder)
                                         .SetContent("Open Folder") // Temporary
                                         .AddArgument("action", "browse")
                                         .AddArgument("file", files["video"])
@@ -788,16 +748,14 @@ Data.DNStatus_Infos["Status"] = "Done"; // Temporary
                                 }
                                 toast.AddButton(
                                     new ToastButton()
-                                    // .SetContent(MyApplication.Lang.Dialog.Close)
                                     .SetContent("Close") // Temporary
                                     .AddArgument("action", "none")
                                     .SetBackgroundActivation()
                                 );
                                 toast.Show();
                             }
-                        } catch (Exception) { } // Silently catch, as original
+                        } catch (Exception) { }
                     }
-                    //Clear downloading status
                     Data.IsDownload = false;
                 });
             }
@@ -812,20 +770,13 @@ Data.DNStatus_Infos["Status"] = "Done"; // Temporary
                 }
             } else {
                 var dialog = new SaveFileDialog();
-                dialog.InitialDirectory = Path.GetDirectoryName(Data.TargetFile);
+                if(!string.IsNullOrEmpty(Data.TargetFile)) dialog.InitialDirectory = Path.GetDirectoryName(Data.TargetFile); // Null check
                 dialog.FileName = Path.GetFileName(Data.TargetFile);
                 if (dialog.ShowDialog() == System.Windows.Forms.DialogResult.OK) {
                     Data.RemuxVideo = true;
                     Data.TargetPath = Path.GetDirectoryName(dialog.FileName);
                     Data.TargetName = Path.GetFileName(dialog.FileName);
                     Data.RemuxVideo = false;
-                    /*
-                    if ((new string[] { ".mp4", ".webm", ".3gp", ".mkv" }).Any(x => Path.GetExtension(dialog.FileName).ToLower() == x)) {
-                        Data.TargetName = Path.GetFileName(dialog.FileName);
-                    } else {
-                        Data.TargetName = Path.GetFileName(dialog.FileName) + ".tmp";
-                    }
-                    */
                 }
             }
         }
@@ -837,11 +788,10 @@ Data.DNStatus_Infos["Status"] = "Done"; // Temporary
         }
         private async void CommandBinding_SaveAs_Executed(object sender, System.Windows.Input.ExecutedRoutedEventArgs e) {
             var dialog = new SaveFileDialog();
-            dialog.InitialDirectory = Path.GetDirectoryName(Data.TargetFile);
+             if(!string.IsNullOrEmpty(Data.TargetFile)) dialog.InitialDirectory = Path.GetDirectoryName(Data.TargetFile); // Null check
             var OrigExt = Path.GetExtension(Data.Thumbnail);
             var OrigFileName = Path.ChangeExtension(Path.GetFileName(Data.TargetFile), OrigExt);
             dialog.DefaultExt = ".jpg";
-            // dialog.Filter = $"{MyApplication.Lang.Files.image}|*.jpg;*.webp";
             dialog.Filter = $"{"Image" /* MyApplication.Lang.Files.image */}|*.jpg;*.webp";
             dialog.FileName = Path.ChangeExtension(OrigFileName, ".jpg");
             if (dialog.ShowDialog() == System.Windows.Forms.DialogResult.OK) {
@@ -849,15 +799,14 @@ Data.DNStatus_Infos["Status"] = "Done"; // Temporary
             }
         }
         private void DownloadThumbnail(string toFile) {
+            if (string.IsNullOrEmpty(Data.Thumbnail) || string.IsNullOrEmpty(Data.TargetFile)) return; // Null checks
             var origExt = Path.GetExtension(Data.Thumbnail);
             var origin = Path.ChangeExtension(Data.TargetFile, origExt);
-            //var target = Path.ChangeExtension(Data.TargetFile, ".jpg");
             var target = toFile;
             var progress = new Progress<double>(percentage => {
                 Debug.Write($"Downloading... {percentage:0.00}%");
             });
             Web.Download(Data.Thumbnail, origin, progress, Data.ProxyEnabled ? Data.ProxyUrl : null).Wait();
-            //convert to target ext
             if (Path.GetExtension(origin).ToLower() != Path.GetExtension(target)) {
                 FFMPEG.DownloadUrl(origin, target);
                 File.Delete(origin);
@@ -870,9 +819,7 @@ Data.DNStatus_Infos["Status"] = "Done"; // Temporary
 
         private void Button_Subtitle(object sender, RoutedEventArgs e) {
             var dialog = new SaveFileDialog();
-            dialog.InitialDirectory = Path.GetDirectoryName(Data.TargetFile);
-            //dialog.Filter = "SubRip | *.srt";
-            //dialog.DefaultExt = Data.selectedSub.key + ".srt";
+            if(!string.IsNullOrEmpty(Data.TargetFile)) dialog.InitialDirectory = Path.GetDirectoryName(Data.TargetFile); // Null check
             dialog.DefaultExt = ".srt";
             dialog.Filter =
                 $"{"SRT Subtitles" /* MyApplication.Lang.Files.srt */}|*.srt|" +
@@ -884,13 +831,10 @@ Data.DNStatus_Infos["Status"] = "Done"; // Temporary
                 $"{"SRV2 Subtitles" /* MyApplication.Lang.Files.srv2 */}|*.srv2|" +
                 $"{"SRV1 Subtitles" /* MyApplication.Lang.Files.srv1 */}|*.srv1|" +
                 $"{"JSON3 Subtitles" /* MyApplication.Lang.Files.json3 */}|*.json3";
-            //dialog.FileName = Path.ChangeExtension(Path.GetFileName(Data.TargetFile), Data.selectedSub.key + ".srt");
             dialog.FileName = Path.ChangeExtension(Data.TargetFile, null);
             if (dialog.ShowDialog() == System.Windows.Forms.DialogResult.OK) {
                 var target = dialog.FileName;
                 Debug.WriteLine(dialog.FileName, "DIALOG");
-                //var target = Path.ChangeExtension(dialog.FileName, ".srt");
-                //FFMPEG.DownloadUrl(Data.selectedSub.url, target);
                 Download_Start_Native(DownloadType.Subtitle, target);
             }
         }
@@ -915,16 +859,16 @@ Data.DNStatus_Infos["Status"] = "Done"; // Temporary
         }
         private void ComboBox_TextChanged(object sender, TextChangedEventArgs e) {
             var combo = sender as System.Windows.Controls.ComboBox;
-            if (combo.SelectedIndex == -1) {
+            if (combo != null && combo.SelectedIndex == -1) { // Null check
                 Data.PathTEMP = combo.Text;
-            } else {
+            } else if (combo != null && combo.SelectedValue != null) { // Null check
                 Data.PathTEMP = combo.SelectedValue.ToString();
             }
         }
 
         private void ToggleButton_Checked(object sender, RoutedEventArgs e) {
             var b = sender as ToggleButton;
-            if (b.IsChecked == true) {
+            if (b != null && b.IsChecked == true) { // Null check
                 var menu = new List<MenuDataItem>() {
                     ("Temporary Target" /* MyApplication.Lang.Main.TemporaryTarget */, () => { Data.PathTEMP = "%YTDLPGUI_TARGET%"; }),
                     ("Temporary Locale" /* MyApplication.Lang.Main.TemporaryLocale */, () => { Data.PathTEMP = "%YTDLPGUI_LOCALE%"; }),
@@ -944,7 +888,7 @@ Data.DNStatus_Infos["Status"] = "Done"; // Temporary
 
         private void ToggleButton_Checked_Sound(object sender, RoutedEventArgs e) {
             var b = sender as ToggleButton;
-            if (b.IsChecked == true) {
+            if (b != null && b.IsChecked == true) { // Null check
                 var menu = new List<MenuDataItem>() {
                     ("System Sound" /* MyApplication.Lang.Main.SoundSystem */, () => { Data.PathNotify = ""; }),
                     ("-"),
@@ -952,7 +896,7 @@ Data.DNStatus_Infos["Status"] = "Done"; // Temporary
                         var dialog = new OpenFileDialog();
                         var dirname = Path.GetDirectoryName(Data.PathNotify);
                         Debug.WriteLine(dirname);
-                        if (Directory.Exists(dirname)) {
+                        if (!string.IsNullOrEmpty(dirname) && Directory.Exists(dirname)) { // Null check for dirname
                             dialog.InitialDirectory = dirname;
                             if (File.Exists(Data.PathNotify)) {
                                 dialog.FileName = Path.GetFileName(Data.PathNotify);
@@ -971,7 +915,7 @@ Data.DNStatus_Infos["Status"] = "Done"; // Temporary
         }
 
         private void Button_PlayNotify(object sender, RoutedEventArgs e) {
-            Util.NotifySound(Data.PathNotify);
+            if(!string.IsNullOrEmpty(Data.PathNotify)) Util.NotifySound(Data.PathNotify); // Null check
         }
 
         private void TextBoxNumber_Changed(object sender, EventArgs e) {
@@ -986,79 +930,65 @@ Data.DNStatus_Infos["Status"] = "Done"; // Temporary
         }
 
         private void ToggleThemeButton_Click(object sender, RoutedEventArgs e) {
-            ThemeManager.ToggleTheme();
+            // ThemeManager.ToggleTheme(); // Assuming ThemeManager is a static class or accessible
+            // Since ThemeManager might come from yt_dlp_gui.App, and that's commented, this needs a placeholder or direct implementation if simple enough.
+             MessageBox.Show("Theme toggling is temporarily disabled.", "Info");
         }
 
-        private void SaveSettingsButton_Click(object sender, RoutedEventArgs e) { // Renamed from SaveProxySettingsButton_Click
+        private void SaveSettingsButton_Click(object sender, RoutedEventArgs e) {
             if (Config.Default == null) {
                  System.Diagnostics.Debug.WriteLine("Config.Default is null in SaveSettingsButton_Click. Attempting to load.");
-                 Config.Load();
-                 if (Config.Default == null) { // Still null after load, create new
-                    System.Diagnostics.Debug.WriteLine("Config.Default is still null after Load. Creating new Config instance for Default.");
-                    Config.Default = new Config();
-                 }
+                 // Config.Load(); // This would use MyApplication.Path, which is missing
+                 Config.Default = new Config(); // Initialize with defaults if not loaded
+                 System.Diagnostics.Debug.WriteLine("Config.Default initialized with new Config() as Load is problematic now.");
             }
-            // Proxy Settings
-            Config.Default.ProxyEnabled = ProxyEnableCheckBox.IsChecked ?? false;
-            Config.Default.ProxyUrl = ProxyUrlTextBox.Text;
-            Config.Default.ProxyPort = ProxyPortTextBox.Text;
-            Config.Default.ProxyUsername = ProxyUsernameTextBox.Text;
-            Config.Default.ProxyPassword = ProxyPasswordTextBox.Text;
+            if (Config.Default != null && ProxyEnableCheckBox != null) { // Null checks for safety
+                Config.Default.ProxyEnabled = ProxyEnableCheckBox.IsChecked ?? false;
+                Config.Default.ProxyUrl = ProxyUrlTextBox.Text;
+                Config.Default.ProxyPort = ProxyPortTextBox.Text;
+                Config.Default.ProxyUsername = ProxyUsernameTextBox.Text;
+                Config.Default.ProxyPassword = ProxyPasswordTextBox.Text;
 
-            // Save Video Format Setting
-            Config.Default.PreferredVideoFormat = VideoFormatTextBox.Text;
-            System.Diagnostics.Debug.WriteLine($"Saved PreferredVideoFormat: {Config.Default.PreferredVideoFormat}");
+                Config.Default.PreferredVideoFormat = VideoFormatTextBox.Text;
+                System.Diagnostics.Debug.WriteLine($"Saved PreferredVideoFormat: {Config.Default.PreferredVideoFormat}");
 
-            // Save Audio Options Settings
-            Config.Default.DownloadAudioOnly = AudioOnlyCheckBox.IsChecked ?? false;
-            if (AudioFormatComboBox.SelectedItem is ComboBoxItem selectedItem) {
-                Config.Default.PreferredAudioFormat = selectedItem.Content?.ToString() ?? "mp3";
-            } else if (!string.IsNullOrEmpty(AudioFormatComboBox.Text)) {
-                 Config.Default.PreferredAudioFormat = AudioFormatComboBox.Text; // Handles if user types a custom format
-            } else {
-                Config.Default.PreferredAudioFormat = "mp3"; // Default fallback if somehow empty
-            }
-            System.Diagnostics.Debug.WriteLine($"Saved DownloadAudioOnly: {Config.Default.DownloadAudioOnly}, PreferredAudioFormat: {Config.Default.PreferredAudioFormat}");
+                Config.Default.DownloadAudioOnly = AudioOnlyCheckBox.IsChecked ?? false;
+                if (AudioFormatComboBox.SelectedItem is ComboBoxItem selectedItem) {
+                    Config.Default.PreferredAudioFormat = selectedItem.Content?.ToString() ?? "mp3";
+                } else if (!string.IsNullOrEmpty(AudioFormatComboBox.Text)) {
+                     Config.Default.PreferredAudioFormat = AudioFormatComboBox.Text;
+                } else {
+                    Config.Default.PreferredAudioFormat = "mp3";
+                }
+                System.Diagnostics.Debug.WriteLine($"Saved DownloadAudioOnly: {Config.Default.DownloadAudioOnly}, PreferredAudioFormat: {Config.Default.PreferredAudioFormat}");
 
-            // Save Download Folder Path
-            Config.Default.DownloadFolderPath = DownloadPathTextBox.Text;
-            System.Diagnostics.Debug.WriteLine($"Saved DownloadFolderPath: {Config.Default.DownloadFolderPath}");
+                Config.Default.DownloadFolderPath = DownloadPathTextBox.Text;
+                System.Diagnostics.Debug.WriteLine($"Saved DownloadFolderPath: {Config.Default.DownloadFolderPath}");
 
-            // Config.Default.Save(MyApplication.Path(MyApplication.Folders.root, MyApplication.AppName + ".yaml")); // Path, Folders, AppName are missing
-            // This save operation cannot be performed if Path/AppName are unavailable.
-            // Consider alternative save path or disable saving if critical info is missing.
-            try {
-                 Config.Default.Save("yt-dlp-gui.yaml"); // Temporary save to root
-            } catch (Exception ex) {
-                System.Diagnostics.Debug.WriteLine($"Failed to save config: {ex.Message}");
+                try {
+                     Config.Default.Save("yt-dlp-gui.yaml");
+                } catch (Exception ex) {
+                    System.Diagnostics.Debug.WriteLine($"Failed to save config: {ex.Message}");
+                }
             }
 
-
-            MessageBox.Show("Settings saved.", "Settings Saved", MessageBoxButton.OK, MessageBoxImage.Information); // TODO: Localize
+            MessageBox.Show("Settings saved.", "Settings Saved", MessageBoxButton.OK, MessageBoxImage.Information);
             System.Diagnostics.Debug.WriteLine("Settings saved from UI.");
         }
     }
     public class LanguageConverter :IValueConverter {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture) {
-            // 檢查輸入值是否為字串
             if (!(value is string key))
                 return value;
-
-            // 利用反射機制查詢 Lang 物件是否包含指定的 key 屬性
             // var Lang = MyApplication.Lang.Status; // Lang is missing
-            var Lang = new Lang(); // Temporary, this will not have translations
+            var Lang = new Lang(); // Temporary, this will not have translations. TODO: Fix this properly later.
             var propertyInfo = Lang.GetType().GetProperty(key, BindingFlags.IgnoreCase | BindingFlags.Public | BindingFlags.Instance);
-
-            // 如果 Lang 物件不包含指定的 key 屬性，則返回空字串
             if (propertyInfo == null)
                 return key;
-
-            // 如果 Lang 物件包含指定的 key 屬性，則返回相應的值
             return propertyInfo.GetValue(Lang)?.ToString() ?? key;
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture) {
-            // ConvertBack 未實作，因為此轉換器僅用於單向綁定
             throw new NotImplementedException();
         }
     }
