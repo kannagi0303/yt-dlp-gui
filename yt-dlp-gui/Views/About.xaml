@@ -9,7 +9,7 @@
         WindowStartupLocation="CenterOwner"
         ShowInTaskbar="False"
         SizeToContent="Height"
-        Title="{Binding Source={x:Static app:App.Lang}, Path=About.About}" Width="420">
+         Title="{Binding Source={x:Static app:MyApplication.AppLang}, Path=About.About}" Width="420">
     <Window.Resources>
         <ControlTemplate TargetType="ContentControl" x:Key="WindowLogo">
             <Controls:Icons Kind="Information" Size="16"/>
