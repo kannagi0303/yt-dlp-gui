@@ -32,11 +32,12 @@ version.Text = "?.?.?"; // Temporary
         }
 
         private void Hyperlink_Click(object sender, RoutedEventArgs e) {
-            Hyperlink link = sender as Hyperlink;
-            // 激活的是当前默认的浏览器
-            var url = link.NavigateUri.AbsoluteUri;
-            Debug.WriteLine(url);
-            Process.Start(new ProcessStartInfo(url) { UseShellExecute = true });
+            Hyperlink? link = sender as Hyperlink;
+            if (link?.NavigateUri != null) {
+                var url = link.NavigateUri.AbsoluteUri;
+                System.Diagnostics.Debug.WriteLine(url); // Keep if useful
+                Process.Start(new ProcessStartInfo(url) { UseShellExecute = true });
+            }
         }
 
         private void Button_Click(object sender, RoutedEventArgs e) {

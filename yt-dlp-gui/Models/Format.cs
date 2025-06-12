@@ -33,6 +33,8 @@ namespace yt_dlp_gui.Models {
     public class ComparerAudio : IComparer<Format> {
         public int Compare(Format? x, Format? y) {
             if (x == null && y == null) return 0;
+            if (x == null) return 1;
+            if (y == null) return -1;
             // var r = 0; // Removed unused variable
             //比较 ABR
             if (x.abr.HasValue && y.abr.HasValue) {
@@ -57,6 +59,8 @@ namespace yt_dlp_gui.Models {
     public class ComparerVideo : IComparer<Format> {
         public int Compare(Format? x, Format? y) {
             if (x == null && y == null) return 0;
+            if (x == null) return 1;
+            if (y == null) return -1;
             // var r = 0; // Removed unused variable
             //比较 resolution
             if (x.height.HasValue && y.height.HasValue) {

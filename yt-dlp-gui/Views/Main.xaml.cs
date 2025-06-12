@@ -495,7 +495,7 @@ namespace yt_dlp_gui.Views {
                         Data.Subtitles.Add(new Subs() { name = "No Subtitles" /* MyApplication.Lang.Main.SubtitleNone */ });
                         Data.hasSubtitle = false;
                     }
-                    Data.Subtitles.AddRange(subs);
+                    Data.Subtitles.AddRange(subs.Where(s => s != null).Select(s => s!));
 
                     var BestUrl = Data.Thumbnails.LastOrDefault()?.url;
                     if (BestUrl != null && Web.Head(BestUrl)) {
@@ -643,6 +643,7 @@ namespace yt_dlp_gui.Views {
                 }
                 Data.IsDownload = true;
                 ClearStatus();
+#pragma warning disable CS4014 // Intentional fire-and-forget
                 _ = Task.Run(() => {
                     var dlp = new DLP(Data.Url);
                     List<Task> tasks = new();
@@ -667,9 +668,11 @@ namespace yt_dlp_gui.Views {
 
 
                         dlp
-                        .Temp(GetTempPath)
-                        .LoadConfig(Data.selectedConfig?.file) // Null check
-                        .MTime(Data.ModifiedType)
+                        .Temp(GetTempPath);
+                        if (Data.selectedConfig?.file != null) {
+                            dlp.LoadConfig(Data.selectedConfig.file);
+                        }
+                        dlp.MTime(Data.ModifiedType)
                         .Cookie(Data.CookieType, Data.NeedCookie)
                         .Proxy(Data.ProxyUrl, Data.ProxyEnabled)
                         .UseAria2(Data.UseAria2)
@@ -766,6 +769,7 @@ namespace yt_dlp_gui.Views {
                     }
                     Data.IsDownload = false;
                 });
+#pragma warning restore CS4014
             }
         }
 
@@ -877,7 +881,7 @@ namespace yt_dlp_gui.Views {
             if (combo != null && combo.SelectedIndex == -1) { // Null check
                 Data.PathTEMP = combo.Text;
             } else if (combo != null && combo.SelectedValue != null) { // Null check
-                Data.PathTEMP = combo.SelectedValue.ToString();
+                Data.PathTEMP = combo.SelectedValue?.ToString() ?? string.Empty;
             }
         }
 
@@ -888,12 +892,12 @@ namespace yt_dlp_gui.Views {
                     ("Temporary Target" /* MyApplication.Lang.Main.TemporaryTarget */, () => { Data.PathTEMP = "%YTDLPGUI_TARGET%"; }),
                     ("Temporary Locale" /* MyApplication.Lang.Main.TemporaryLocale */, () => { Data.PathTEMP = "%YTDLPGUI_LOCALE%"; }),
                     ("Temporary System" /* MyApplication.Lang.Main.TemporarySystem */, () => { Data.PathTEMP = "%TEMP%"; }),
-                    ("-"),
+                    ("-", null),
                     ("Browse..." /* MyApplication.Lang.Main.TemporaryBrowse */, () => {
                         var dialog = new FolderBrowserDialog();
                         dialog.SelectedPath = GetEnvPath(Data.PathTEMP);
                         if (dialog.ShowDialog() == System.Windows.Forms.DialogResult.OK) {
-                            Data.PathTEMP = dialog.SelectedPath;
+                            Data.PathTEMP = dialog.SelectedPath ?? string.Empty;
                         }
                     })
                 };
@@ -906,7 +910,7 @@ namespace yt_dlp_gui.Views {
             if (b != null && b.IsChecked == true) { // Null check
                 var menu = new List<MenuDataItem>() {
                     ("System Sound" /* MyApplication.Lang.Main.SoundSystem */, () => { Data.PathNotify = ""; }),
-                    ("-"),
+                    ("-", null),
                     ("Browse..." /* MyApplication.Lang.Main.SoundBrowse */, () => {
                         var dialog = new OpenFileDialog();
                         var dirname = Path.GetDirectoryName(Data.PathNotify);

@@ -146,7 +146,8 @@ namespace yt_dlp_gui.Controls.Behaviors {
         }
         //驗證數字
         private static readonly Regex patten = new Regex(@"^[0-9]+\.?[0-9]*$");
-        private bool IsVaild(string str) {
+        private bool IsVaild(string? str) {
+            if (string.IsNullOrEmpty(str)) return true;
             return patten.IsMatch(str);
         }
     }

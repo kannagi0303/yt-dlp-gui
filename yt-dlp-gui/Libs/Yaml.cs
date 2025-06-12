@@ -30,7 +30,11 @@ namespace Libs.Yaml {
         }
         public static T? OpenFromResouce<T>(string path) where T : new() {
             if (!Util.ResourceExists(path)) return default(T); // Or new T()
-            using (Stream s = System.Windows.Application.GetResourceStream(new Uri(path, UriKind.Relative)).Stream) {
+            var resourceInfo = System.Windows.Application.GetResourceStream(new Uri(path, UriKind.Relative));
+            if (resourceInfo == null) {
+                return default(T);
+            }
+            using (Stream s = resourceInfo.Stream) {
                 using (TextReader reader = new StreamReader(s)) {
                     var deserializer = new DeserializerBuilder()
                             .IgnoreUnmatchedProperties()
@@ -38,7 +42,6 @@ namespace Libs.Yaml {
                     return deserializer.Deserialize<T>(reader);
                 }
             }
-            return default(T); // Or new T()
         }
         public static string Serialize(object obj) {
             var s = new SerializerBuilder()

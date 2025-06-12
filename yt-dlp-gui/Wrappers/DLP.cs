@@ -294,7 +294,7 @@ namespace yt_dlp_gui.Wrappers {
             }
         }
 
-        public Process Exec(DownloadItem? itemToUpdate,
+        public Process? Exec(DownloadItem? itemToUpdate,
                                 Action<DownloadItem?, string>? stdall = null,
                                 Action<DownloadItem?, string>? stdout = null,
                                 Action<DownloadItem?, string>? stderr = null) {

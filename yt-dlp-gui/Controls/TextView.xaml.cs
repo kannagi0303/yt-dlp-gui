@@ -39,12 +39,14 @@ namespace yt_dlp_gui.Controls {
             }
         }
         private static void onSyntaxChanged(DependencyObject dpo, DependencyPropertyChangedEventArgs e) {
-            var d = (dpo as TextView);
+            var d = dpo as TextView;
+            if (d == null) return;
             var n = e.NewValue?.ToString() ?? "";
-            //d?.LoadDefinition(n);
+            //d.LoadDefinition(n);
         }
         private static void onLinkChanged(DependencyObject dpo, DependencyPropertyChangedEventArgs e) {
-            var d = (dpo as TextView);
+            var d = dpo as TextView;
+            if (d == null) return;
             d.textView.Options.EnableHyperlinks = d.EnableHyperlinks;
             d.textView.Options.RequireControlModifierForHyperlinkClick = !d.EnableHyperlinks;
         }
@@ -66,6 +68,10 @@ namespace yt_dlp_gui.Controls {
         }
         public IHighlightingDefinition SyntaxDefinition {
             set {
+                if (value == null) {
+                    textView.LineTransformers.Clear();
+                    return;
+                }
                 textView.LineTransformers.Clear();
                 textView.LineTransformers.Insert(0, new HighlightingColorizer(value)); 
             }

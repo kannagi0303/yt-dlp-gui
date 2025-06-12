@@ -80,7 +80,9 @@ namespace yt_dlp_gui.Controls {
             return Geometry.Empty;
         }
         private Geometry GetDescription(Type enumType, object enumValue) {
-            var descriptionAttribute = enumType.GetField(enumValue.ToString())
+            var fieldInfo = enumType.GetField(enumValue.ToString()!);
+            if (fieldInfo == null) return Geometry.Empty;
+            var descriptionAttribute = fieldInfo
                 .GetCustomAttributes(typeof(DescriptionAttribute), false)
                 .FirstOrDefault() as DescriptionAttribute;
 

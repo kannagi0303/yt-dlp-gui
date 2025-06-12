@@ -1,6 +1,7 @@
 ﻿namespace Libs {
     public partial class Util {
-        public static void PropertyCopy<TParent, TChild>(TParent from, TChild to) {
+        public static void PropertyCopy<TParent, TChild>(TParent? from, TChild? to) {
+            if (from == null || to == null) return;
             var parentProperties = from.GetType().GetProperties();
             var childProperties = to.GetType().GetProperties();
 
