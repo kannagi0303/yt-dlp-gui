@@ -48,7 +48,7 @@ namespace yt_dlp_gui.Views {
 
             DownloadItem? currentItem = null;
             while (true) {
-                currentItem = DownloadQueue.FirstOrDefault(item => item.Status == DownloadStatus.Queued);
+                currentItem = DownloadQueue.FirstOrDefault(item => item.Status == yt_dlp_gui.Models.DownloadStatus.Queued);
 
                 if (currentItem == null) {
                     System.Diagnostics.Debug.WriteLine("ProcessQueueAsync: No more queued items.");
@@ -56,7 +56,7 @@ namespace yt_dlp_gui.Views {
                 }
 
                 System.Diagnostics.Debug.WriteLine($"ProcessQueueAsync: Processing item: {currentItem.Url}");
-                currentItem.Status = DownloadStatus.Downloading;
+                currentItem.Status = yt_dlp_gui.Models.DownloadStatus.Downloading;
                 currentItem.Progress = 0;
                 currentItem.ErrorMessage = null;
 
@@ -108,7 +108,7 @@ namespace yt_dlp_gui.Views {
                             },
                             stdout: null,
                             stderr: (item, error) => {
-                                if (item != null && item.Status == DownloadStatus.Downloading) {
+                                if (item != null && item.Status == yt_dlp_gui.Models.DownloadStatus.Downloading) {
                                     if (string.IsNullOrEmpty(item.ErrorMessage)) item.ErrorMessage = error;
                                     else item.ErrorMessage += $"; {error}";
                                 }
@@ -126,13 +126,13 @@ namespace yt_dlp_gui.Views {
                                        currentItem.FileName = "Unknown Title";
                                     });
                                 }
-                                currentItem.Status = DownloadStatus.Completed;
+                                currentItem.Status = yt_dlp_gui.Models.DownloadStatus.Completed;
                                 currentItem.Progress = 100;
                                 System.Diagnostics.Debug.WriteLine($"ProcessQueueAsync: Item completed: {currentItem.Url}");
                             }
                         } else {
                             if (currentItem != null) {
-                                currentItem.Status = DownloadStatus.Failed;
+                                currentItem.Status = yt_dlp_gui.Models.DownloadStatus.Failed;
                                 if (string.IsNullOrEmpty(currentItem.ErrorMessage)) {
                                     currentItem.ErrorMessage = $"Download failed. Exit code: {process?.ExitCode}. DLP Errors: {string.Join(", ", dlp.StdErr)}";
                                 }
@@ -142,7 +142,7 @@ namespace yt_dlp_gui.Views {
                     });
                 } catch (Exception ex) {
                     if (currentItem != null) {
-                        currentItem.Status = DownloadStatus.Failed;
+                        currentItem.Status = yt_dlp_gui.Models.DownloadStatus.Failed;
                         currentItem.ErrorMessage = $"An exception occurred: {ex.Message}";
                         System.Diagnostics.Debug.WriteLine($"ProcessQueueAsync: Exception for item {currentItem.Url}. Error: {ex.Message}");
                     }
