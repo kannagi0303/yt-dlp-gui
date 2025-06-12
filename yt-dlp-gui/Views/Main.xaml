@@ -755,7 +755,7 @@
                     </DataGrid>
                 </Grid>
             </TabItem>
-            <TabItem Header="{Binding Source={x:Static app:App.Lang}, Path=Main.Options}">
+            <TabItem Header="{Binding Source={x:Static app:MyApplication.AppLang}, Path=Main.Options}">
                 <Grid Margin="4" VerticalAlignment="Top">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="Auto"/>
