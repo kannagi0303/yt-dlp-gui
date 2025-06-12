@@ -17,7 +17,10 @@ namespace yt_dlp_gui.Controls {
             = DependencyProperty.RegisterAttached("Unit", typeof(FilesizeUnit), typeof(Filesize),
                 new FrameworkPropertyMetadata(FilesizeUnit.Auto, FrameworkPropertyMetadataOptions.BindsTwoWayByDefault, BytesPropertyChanged));
         private static void BytesPropertyChanged(DependencyObject dpo, DependencyPropertyChangedEventArgs e) {
-            var (d, v) = (dpo as TextBlock, GetBytes(dpo));
+            var d = dpo as TextBlock;
+            if (d == null) return; // Guard against dpo not being a TextBlock
+
+            var v = GetBytes(dpo);
             var value = v.HasValue ? v.Value : 0;
             
             //負數處理

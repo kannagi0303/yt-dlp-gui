@@ -66,7 +66,7 @@ namespace Libs {
                     Directory.GetDirectories(directory).Length == 0) {
                     try {
                         Directory.Delete(directory, false);
-                    } catch (Exception e) {
+                    } catch (Exception) { // 'e' removed
                         return false;
                     }
                 }

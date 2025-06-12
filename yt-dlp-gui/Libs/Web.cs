@@ -50,9 +50,14 @@ namespace Libs {
                     return JsonConvert.DeserializeObject<List<GitRelease>>(res.content);
                 } catch { };
             }
-            return null;
+            return new List<GitRelease>(); // Return empty list instead of null
         }
-        public static async Task Download(string downloadUrl, string savePath, IProgress<double> progress = null, string proxyUrl = null) {
+        public static async Task Download(string? downloadUrl, string savePath, IProgress<double>? progress = null, string? proxyUrl = null) {
+            if (string.IsNullOrEmpty(downloadUrl)) {
+                // Or throw new ArgumentNullException(nameof(downloadUrl));
+                Debug.WriteLine("Download URL is null or empty.");
+                return;
+            }
             Debug.WriteLine($"save {downloadUrl} to {savePath} use {proxyUrl}");
             var httpClientHandler = new HttpClientHandler();
             if (!string.IsNullOrEmpty(proxyUrl)) {
@@ -78,33 +83,37 @@ namespace Libs {
             //var fileExt = Path.GetExtension(fileName);
             //var filePath = Path.ChangeExtension(savePath, fileExt);
 
-            var response = httpClient.GetAsync(downloadUrl).Result;
-            if (response.IsSuccessStatusCode) {
-                var contentLength = response.Content.Headers.ContentLength;
-                if (contentLength == null) {
-                    throw new Exception("Content length not found");
+            using var response = await httpClient.GetAsync(downloadUrl, HttpCompletionOption.ResponseHeadersRead);
+            response.EnsureSuccessStatusCode(); // Ensure success status before proceeding
+
+            var contentLength = response.Content.Headers.ContentLength;
+            if (contentLength == null) {
+                // Consider how to handle unknown content length. For progress reporting, it's crucial.
+                // For now, proceeding without it if progress is null, or throwing if progress is expected.
+                if (progress != null) {
+                    throw new Exception("Content length not found, cannot report progress.");
                 }
+            }
 
-                var totalBytes = contentLength.Value;
-                var downloadedBytes = 0L;
-                using (var contentStream = response.Content.ReadAsStreamAsync().Result) {
-                    using (var fileStream = new FileStream(savePath, FileMode.Create, FileAccess.Write)) {
-                        var buffer = new byte[8192];
-                        int bytesRead;
-                        while ((bytesRead = contentStream.ReadAsync(buffer, 0, buffer.Length).Result) > 0) {
-                            fileStream.WriteAsync(buffer, 0, bytesRead).Wait();
-                            downloadedBytes += bytesRead;
+            var totalBytes = contentLength ?? -1; // Use -1 if unknown, adjust progress logic if needed
+            long downloadedBytes = 0L;
 
-                            if (progress != null) {
-                                var percentage = (double)downloadedBytes / totalBytes * 100;
-                                progress.Report(percentage);
-                            }
+            using (var contentStream = await response.Content.ReadAsStreamAsync()) {
+                using (var fileStream = new FileStream(savePath, FileMode.Create, FileAccess.Write)) {
+                    var buffer = new byte[8192]; // 8KB buffer
+                    int bytesRead;
+                    while ((bytesRead = await contentStream.ReadAsync(buffer, 0, buffer.Length)) > 0) {
+                        await fileStream.WriteAsync(buffer, 0, bytesRead);
+                        downloadedBytes += bytesRead;
+
+                        if (progress != null && totalBytes > 0) { // Only report progress if totalBytes is known
+                            var percentage = (double)downloadedBytes / totalBytes * 100;
+                            progress.Report(percentage);
                         }
                     }
                 }
-            } else {
-                Console.WriteLine($"Failed to download file. Status code: {response.StatusCode}");
             }
+            // Removed the 'else' block for response.IsSuccessStatusCode as EnsureSuccessStatusCode handles it
         }
     }
     public class WebProxy :IWebProxy {

@@ -19,9 +19,10 @@ namespace yt_dlp_gui.Controls {
         }
 
         static void OnHtmlChanged(DependencyObject d, DependencyPropertyChangedEventArgs e) {
-            WebBrowser wb = d as WebBrowser;
-            if (wb != null)
-                wb.NavigateToString(e.NewValue as string);
+            if (d is WebBrowser wb) { // Use 'is' for type check and cast
+                string? htmlContent = e.NewValue as string;
+                wb.NavigateToString(htmlContent ?? string.Empty); // Pass empty string if null
+            }
         }
     }
 }

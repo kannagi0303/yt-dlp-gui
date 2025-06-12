@@ -1,126 +1,62 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
+using System;
 using System.ComponentModel;
-using System.Linq;
-using System.Runtime.Serialization;
 using YamlDotNet.Core;
-using YamlDotNet.Core.Events;
+using YamlDotNet.Core.Events; // Required for MappingStart, MappingEnd, Scalar, Comment
 using YamlDotNet.Serialization;
-using YamlDotNet.Serialization.ObjectGraphVisitors;
-using YamlDotNet.Serialization.TypeInspectors;
+using YamlDotNet.Serialization.ObjectFactories; // Although ObjectDeserializer and ObjectSerializer are used, ObjectFactories might not be strictly needed for this specific converter's WriteYaml.
 
-namespace Libs.Yaml {
-    public class CommentGatheringTypeInspector : TypeInspectorSkeleton {
-        private readonly ITypeInspector innerTypeDescriptor;
-
-        public CommentGatheringTypeInspector(ITypeInspector innerTypeDescriptor) {
-            if (innerTypeDescriptor == null) {
-                throw new ArgumentNullException("innerTypeDescriptor");
-            }
-            this.innerTypeDescriptor = innerTypeDescriptor;
+namespace yt_dlp_gui.Libs
+{
+    public class YamlDescription : IYamlTypeConverter
+    {
+        public bool Accepts(Type type)
+        {
+            // This converter can apply to any type with properties.
+            return true;
         }
 
-        public override IEnumerable<IPropertyDescriptor> GetProperties(Type type, object container) {
-            return innerTypeDescriptor
-                .GetProperties(type, container)
-                .Select(d => new CommentsPropertyDescriptor(d));
+        public object ReadYaml(IParser parser, Type type, ObjectDeserializer nestedObjectDeserializer)
+        {
+            // We are not using this converter for reading YAML, so we can leave it unimplemented.
+            // Or, if default deserialization is desired when this converter is registered:
+            // return nestedObjectDeserializer(typeof(object)); // This might not be correct, depends on usage.
+            // Safest is to throw if it's not meant to be used for reading.
+            throw new NotImplementedException("This converter is only for writing YAML with comments.");
         }
 
-        private sealed class CommentsPropertyDescriptor : IPropertyDescriptor {
-            private readonly IPropertyDescriptor baseDescriptor;
+        public void WriteYaml(IEmitter emitter, object? value, Type type, ObjectSerializer nestedObjectSerializer)
+        {
+            if (value == null) return;
 
-            public CommentsPropertyDescriptor(IPropertyDescriptor baseDescriptor) {
-                this.baseDescriptor = baseDescriptor;
-                Name = baseDescriptor.Name;
+            var pds = TypeDescriptor.GetProperties(value);
+            emitter.Emit(new MappingStart(null, null, false, MappingStyle.Block));
+
+            foreach (System.ComponentModel.PropertyDescriptor pd in pds)
+            {
+                // Original code had: pd.IsBrowsable && pd.Name != "Configs"
+                // Let's keep that logic. If "Configs" is a specific property to skip.
+                if (pd.IsBrowsable && pd.Name != "Configs")
+                {
+                    var description = pd.Description;
+                    if (!string.IsNullOrEmpty(description))
+                    {
+                        // Emit each line of the description as a separate comment
+                        foreach (var line in description.Split(new[] { "\r\n", "\r", "\n" }, StringSplitOptions.None)) // Escaped backslashes for string literal
+                        {
+                            emitter.Emit(new Comment($" {line}", false));
+                        }
+                    }
+
+                    // Emit the property name
+                    emitter.Emit(new Scalar(pd.Name));
+
+                    // Emit the property value using the nested serializer
+                    var propertyValue = pd.GetValue(value);
+                    // Pass the actual type of the property for correct serialization
+                    nestedObjectSerializer(propertyValue, pd.PropertyType);
+                }
             }
-
-            public string Name { get; set; }
-
-            public Type Type { get { return baseDescriptor.Type; } }
-
-            public Type TypeOverride {
-                get { return baseDescriptor.TypeOverride; }
-                set { baseDescriptor.TypeOverride = value; }
-            }
-
-            public int Order { get; set; }
-
-            public ScalarStyle ScalarStyle {
-                get { return baseDescriptor.ScalarStyle; }
-                set { baseDescriptor.ScalarStyle = value; }
-            }
-
-            public bool CanWrite { get { return baseDescriptor.CanWrite; } }
-
-            public void Write(object target, object value) {
-                baseDescriptor.Write(target, value);
-            }
-
-            public T GetCustomAttribute<T>() where T : Attribute {
-                return baseDescriptor.GetCustomAttribute<T>();
-            }
-
-            public IObjectDescriptor Read(object target) {
-                
-                var description = baseDescriptor.GetCustomAttribute<DescriptionAttribute>();
-                return description != null
-                    ? new CommentsObjectDescriptor(baseDescriptor.Read(target), description.Description)
-                    : baseDescriptor.Read(target);
-            }
-        }
-    }
-
-    public sealed class CommentsObjectDescriptor : IObjectDescriptor {
-        private readonly IObjectDescriptor innerDescriptor;
-
-        public CommentsObjectDescriptor(IObjectDescriptor innerDescriptor, string comment) {
-            this.innerDescriptor = innerDescriptor;
-            Comment = comment;
-        }
-
-        public string Comment { get; private set; }
-
-        public object Value { get { return innerDescriptor.Value; } }
-        public Type Type { get { return innerDescriptor.Type; } }
-        public Type StaticType { get { return innerDescriptor.StaticType; } }
-        public ScalarStyle ScalarStyle { get { return innerDescriptor.ScalarStyle; } }
-    }
-
-    public class CommentsObjectGraphVisitor : ChainedObjectGraphVisitor {
-        public CommentsObjectGraphVisitor(IObjectGraphVisitor<IEmitter> nextVisitor)
-            : base(nextVisitor) {
-        }
-
-        public override bool EnterMapping(IPropertyDescriptor key, IObjectDescriptor value, IEmitter context) {
-            var commentsDescriptor = value as CommentsObjectDescriptor;
-            if (commentsDescriptor != null && commentsDescriptor.Comment != null) {
-                context.Emit(new Comment(commentsDescriptor.Comment, false));
-            }
-
-            return base.EnterMapping(key, value, context);
-        }
-    }
-    public class SkipEmptyObjectGraphVisitor : ChainedObjectGraphVisitor {
-        public SkipEmptyObjectGraphVisitor(IObjectGraphVisitor<IEmitter> nextVisitor) : base(nextVisitor) {
-        }
-        public override bool EnterMapping(IPropertyDescriptor key, IObjectDescriptor value, IEmitter context) {
-            if (value.Value is string) {
-                if (string.IsNullOrWhiteSpace(value.Value.ToString())) return false;
-            }
-            return base.EnterMapping(key, value, context);
-        }
-    }
-    //=================
-    public class SortedTypeInspector :TypeInspectorSkeleton {
-        private readonly ITypeInspector _innerTypeInspector;
-
-        public SortedTypeInspector(ITypeInspector innerTypeInspector) {
-            _innerTypeInspector = innerTypeInspector;
-        }
-
-        public override IEnumerable<IPropertyDescriptor> GetProperties(Type type, object container) {
-            return _innerTypeInspector.GetProperties(type, container).OrderBy(x => x.Name);
+            emitter.Emit(new MappingEnd());
         }
     }
 }

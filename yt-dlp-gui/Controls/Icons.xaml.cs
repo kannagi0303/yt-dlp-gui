@@ -6,7 +6,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Media;
-using static yt_dlp_gui.App;
+using static yt_dlp_gui.MyApplication;
 
 namespace yt_dlp_gui.Controls {
     /// <summary>
@@ -80,7 +80,9 @@ namespace yt_dlp_gui.Controls {
             return Geometry.Empty;
         }
         private Geometry GetDescription(Type enumType, object enumValue) {
-            var descriptionAttribute = enumType.GetField(enumValue.ToString())
+            var fieldInfo = enumType.GetField(enumValue.ToString()!);
+            if (fieldInfo == null) return Geometry.Empty;
+            var descriptionAttribute = fieldInfo
                 .GetCustomAttributes(typeof(DescriptionAttribute), false)
                 .FirstOrDefault() as DescriptionAttribute;
 

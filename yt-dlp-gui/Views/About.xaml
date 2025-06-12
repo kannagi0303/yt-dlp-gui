@@ -9,7 +9,7 @@
         WindowStartupLocation="CenterOwner"
         ShowInTaskbar="False"
         SizeToContent="Height"
-        Title="{Binding Source={x:Static app:App.Lang}, Path=About.About}" Width="420">
+         Title="{Binding Source={x:Static app:MyApplication.AppLang}, Path=About.About}" Width="420">
     <Window.Resources>
         <ControlTemplate TargetType="ContentControl" x:Key="WindowLogo">
             <Controls:Icons Kind="Information" Size="16"/>
@@ -65,11 +65,11 @@
 
             <!--
             <TextBlock Grid.Row="2" Grid.Column="1" LineHeight="20">
-                <Run Foreground="Gray" Text="{Binding Source={x:Static app:App.Lang}, Path=About.Website}"/>
+                <Run Foreground="Gray" Text="{Binding Source={x:Static app:MyApplication.AppLang}, Path=About.Website}"/>
                 <Run Foreground="Gray" Text=" :"/>
                 <Hyperlink NavigateUri="https://github.com/Kannagi0303/yt-dlp-gui" Click="Hyperlink_Click">https://github.com/Kannagi0303/yt-dlp-gui</Hyperlink>
                 <LineBreak/>
-                <Run Foreground="Gray" Text="{Binding Source={x:Static app:App.Lang}, Path=About.Authors}"/>
+                <Run Foreground="Gray" Text="{Binding Source={x:Static app:MyApplication.AppLang}, Path=About.Authors}"/>
                 <Run Foreground="Gray" Text=" :"/>
                 カンナギ Kannagi
             </TextBlock>

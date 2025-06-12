@@ -19,22 +19,25 @@ namespace yt_dlp_gui.Views {
         private readonly AboutViewData Data = new();
         public About() {
             InitializeComponent();
-            version.Text = App.CurrentVersion;
+            // version.Text = MyApplication.CurrentVersion; // CurrentVersion is missing
+version.Text = "?.?.?"; // Temporary
             DataContext = Data;
             Data.Items.Clear();
-            Data.Items.Add(new() { Label = App.Lang.About.Authors, Context = "カンナギ Kannagi" });
-            Data.Items.Add(new() { Label = App.Lang.About.Website, Context = "https://github.com/Kannagi0303/yt-dlp-gui" });
-            foreach (var aitem in App.Lang.About.Extends) {
-                Data.Items.Add(new() { Label = aitem.Key, Context = aitem.Value });
-            }
+            Data.Items.Add(new() { Label = "Authors" /* MyApplication.Lang.About.Authors */, Context = "カンナギ Kannagi" });
+            Data.Items.Add(new() { Label = "Website" /* MyApplication.Lang.About.Website */, Context = "https://github.com/Kannagi0303/yt-dlp-gui" });
+            // foreach (var aitem in MyApplication.Lang.About.Extends) // Lang is missing
+            // {
+            //     Data.Items.Add(new() { Label = aitem.Key, Context = aitem.Value });
+            // }
         }
 
         private void Hyperlink_Click(object sender, RoutedEventArgs e) {
-            Hyperlink link = sender as Hyperlink;
-            // 激活的是当前默认的浏览器
-            var url = link.NavigateUri.AbsoluteUri;
-            Debug.WriteLine(url);
-            Process.Start(new ProcessStartInfo(url) { UseShellExecute = true });
+            Hyperlink? link = sender as Hyperlink;
+            if (link?.NavigateUri != null) {
+                var url = link.NavigateUri.AbsoluteUri;
+                System.Diagnostics.Debug.WriteLine(url); // Keep if useful
+                Process.Start(new ProcessStartInfo(url) { UseShellExecute = true });
+            }
         }
 
         private void Button_Click(object sender, RoutedEventArgs e) {
