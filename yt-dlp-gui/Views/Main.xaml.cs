@@ -460,10 +460,12 @@ namespace yt_dlp_gui.Views {
             }
             if (Data.UseOutput) dlp.Output("%(title)s.%(ext)s");
             ClearStatus();
-            dlp.Exec(null, std => {
-                Data.Video = JsonConvert.DeserializeObject<Video>(std, new JsonSerializerSettings() {
-                    NullValueHandling = NullValueHandling.Ignore
-                });
+            dlp.Exec(
+                itemToUpdate: null,
+                stdall: (item, std) => {
+                    Data.Video = JsonConvert.DeserializeObject<Video>(std, new JsonSerializerSettings() {
+                        NullValueHandling = NullValueHandling.Ignore
+                    });
                 Data.Chapters.Clear();
                 if (Data.Video != null && Data.Video.chapters != null && Data.Video.chapters.Any()) { // Added null check for Data.Video
                     Data.Chapters.Add(new Chapters() { title = "All Chapters" /* MyApplication.Lang.Main.ChaptersAll */, type = ChaptersType.None });
