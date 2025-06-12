@@ -42,7 +42,7 @@ namespace Libs.Yaml {
         }
         public static string Serialize(object obj) {
             var s = new SerializerBuilder()
-                .WithDefaultValuesHandling(DefaultValuesHandling.OmitNull | DefaultValuesHandling.OmitEmptyCollections)
+                .ConfigureDefaultValuesHandling(DefaultValuesHandling.OmitDefaults)
                 .Build();
             return s.Serialize(obj);
         }
@@ -56,7 +56,7 @@ namespace Libs.Yaml {
                 using (var yaml = new StreamWriter(info.FullName, false, Encoding.UTF8)) {
                     var s = new SerializerBuilder()
                     //.WithTypeInspector(inner => new SortedTypeInspector(inner))
-                    .WithDefaultValuesHandling(DefaultValuesHandling.OmitNull | DefaultValuesHandling.OmitEmptyCollections)
+                    .ConfigureDefaultValuesHandling(DefaultValuesHandling.OmitDefaults)
                     .Build();
                     s.Serialize(yaml, graph);
                 }
