@@ -16,7 +16,7 @@ Main:
   DownloadThumb: 썸네일 다운로드
   # Main Tab - Buttons
   Analyze: 분석
-  Browse: 검색
+  Browse: 찾아보기
   Download: 다운로드
   Record: 녹화
   Cancel: 취소
@@ -59,7 +59,7 @@ Main:
   CookieWhenNeeded: 필요할 때
   CookieNever: 사용 안함
   CookieAlways: 항상 사용
-  CookieAsk: 뭍기
+  CookieAsk: 묻기
   CookieUse: 사용
   # Advance Tab - Aria2
   Aria2: Aria2
@@ -87,7 +87,7 @@ Main:
   NotificationsSound: 알림 소리
   SoundDefault: 기본
   SoundSystem: 시스템
-  SoundBrowse: 검색...
+  SoundBrowse: 찾아보기...
   # Options Tab - Always On Top
   AlwaysOnTop: 항상 위에 표시
   AlwaysOnTopEnabled: 활성화
@@ -95,7 +95,7 @@ Main:
   RememberWindowState: 창 위치 및 형태 기억하기
   RememberWindowPosition: 위치
   RememberWindowSize: 사이즈
-  Scale: Scale
+  Scale: 배율
   # Options Tab - Automatically download
   AutoDownload: 자동 다운로드
   AutoDownloadAnalysed: 분석 후에
@@ -104,7 +104,7 @@ Main:
   TemporaryTarget: 대상
   TemporaryLocale: 지역
   TemporarySystem: 시스템
-  TemporaryBrowse: 검색...
+  TemporaryBrowse: 찾아보기...
 # Window - About
 About:
   About: 정보
@@ -122,7 +122,7 @@ Releases:
   NoUpdated: 새 업데이트가 없습니다.
 # Dialog, Popups
 Dialog:
-  CookieRequired: 쿠기가 필요합니다. 사용하시겠습니까?
+  CookieRequired: 쿠키가 필요합니다. 사용하시겠습니까?
   FileExist: 파일이 이미 존재합니다. 덮어쓰시겠습니까?
   DownloadCompleted: 비디오 다운로드 완료!
   OpenFolder: 폴더 열기
