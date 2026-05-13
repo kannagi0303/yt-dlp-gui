@@ -208,6 +208,7 @@ namespace yt_dlp_gui.Models {
         [YamlMember(Order = 1203)] public string TemporaryLocale { get; set; } = "Locale";
         [YamlMember(Order = 1204)] public string TemporarySystem { get; set; } = "System";
         [YamlMember(Order = 1205)] public string TemporaryBrowse { get; set; } = "Browse...";
+        [YamlMember(Order = 1207)] public string NameFormat { get; set; } = "Name format";
 
         //public string Formats { get; set; } = "Formats"; //Deprecated
         //public string EmbedSubs { get; set; } = "Embed Subtitles";
