@@ -3,6 +3,8 @@
 [![GitHub release (latest by date)](https://img.shields.io/github/downloads/kannagi0303/yt-dlp-gui/total)](#)
 [![GitHub release (latest by date)](https://img.shields.io/github/downloads/kannagi0303/yt-dlp-gui/latest/total)](#)
 
+> **⚠️ This version is no longer maintained or updated. For ongoing development and new feature requests, please refer to yt-dlp-gui-v2.**
+
 ### Newly rebuilt version is available: [yt-dlp-gui-v2](https://github.com/kannagi0303/yt-dlp-gui-v2)
 
 Please refer to the [wiki](https://github.com/kannagi0303/yt-dlp-gui/wiki) for usage and details.
